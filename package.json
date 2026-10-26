@@ -266,6 +266,14 @@
 				"icon": "$(link-external)"
 			},
 			{
+				"command": "_projectManager.openInWsl",
+				"title": "%projectManager.commands.openInWsl.title%"
+			},
+			{
+				"command": "_projectManager.openInWindows",
+				"title": "%projectManager.commands.openInWindows.title%"
+			},
+			{
 				"command": "projectManager.addToWorkspace#sideBar",
 				"title": "%projectManager.commands.addToWorkspace#sideBar.title%"
 			},
@@ -342,6 +350,14 @@
 				},
 				{
 					"command": "_projectManager.openInNewWindow",
+					"when": "false"
+				},
+				{
+					"command": "_projectManager.openInWsl",
+					"when": "false"
+				},
+				{
+					"command": "_projectManager.openInWindows",
 					"when": "false"
 				},
 				{
@@ -605,6 +621,16 @@
 				{
 					"command": "_projectManager.openInNewWindow",
 					"when": "view =~ /projectsExplorer(Favorites|VSCode|Git|SVN|Any|Mercurial)/ && viewItem == ProjectNodeKind",
+					"group": "navigation"
+				},
+				{
+					"command": "_projectManager.openInWsl",
+					"when": "view =~ /projectsExplorer(Favorites|VSCode|Git|SVN|Any|Mercurial)/ && viewItem == ProjectNodeKind && isWindows",
+					"group": "navigation"
+				},
+				{
+					"command": "_projectManager.openInWindows",
+					"when": "view =~ /projectsExplorer(Favorites|VSCode|Git|SVN|Any|Mercurial)/ && viewItem == ProjectNodeKind && isWindows",
 					"group": "navigation"
 				},
 				{
@@ -1028,6 +1054,11 @@
 						"type": "integer",
 						"default": 4,
 						"description": "%projectManager.configuration.any.maxDepthRecursion.description%"
+					},
+					"projectManager.wsl.distro": {
+						"type": "string",
+						"default": "",
+						"description": "%projectManager.configuration.wsl.distro.description%"
 					}
 				}
 			}

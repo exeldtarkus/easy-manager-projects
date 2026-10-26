@@ -18,7 +18,7 @@ import { showStatusBar, updateStatusBar } from "./statusbar/statusBar";
 import { getProjectDetails } from "./utils/suggestion";
 import { CommandLocation, PROJECTS_FILE } from "./core/constants";
 import { isMacOS, isRemoteUri, isWindows } from "./utils/remote";
-import { buildProjectUri } from "./utils/uri";
+import { buildProjectUri, buildWindowsProjectUri, buildWslProjectUri } from "./utils/uri";
 import { Container } from "./core/container";
 import { registerWhatsNew } from "./whats-new/commands";
 import { registerSupportProjectManager } from "./commands/supportProjectManager";
@@ -101,6 +101,29 @@ export async function activate(context: vscode.ExtensionContext) {
                 () => ({}),  // done
                 () => vscode.window.showInformationMessage(l10n.t("Could not open the project!")));
     });
+    vscode.commands.registerCommand("_projectManager.openInWsl", (node) => {
+        const distro = vscode.workspace.getConfiguration("projectManager").get<string>("wsl.distro", "");
+        openOnOtherSide(node, buildWslProjectUri(node.command.arguments[0], distro),
+            l10n.t("This project can't be opened in WSL. For Windows drives, set the WSL distribution in `projectManager.wsl.distro`."));
+    });
+    vscode.commands.registerCommand("_projectManager.openInWindows", (node) => {
+        openOnOtherSide(node, buildWindowsProjectUri(node.command.arguments[0]),
+            l10n.t("This project can't be opened in Windows. Only WSL projects are supported."));
+    });
+
+    async function openOnOtherSide(node, uri: vscode.Uri | undefined, unsupportedMessage: string) {
+        if (!uri) {
+            vscode.window.showInformationMessage(unsupportedMessage);
+            return;
+        }
+        if (!await canSwitchOnActiveWindow(CommandLocation.SideBar)) {
+            return;
+        }
+        vscode.commands.executeCommand("vscode.openFolder", uri, { forceProfile: node.command.arguments[2], forceNewWindow: false })
+            .then(
+                () => ({}),  // done
+                () => vscode.window.showInformationMessage(l10n.t("Could not open the project!")));
+    }
 
     // register commands (here, because it needs to be used right below if an invalid JSON is present)
     vscode.commands.registerCommand("projectManager.saveProject", () => saveProject());
