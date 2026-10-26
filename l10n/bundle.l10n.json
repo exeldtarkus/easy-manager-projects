@@ -2,7 +2,7 @@
     "Remote projects can't be revealed in {0}": "Remote projects can't be revealed in {0}",
     "While Project Manager is offered for free, if you \n        find it useful, please consider supporting it. Thank you!": "While Project Manager is offered for free, if you \n        find it useful, please consider supporting it. Thank you!",
     "Could not open the project!": "Could not open the project!",
-    "This project can't be opened in WSL. For Windows drives, set the WSL distribution in `projectManager.wsl.distro`.": "This project can't be opened in WSL. For Windows drives, set the WSL distribution in `projectManager.wsl.distro`.",
+    "This project can't be opened in WSL. For Windows drives, set the WSL distribution in `easyManagerProjects.wsl.distro`.": "This project can't be opened in WSL. For Windows drives, set the WSL distribution in `easyManagerProjects.wsl.distro`.",
     "This project can't be opened in Windows. Only WSL projects are supported.": "This project can't be opened in Windows. Only WSL projects are supported.",
     "Refreshing Projects": "Refreshing Projects",
     "The projects have been refreshed!": "The projects have been refreshed!",

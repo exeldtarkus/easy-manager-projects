@@ -42,7 +42,7 @@ function folderNotFound(name: string, projectStorage: ProjectStorage) {
         }
 
         if (option.title === l10n.t("Update Project")) {
-            commands.executeCommand("projectManager.editProjects");
+            commands.executeCommand("easyManagerProjects.editProjects");
         } else { // Update Project
             projectStorage.pop(name);
             projectStorage.save();
@@ -128,7 +128,7 @@ export async function pickProjects(projectStorage: ProjectStorage, locators: Loc
                         window.showInformationMessage(l10n.t("No projects saved yet!"));
                         return resolve(undefined);
                     } else {
-                        if (!workspace.getConfiguration("projectManager").get("groupList", false)) {
+                        if (!workspace.getConfiguration("easyManagerProjects").get("groupList", false)) {
                             if (locators) {
                                 folders = locators?.sortProjectList(folders);
                             }
@@ -136,7 +136,7 @@ export async function pickProjects(projectStorage: ProjectStorage, locators: Loc
                         commands.executeCommand("setContext", "inProjectManagerList", true);
 
                         //
-                        const showGitBranchInCommandPalette = workspace.getConfiguration("projectManager").get<string>("git.showBranchName", "never");
+                        const showGitBranchInCommandPalette = workspace.getConfiguration("easyManagerProjects").get<string>("git.showBranchName", "never");
                         folders = (<any[]>folders).map(folder => {
                             let detail: string | undefined;
                             if (showGitBranchInCommandPalette === "onlyInCommandPalette" || showGitBranchInCommandPalette === "always") {
@@ -155,7 +155,7 @@ export async function pickProjects(projectStorage: ProjectStorage, locators: Loc
                         });
                         const input = window.createQuickPick();
                         input.placeholder = l10n.t("Loading projects (pick one)...");
-                        input.matchOnDescription = workspace.getConfiguration("projectManager").get("filterOnFullPath", false);
+                        input.matchOnDescription = workspace.getConfiguration("easyManagerProjects").get("filterOnFullPath", false);
                         input.matchOnDetail = false;
                         input.items = <any[]>folders;
                         input.onDidChangeSelection(items => {
@@ -224,14 +224,14 @@ export function shouldOpenInNewWindow(openInNewWindow: boolean, calledFrom: Comm
     }
 
     // Check for setting name before and after typo was corrected
-    const oldValue = workspace.getConfiguration("projectManager").inspect("openInCurrenWindowIfEmpty");
-    const newValue = workspace.getConfiguration("projectManager").inspect("openInCurrentWindowIfEmpty");
+    const oldValue = workspace.getConfiguration("easyManagerProjects").inspect("openInCurrenWindowIfEmpty");
+    const newValue = workspace.getConfiguration("easyManagerProjects").inspect("openInCurrentWindowIfEmpty");
 
     let config: string | unknown;
     if (oldValue.globalValue) {
         config = newValue.globalValue === undefined ? oldValue.globalValue : newValue.globalValue;
     } else {
-        config = workspace.getConfiguration("projectManager").get<string>("openInCurrentWindowIfEmpty");
+        config = workspace.getConfiguration("easyManagerProjects").get<string>("openInCurrentWindowIfEmpty");
     }
 
     if (config === OpenInCurrentWindowIfEmptyMode.always) {
@@ -258,7 +258,7 @@ function shouldConfirmSwitchOnActiveWindow(calledFrom: CommandLocation): boolean
         return false;
     }
 
-    const config = workspace.getConfiguration("projectManager").get<string>("confirmSwitchOnActiveWindow", ConfirmSwitchOnActiveWindowMode.never);
+    const config = workspace.getConfiguration("easyManagerProjects").get<string>("confirmSwitchOnActiveWindow", ConfirmSwitchOnActiveWindowMode.never);
 
     switch (config) {
         case ConfirmSwitchOnActiveWindowMode.never:

@@ -29,15 +29,15 @@ export class Locators implements Disposable {
     private providerManager: Providers;
 
     public registerCommands() {
-        commands.registerCommand("projectManager.refreshVSCodeProjects", () => this.refreshProjectsByType("VSCode", this.vscLocator, this.providerManager.vscodeProvider, true, true));
-        commands.registerCommand("projectManager.refreshGitProjects", () => this.refreshProjectsByType("Git", this.gitLocator, this.providerManager.gitProvider, true, true));
-        commands.registerCommand("projectManager.refreshMercurialProjects", () => this.refreshProjectsByType("Mercurial", this.mercurialLocator, this.providerManager.mercurialProvider, true, true));
-        commands.registerCommand("projectManager.refreshSVNProjects", () => this.refreshProjectsByType("SVN", this.svnLocator, this.providerManager.svnProvider, true, true));
-        commands.registerCommand("projectManager.refreshAnyProjects", () => this.refreshProjectsByType("Any", this.anyLocator, this.providerManager.anyProvider, true, true));
+        commands.registerCommand("easyManagerProjects.refreshVSCodeProjects", () => this.refreshProjectsByType("VSCode", this.vscLocator, this.providerManager.vscodeProvider, true, true));
+        commands.registerCommand("easyManagerProjects.refreshGitProjects", () => this.refreshProjectsByType("Git", this.gitLocator, this.providerManager.gitProvider, true, true));
+        commands.registerCommand("easyManagerProjects.refreshMercurialProjects", () => this.refreshProjectsByType("Mercurial", this.mercurialLocator, this.providerManager.mercurialProvider, true, true));
+        commands.registerCommand("easyManagerProjects.refreshSVNProjects", () => this.refreshProjectsByType("SVN", this.svnLocator, this.providerManager.svnProvider, true, true));
+        commands.registerCommand("easyManagerProjects.refreshAnyProjects", () => this.refreshProjectsByType("Any", this.anyLocator, this.providerManager.anyProvider, true, true));
     }
 
     public dispose() {
-        if (workspace.getConfiguration("projectManager").get("cacheProjectsBetweenSessions", true)) {
+        if (workspace.getConfiguration("easyManagerProjects").get("cacheProjectsBetweenSessions", true)) {
             return;
         }
 
@@ -74,7 +74,7 @@ export class Locators implements Disposable {
     }
 
     public sortGroupedList(items): any[] {
-        if (workspace.getConfiguration("projectManager").get("groupList", false)) {
+        if (workspace.getConfiguration("easyManagerProjects").get("groupList", false)) {
             return this.sortProjectList(items);
         } else {
             return items;
@@ -84,7 +84,7 @@ export class Locators implements Disposable {
     public sortProjectList(items): any[] {
         let itemsToShow = PathUtils.expandHomePaths(items);
         itemsToShow = this.removeRootPath(itemsToShow);
-        const checkInvalidPath: boolean = workspace.getConfiguration("projectManager").get("checkInvalidPathsBeforeListing", true);
+        const checkInvalidPath: boolean = workspace.getConfiguration("easyManagerProjects").get("checkInvalidPathsBeforeListing", true);
         if (checkInvalidPath) {
             itemsToShow = PathUtils.indicateInvalidPaths(itemsToShow);
         }
@@ -120,7 +120,7 @@ export class Locators implements Disposable {
             workspace.workspaceFolders ? workspace.workspaceFolders[ 0 ].uri :
                 undefined;
 
-        if (!workspace0 || !workspace.getConfiguration("projectManager").get("removeCurrentProjectFromList")) {
+        if (!workspace0 || !workspace.getConfiguration("easyManagerProjects").get("removeCurrentProjectFromList")) {
             return items;
         } else {
             if (isRemoteUri(workspace0)) {

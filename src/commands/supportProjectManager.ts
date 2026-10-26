@@ -7,7 +7,7 @@ import { commands, env, l10n, MessageItem, Uri, window } from "vscode";
 import { Container } from "../core/container";
 
 export function registerSupportProjectManager() {
-    Container.context.subscriptions.push(commands.registerCommand("projectManager.supportProjectManager", async () => {
+    Container.context.subscriptions.push(commands.registerCommand("easyManagerProjects.supportProjectManager", async () => {
         const actions: MessageItem[] = [
             { title: 'Become a Sponsor' },
             { title: 'Donate via PayPal' }

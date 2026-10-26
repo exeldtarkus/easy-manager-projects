@@ -8,15 +8,15 @@ import { HelpAndFeedbackView, Link, StandardLinksProvider, ProvideFeedbackLink, 
 
 export function registerHelpAndFeedbackView(context: ExtensionContext) {
     const items = new Array<Link | Command>();
-    const predefinedProvider = new StandardLinksProvider('alefragnani.project-manager');
+    const predefinedProvider = new StandardLinksProvider('exeldtarkus.easy-manager-projects');
     items.push(predefinedProvider.getGetStartedLink());
-    items.push(new ProvideFeedbackLink('project-manager'));
+    items.push(new ProvideFeedbackLink('easy-manager-projects'));
     items.push(predefinedProvider.getReviewIssuesLink());
     items.push(predefinedProvider.getReportIssueLink());
     items.push({
         icon: 'heart',
         title: 'Support',
-        command: 'projectManager.supportProjectManager'
+        command: 'easyManagerProjects.supportProjectManager'
     });
-    new HelpAndFeedbackView(context, "projectManagerHelpAndFeedback", items);
+    new HelpAndFeedbackView(context, "easyManagerProjectsHelpAndFeedback", items);
 }

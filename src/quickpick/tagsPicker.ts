@@ -16,7 +16,7 @@ export interface PickTagOptions {
 
 export async function pickTags(storage: ProjectStorage, preselected: string[], options?: PickTagOptions): Promise<string[] | undefined> {
 
-    const config = workspace.getConfiguration("projectManager");
+    const config = workspace.getConfiguration("easyManagerProjects");
     const defaultTags = config.get<string[]>("tags") ?? [];
     let currentPreselected = preselected ?? [];
 

@@ -11,9 +11,9 @@ import { ProjectManagerContentProvider, ProjectManagerSocialMediaProvider } from
 export function registerWhatsNew() {
     const provider = new ProjectManagerContentProvider();
     const viewer = new WhatsNewManager(Container.context)
-        .registerContentProvider("alefragnani", "project-manager", provider)
+        .registerContentProvider("exeldtarkus", "easy-manager-projects", provider)
         .registerSocialMediaProvider(new ProjectManagerSocialMediaProvider());
     viewer.showPageInActivation();
-    Container.context.subscriptions.push(commands.registerCommand("projectManager.whatsNew", () => viewer.showPage()));
-    Container.context.subscriptions.push(commands.registerCommand("_projectManager.whatsNewContextMenu", () => viewer.showPage()));
+    Container.context.subscriptions.push(commands.registerCommand("easyManagerProjects.whatsNew", () => viewer.showPage()));
+    Container.context.subscriptions.push(commands.registerCommand("_easyManagerProjects.whatsNewContextMenu", () => viewer.showPage()));
 }

@@ -62,7 +62,7 @@ suite("SideBar Decoration Tests", () => {
         Container.currentProject = createProject("my-project", projectPath);
 
         const decoration = provider.provideFileDecoration(
-            Uri.parse(`projectManager-view:${projectPath}`), tokenSource.token) as FileDecoration;
+            Uri.parse(`easyManagerProjects-view:${projectPath}`), tokenSource.token) as FileDecoration;
 
         assert.equal(decoration.badge, "✔");
     });
@@ -71,7 +71,7 @@ suite("SideBar Decoration Tests", () => {
         Container.currentProject = createProject("my-project", projectPath);
 
         const decoration = provider.provideFileDecoration(
-            Uri.parse("projectManager-view:/home/user/projects/another-project"), tokenSource.token);
+            Uri.parse("easyManagerProjects-view:/home/user/projects/another-project"), tokenSource.token);
 
         assert.equal(decoration, undefined);
     });
@@ -80,14 +80,14 @@ suite("SideBar Decoration Tests", () => {
         Container.currentProject = undefined;
 
         assert.doesNotThrow(() => provider.provideFileDecoration(
-            Uri.parse(`projectManager-view:${projectPath}`), tokenSource.token));
+            Uri.parse(`easyManagerProjects-view:${projectPath}`), tokenSource.token));
     });
 
     test("should not decorate when there is no current project", () => {
         Container.currentProject = undefined;
 
         const decoration = provider.provideFileDecoration(
-            Uri.parse(`projectManager-view:${projectPath}`), tokenSource.token);
+            Uri.parse(`easyManagerProjects-view:${projectPath}`), tokenSource.token);
 
         assert.equal(decoration, undefined);
     });

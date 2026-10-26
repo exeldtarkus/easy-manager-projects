@@ -29,7 +29,7 @@ export class StorageProvider implements vscode.TreeDataProvider<ProjectNode | Ta
 
     private projectSource: ProjectStorage;
     private internalOnDidChangeTreeData: vscode.EventEmitter<ProjectNode | TagNode | void> = new vscode.EventEmitter<ProjectNode | void>();
-    private static readonly TAGS_EXPANSION_STATE_KEY = "projectsExplorerFavorites.tagsExpansionState";
+    private static readonly TAGS_EXPANSION_STATE_KEY = "easyManagerProjectsExplorerFavorites.tagsExpansionState";
 
     constructor(projectSource: ProjectStorage) {
         this.projectSource = projectSource;
@@ -95,7 +95,7 @@ export class StorageProvider implements vscode.TreeDataProvider<ProjectNode | Ta
 
                 projectsMapped = sortProjects(projectsMapped);
 
-                const showGitBranch = vscode.workspace.getConfiguration("projectManager").get<string>("git.showBranchName", "never");
+                const showGitBranch = vscode.workspace.getConfiguration("easyManagerProjects").get<string>("git.showBranchName", "never");
 
                 for (let index = 0; index < projectsMapped.length; index++) {
                     const prj: ProjectInQuickPick = projectsMapped[ index ];
@@ -116,7 +116,7 @@ export class StorageProvider implements vscode.TreeDataProvider<ProjectNode | Ta
                             path: projectPath,
                             detail: gitBranch
                         }, {
-                            command: "_projectManager.open",
+                            command: "_easyManagerProjects.open",
                             title: "",
                             arguments: [ projectPath, prj.label, prj.profile ],
                         }));
@@ -138,7 +138,7 @@ export class StorageProvider implements vscode.TreeDataProvider<ProjectNode | Ta
                 if (!viewAsList) {
                     let nodes: TagNode[] = [];
 
-                    const tagsCollapseBehavior = vscode.workspace.getConfiguration("projectManager").get<string>("tags.collapseItems", "startExpanded");
+                    const tagsCollapseBehavior = vscode.workspace.getConfiguration("easyManagerProjects").get<string>("tags.collapseItems", "startExpanded");
                     const tags = this.projectSource.getAvailableTags().sort();
                     for (const tag of tags) {
                         nodes.push(new TagNode(tag, StorageProvider.getTagCollapsibleState(tag, tagsCollapseBehavior)));
@@ -177,7 +177,7 @@ export class StorageProvider implements vscode.TreeDataProvider<ProjectNode | Ta
 
                 projectsMapped = sortProjects(projectsMapped);
 
-                const showGitBranch = vscode.workspace.getConfiguration("projectManager").get<string>("git.showBranchName", "never");
+                const showGitBranch = vscode.workspace.getConfiguration("easyManagerProjects").get<string>("git.showBranchName", "never");
 
                 for (let index = 0; index < projectsMapped.length; index++) {
                     const prj: ProjectInQuickPick = projectsMapped[ index ];
@@ -199,7 +199,7 @@ export class StorageProvider implements vscode.TreeDataProvider<ProjectNode | Ta
                             detail: gitBranch
                         },
                         {
-                            command: "_projectManager.open",
+                            command: "_easyManagerProjects.open",
                             title: "",
                             arguments: [ projectPath, prj.label, prj.profile ],
                         }));

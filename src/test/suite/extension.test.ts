@@ -19,7 +19,7 @@ suite('Extension Test Suite', () => {
     vscode.window.showInformationMessage('Start all tests.');
 
     suiteSetup(() => {
-        extension = vscode.extensions.getExtension('alefragnani.project-manager') as vscode.Extension<any>;
+        extension = vscode.extensions.getExtension('exeldtarkus.easy-manager-projects') as vscode.Extension<any>;
     });
 
     test('Sample test', () => {

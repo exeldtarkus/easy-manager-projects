@@ -186,7 +186,7 @@ export class PathUtils {
     }
 
     public static handleSymlinks(items: string[]): string[] {
-        if (!workspace.getConfiguration("projectManager").get<boolean>("supportSymlinksOnBaseFolders", false)) {
+        if (!workspace.getConfiguration("easyManagerProjects").get<boolean>("supportSymlinksOnBaseFolders", false)) {
             return items;
         }
 
@@ -248,7 +248,7 @@ interface ProjectDetail {
 
 export function addParentFolderToDuplicates(projects: AutodetectedProjectList): ProjectDetail[] {
 
-    if (!workspace.getConfiguration("projectManager").get<boolean>("showParentFolderInfoOnDuplicates", false)) {
+    if (!workspace.getConfiguration("easyManagerProjects").get<boolean>("showParentFolderInfoOnDuplicates", false)) {
         return projects.map(project => <ProjectDetail>{
             name: project.name,
             path: project.fullPath,

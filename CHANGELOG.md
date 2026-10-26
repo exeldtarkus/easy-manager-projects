@@ -1,3 +1,21 @@
+## [1.0.0] - 2026-10-26
+### Added
+- Initial release as **Easy Manager Projects**, forked from [Project Manager](https://github.com/alefragnani/vscode-project-manager) 13.1.1 by Alessandro Fragnani (GPLv3)
+- Projects under `\\wsl$\<distro>\...` or `\\wsl.localhost\<distro>\...` (saved or auto-detected) open as a WSL remote window (`vscode-remote://wsl+<distro>/...`)
+- Side Bar context menu **Open in WSL** (Windows only): Windows-drive projects open in WSL as `/mnt/<drive>/...`
+- Side Bar context menu **Open in Windows** (Windows only): WSL projects open locally as `\\wsl.localhost\<distro>\...`, and `/mnt/<drive>/...` maps back to `<drive>:\...`
+- New setting `easyManagerProjects.wsl.distro` (distro used by **Open in WSL** for Windows-drive projects)
+
+### Changed
+- All command, setting and view IDs renamed from `projectManager.*` to `easyManagerProjects.*`
+- Command titles now start with `Easy Manager Projects:`
+- Favorites are stored per extension (not shared with the original Project Manager)
+
+### Known limitations
+- WSL path mapping assumes the default automount root `/mnt/`
+
+# History from Project Manager (alefragnani)
+
 ## [13.1.1] - 2026-03-31
 ### Internal
 - Failed publishing on open-vsx (issue [#920](https://github.com/alefragnani/vscode-project-manager/issues/920))

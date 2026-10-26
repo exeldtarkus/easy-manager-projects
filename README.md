@@ -1,52 +1,30 @@
-[![](https://vsmarketplacebadges.dev/version-short/alefragnani.project-manager.svg)](https://marketplace.visualstudio.com/items?itemName=alefragnani.project-manager)
-[![](https://vsmarketplacebadges.dev/downloads-short/alefragnani.project-manager.svg)](https://marketplace.visualstudio.com/items?itemName=alefragnani.project-manager)
-[![](https://vsmarketplacebadges.dev/rating-short/alefragnani.project-manager.svg)](https://marketplace.visualstudio.com/items?itemName=alefragnani.project-manager)
-
 <p align="center">
   <br />
-  <a title="Learn more about Project Manager" href="https://github.com/alefragnani/vscode-project-manager"><img src="https://raw.githubusercontent.com/alefragnani/vscode-project-manager/master/images/vscode-project-manager-logo-readme.png" alt="Project Manager Logo" width="70%" /></a>
+  <img src="images/vscode-project-manager-logo-readme.png" alt="Easy Manager Projects Logo" width="70%" />
 </p>
 
 English | [简体中文](README.zh-CN.md)
 
-# What's new in Project Manager 13.1
+# Easy Manager Projects
 
-* Improved **Tags** support
-* Improved **auto-detected projects** support
-* Fully Open Source again
-* Adds **Profile** support
-* Highlights the current project in the Side Bar
-* Published to **Open VSX**
-* Adds **Getting Started / Walkthrough**
-* Organize your projects with **Tags**
-* Adds **Virtual Workspaces** support
-* Adds **Workspace Trust** support
+Easily access your projects, saved or auto-detected, with first-class switching between WSL and Windows.
 
-# Support
+> **Fork notice:** Easy Manager Projects is a fork of [alefragnani/vscode-project-manager](https://github.com/alefragnani/vscode-project-manager) (GPLv3). All credit for the original extension goes to **Alessandro Fragnani**.
 
-**Project Manager** is an extension created for **Visual Studio Code**. If you find it useful, please consider supporting it.
+# What's new in Easy Manager Projects 1.0
 
-<table align="center" width="60%" border="0">
-  <tr>
-    <td>
-      <a title="Paypal" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EP57F3B6FXKTU&lc=US&item_name=Alessandro%20Fragnani&item_number=vscode%20extensions&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif"/></a>
-    </td>
-    <td>
-      <a title="GitHub Sponsors" href="https://github.com/sponsors/alefragnani"><img src="https://raw.githubusercontent.com/alefragnani/oss-resources/master/images/button-become-a-sponsor-rounded-small.png"/></a>
-    </td>
-    <td>
-      <a title="Patreon" href="https://www.patreon.com/alefragnani"><img src="https://raw.githubusercontent.com/alefragnani/oss-resources/master/images/button-become-a-patron-rounded-small.png"/></a>
-    </td>
-  </tr>
-</table>
+* Initial release, forked from **Project Manager 13.1.1**
+* All command, setting and view IDs renamed from the `projectManager` prefix to `easyManagerProjects`
+* WSL projects (`\\wsl$\...` / `\\wsl.localhost\...`) open as a **WSL remote window**
+* **Open in WSL** / **Open in Windows** in the Side Bar context menu
 
-# Project Manager
+# Overview
 
 It helps you to easily access your **projects**, no matter where they are located. _Don't miss those important projects anymore_. 
 
 You can define your own **Projects** (also called **Favorites**), or choose for auto-detect **Git**, **Mercurial** or **SVN** repositories, **VSCode** folders, or **any** other folder.
 
-Here are some of the features that **Project Manager** provides:
+Here are some of the features that **Easy Manager Projects** provides:
 
 * Save any folder or workspace as a **Project**
 * Auto-detect **Git**, **Mercurial** or **SVN** repositories
@@ -60,11 +38,11 @@ Here are some of the features that **Project Manager** provides:
 
 ## Available Commands
 
-* `Project Manager: Save Project` Save the current folder/workspace as a new project
-* `Project Manager: Edit Project` Edit your projects manually (`projects.json`)
-* `Project Manager: List Projects to Open` List all saved/detected projects and pick one
-* `Project Manager: List Projects to Open in New Window` List all saved/detected projects and pick one to be opened in New Window
-* `Project Manager: Filter Projects by Tag` Filter the Favorite projects by selected tags
+* `Easy Manager Projects: Save Project` Save the current folder/workspace as a new project
+* `Easy Manager Projects: Edit Projects` Edit your projects manually (`projects.json`)
+* `Easy Manager Projects: List Projects to Open` List all saved/detected projects and pick one
+* `Easy Manager Projects: List Projects to Open in New Window` List all saved/detected projects and pick one to be opened in New Window
+* `Easy Manager Projects: Filter Projects by Tag` Filter the Favorite projects by selected tags
 
 ## Manage your projects
 
@@ -78,7 +56,7 @@ You can save the current folder/workspace as a **Project** at any time. You just
  
 ### Edit Projects
 
-For easier customization of your project list, you can edit the `projects.json` file, directly inside **Code**. Just execute `Project Manager: Edit Projects` and the `projects.json` file is opened. Simple as this:
+For easier customization of your project list, you can edit the `projects.json` file, directly inside **Code**. Just execute `Easy Manager Projects: Edit Projects` and the `projects.json` file is opened. Simple as this:
 
 ```json
 [
@@ -114,7 +92,7 @@ For easier customization of your project list, you can edit the `projects.json` 
 
 > You can use `~` or `$home` while defining any path. It will be replaced by your HOME folder.
 
-> Be sure that the JSON file is well-formed. Otherwise, **Project Manager** will not be able to open it, and an error message like this should appear. In this case, you should use the `Open File` button to fix it.
+> Be sure that the JSON file is well-formed. Otherwise, **Easy Manager Projects** will not be able to open it, and an error message like this should appear. In this case, you should use the `Open File` button to fix it.
 
 ![Corrupted](docs/images/project-manager-edit-corrupted-projectsJson.png)
 
@@ -177,13 +155,42 @@ You just have to add the lines below on your `User Settings`.
 
 ```json
     "remote.extensionKind": {
-        "alefragnani.project-manager": [
+        "exeldtarkus.easy-manager-projects": [
             "workspace"
         ]
     },
 ```
 
 > More details on [VS Code documentation](https://code.visualstudio.com/docs/remote/containers#_advanced-forcing-an-extension-to-run-locally-or-remotely)
+
+## WSL ⇄ Windows
+
+When you work on Windows with WSL, folders like `\\wsl$\<distro>\...` or `\\wsl.localhost\<distro>\...` open very slowly as a local UNC folder. **Easy Manager Projects** fixes that:
+
+* Projects under `\\wsl$\<distro>\...` or `\\wsl.localhost\<distro>\...` (saved as Favorites or auto-detected via `baseFolders`) open as a **WSL remote window** (`vscode-remote://wsl+<distro>/...`).
+* **Open in WSL** (Side Bar context menu, Windows only)
+  * A Windows-drive project such as `C:\src\app` opens in WSL as `/mnt/c/src/app`, using the distro set in `easyManagerProjects.wsl.distro`.
+  * A WSL UNC path uses its own distro.
+* **Open in Windows** (Side Bar context menu, Windows only)
+  * A WSL project such as `vscode-remote://wsl+Ubuntu/home/u/app` opens locally as `\\wsl.localhost\Ubuntu\home\u\app`.
+  * A `/mnt/c/...` path maps back to `C:\...`.
+
+Set the distro used for Windows-drive projects (default `""`):
+
+```json
+    "easyManagerProjects.wsl.distro": "Ubuntu"
+```
+
+> **Limitation:** the default WSL automount root `/mnt/` is assumed. A custom `root` in `/etc/wsl.conf` is not supported.
+
+## Migrating from Project Manager
+
+Favorites are stored per extension, so your favorites from the original **Project Manager** are not shared automatically. To bring them over, either:
+
+* Copy `projects.json` from the original extension's globalStorage folder (`alefragnani.project-manager`) into this extension's folder (`exeldtarkus.easy-manager-projects`), or
+* Point `easyManagerProjects.projectsLocation` at the folder that holds your `projects.json`.
+
+Settings must also be renamed: replace the `projectManager` prefix with `easyManagerProjects` in your `settings.json`.
 
 ## Available Settings
 
@@ -195,7 +202,7 @@ You can choose how your projects are sorted
 * `Recent`: The recently used projects
 
 ```json
-    "projectManager.sortList": "Name"
+    "easyManagerProjects.sortList": "Name"
 ```
 
 ![List](docs/images/project-manager-list-sort-by-name.png)
@@ -203,37 +210,37 @@ You can choose how your projects are sorted
 * Choose if the project list must be grouped by its _kind_ (**Favorites**, **Git**, **Mercurial**, **SVN** and **VS Code**).
 
 ```json
-    "projectManager.groupList": true
+    "easyManagerProjects.groupList": true
 ```
 
 * Should the current project be removed from the list? (`false` by default)
 
 ```json
-    "projectManager.removeCurrentProjectFromList": true
+    "easyManagerProjects.removeCurrentProjectFromList": true
 ```
 
 * Should identify _invalid paths_ on project list? (`true` by default)
 
 ```json 
-    "projectManager.checkInvalidPathsBeforeListing": false
+    "easyManagerProjects.checkInvalidPathsBeforeListing": false
 ```
 
 * Should support symlinks on `baseFolders`? (`false` by default)
 
 ```json 
-    "projectManager.supportSymlinksOnBaseFolders": true
+    "easyManagerProjects.supportSymlinksOnBaseFolders": true
 ```
 
 * Should show the parent folder info when projects with same name are detected? (`false` by default)
 
 ```json 
-    "projectManager.showParentFolderInfoOnDuplicates": true
+    "easyManagerProjects.showParentFolderInfoOnDuplicates": true
 ```
 
 * Filter Projects Through Full Path (`false` by default)
 
 ```json 
-    "projectManager.filterOnFullPath": true
+    "easyManagerProjects.filterOnFullPath": true
 ```
 
 * Custom projects file (`projects.json`) location
@@ -241,7 +248,7 @@ You can choose how your projects are sorted
 If you intend to _share_ projects between  **Stable** and **Insider** installations, or if you store your settings in different locations (cloud services), you can indicate an _alternative_ location (folder path) for the `projects.json` file.
 
 ```json
-    "projectManager.projectsLocation": "C:\\Users\\myUser\\AppData\\Roaming\\Code\\User"
+    "easyManagerProjects.projectsLocation": "C:\\Users\\myUser\\AppData\\Roaming\\Code\\User"
 ```
 
 > You can use `~` or `$home` while defining the folder path. It will be replaced by your HOME folder.
@@ -249,7 +256,7 @@ If you intend to _share_ projects between  **Stable** and **Insider** installati
 * Automatic Detection of Projects (**Git** ![git](docs/images/ico_git_branch.png), **Mercurial** ![git](docs/images/ico_git_branch.png), **SVN** ![svn](docs/images/ico_svn.png) and **VSCode** ![vscode](docs/images/ico_file_code.png))
 
 ```json
-    "projectManager.git.baseFolders": [
+    "easyManagerProjects.git.baseFolders": [
         "c:\\Projects\\code",
         "d:\\MoreProjects\\code-*",
         "$home\\personal-coding"
@@ -258,7 +265,7 @@ If you intend to _share_ projects between  **Stable** and **Insider** installati
 > Indicates folders or [glob patterns](https://code.visualstudio.com/docs/editor/glob-patterns) to search for projects
 
 ```json
-    "projectManager.git.ignoredFolders": [
+    "easyManagerProjects.git.ignoredFolders": [
         "node_modules", 
         "out", 
         "typings", 
@@ -269,39 +276,39 @@ If you intend to _share_ projects between  **Stable** and **Insider** installati
 > Indicates folders or [glob patterns](https://code.visualstudio.com/docs/editor/glob-patterns) to be ignored when searching for projects
 
 ```json
-    "projectManager.git.maxDepthRecursion": 4
+    "easyManagerProjects.git.maxDepthRecursion": 4
 ```
 > Define how deeps it should search for projects
 
 * Exclude the base folders themselves from the auto-detected projects list (`false` by default)
 
 ```json
-    "projectManager.any.excludeBaseFoldersFromResults": true
+    "easyManagerProjects.any.excludeBaseFoldersFromResults": true
 ```
-> When enabled, the **Any** base folders configured in `projectManager.any.baseFolders` are not returned as projects themselves, only their matching subfolders are.
+> When enabled, the **Any** base folders configured in `easyManagerProjects.any.baseFolders` are not returned as projects themselves, only their matching subfolders are.
 
 * Should ignore projects found inside other projects? (`false` by default)
 
 ```json 
-    "projectManager.ignoreProjectsWithinProjects": true
+    "easyManagerProjects.ignoreProjectsWithinProjects": true
 ```
 
 * Cache automatically detected projects (`true` by default)
 
 ```json 
-    "projectManager.cacheProjectsBetweenSessions": false
+    "easyManagerProjects.cacheProjectsBetweenSessions": false
 ```
 
 * Display the Project Name in Status Bar (`true` by default)
 
 ```json 
-    "projectManager.showProjectNameInStatusBar": true
+    "easyManagerProjects.showProjectNameInStatusBar": true
 ```
 
 * Open projects in _New Window_ when clicking in status bar (`false` by default)
 
 ```json 
-    "projectManager.openInNewWindowWhenClickingInStatusBar": true
+    "easyManagerProjects.openInNewWindowWhenClickingInStatusBar": true
 ```
 
 * Indicates if the `New Window` command should open the project in current window, when empty (`always` by default)
@@ -312,13 +319,13 @@ If you intend to _share_ projects between  **Stable** and **Insider** installati
   * `never`: Works as today. The Open in New Window command will always open in New Window
 
 ```json 
-    "projectManager.openInCurrentWindowIfEmpty": "always"
+    "easyManagerProjects.openInCurrentWindowIfEmpty": "always"
 ```
 
 * Indicates the list of tags you can use to organize your projects _(`Personal` and `Work` by default)_
 
 ```json
-    "projectManager.tags": [
+    "easyManagerProjects.tags": [
         "Personal", 
         "Work",
         "VS Code",
@@ -334,13 +341,13 @@ If you intend to _share_ projects between  **Stable** and **Insider** installati
   * `startCollapsed`: Tag groups start collapsed and remember your last expand/collapse state
 
 ```json
-    "projectManager.tags.collapseItems": "startExpanded"
+    "easyManagerProjects.tags.collapseItems": "startExpanded"
 ```
 
 * Show the current Git branch name for projects (`"never"` by default)
 
 ```json
-    "projectManager.git.showBranchName": "never"
+    "easyManagerProjects.git.showBranchName": "never"
 ```
 
 Supported values:
@@ -355,13 +362,13 @@ Supported values:
 * Choose the foreground color to highlight the current project in the Side Bar
 ```json
     "workbench.colorCustomizations": {
-      "projectManager.sideBar.currentProjectHighlightForeground": "#e13015"  
+      "easyManagerProjects.sideBar.currentProjectHighlightForeground": "#e13015"  
     }
 ```
 
 ## Side Bar
 
-The **Project Manager** extension has its own **Side Bar**, with a variety of commands to improve your productivity. 
+The **Easy Manager Projects** extension has its own **Side Bar**, with a variety of commands to improve your productivity. 
 
 ![Side Bar](docs/images/vscode-project-manager-side-bar.png)
 
@@ -369,29 +376,29 @@ The **Project Manager** extension has its own **Side Bar**, with a variety of co
 
 Starting in v12.3, you can now organize your Projects with **Tags**. 
 
-You can define your custom tags (via `projectManager.tags` setting), define multiple **tags** for each project, and filter the projects based on their **tags**. 
+You can define your custom tags (via `easyManagerProjects.tags` setting), define multiple **tags** for each project, and filter the projects based on their **tags**. 
 
 ![Side Bar](docs/images/vscode-project-manager-side-bar-tags.gif)
 
 ## Extension API
 
-If you are an extension developer and would like to interact with the **Project Manager** extension, you can use its public API. 
+If you are an extension developer and would like to interact with the **Easy Manager Projects** extension, you can use its public API. 
 
 First, you must add an `extensionDependencies` entry in your `package.json` file:
 
 ```json
   "extensionDependencies": [
-    "alefragnani.project-manager"
+    "exeldtarkus.easy-manager-projects"
   ],
 ```
 
-Then, retrieve the extension instance with `vscode.extensions.getExtension("alefragnani.project-manager")` in your source code, to be able to use the methods that the extension exposes.
+Then, retrieve the extension instance with `vscode.extensions.getExtension("exeldtarkus.easy-manager-projects")` in your source code, to be able to use the methods that the extension exposes.
 
 ```ts
 import { ProjectManagerPublicApi } from './api/projectManager/api';
 
 async function useProjectManagerApi() {
-    const projectManagerApi = <ProjectManagerPublicApi>vscode.extensions.getExtension('alefragnani.project-manager')?.exports;
+    const projectManagerApi = <ProjectManagerPublicApi>vscode.extensions.getExtension('exeldtarkus.easy-manager-projects')?.exports;
 
     await projectManagerApi.saveProject("My Project", "/path/to/project", ["work"], "Default");
 }
@@ -410,4 +417,4 @@ You should follow the official documentation to:
 
 # License
 
-[GPL-3.0 with VS Code Extension Host API Exception](LICENSE.md) &copy; Alessandro Fragnani
+[GPL-3.0 with VS Code Extension Host API Exception](LICENSE.md) &copy; Alessandro Fragnani (original [Project Manager](https://github.com/alefragnani/vscode-project-manager)), fork maintained by exeldtarkus

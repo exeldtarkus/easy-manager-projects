@@ -164,7 +164,7 @@ export class CustomProjectLocator {
                             .on("dir", this.processDirectory)
                             .on("file", this.processFile)
                             .on("symlink", (link) => {
-                                if (!workspace.getConfiguration("projectManager").get<boolean>("supportSymlinksOnBaseFolders", false)) {
+                                if (!workspace.getConfiguration("easyManagerProjects").get<boolean>("supportSymlinksOnBaseFolders", false)) {
                                     return;
                                 }
                                 if (this.isFolderIgnored(path.basename(link)) ||
@@ -278,7 +278,7 @@ export class CustomProjectLocator {
     }
 
     private refreshConfig(): boolean {
-        const config = vscode.workspace.getConfiguration("projectManager");
+        const config = vscode.workspace.getConfiguration("easyManagerProjects");
         let refreshedSomething = false;
         let currentValue = null;
 
