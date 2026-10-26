@@ -22,7 +22,14 @@ webpack.config.js
 AGENTS.md
 plans/**
 
-# gh-pages
-docs/index.html
-docs/styles.css
-docs/images/project-manager-save-and-list.gif
+# gh-pages + per-branch work folders (docs/<branch>/); keep only images used by package.json and walkthroughs
+docs/**
+!docs/images/icon.png
+!docs/images/project-manager-side-bar.svg
+!docs/images/project-manager-list-sort-by-name.png
+!docs/images/project-manager-save.png
+!docs/images/vscode-project-manager-side-bar-tags.gif
+!docs/images/vscode-project-manager-side-bar.png
+
+# local tooling
+scripts/**

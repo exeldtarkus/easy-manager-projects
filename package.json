@@ -1167,7 +1167,9 @@
 		"pretest": "npm run compile && npm run lint",
 		"test-compile": "tsc -p ./ && npm run webpack",
 		"just-test": "node ./out/src/test/runTest.js",
-		"test": "npm run test-compile && npm run just-test"
+		"test": "npm run test-compile && npm run just-test",
+		"package": "vsce package --skip-license",
+		"install:local": "node scripts/install-local.js"
 	},
 	"devDependencies": {
 		"@types/mocha": "^10.0.0",
@@ -1176,6 +1178,7 @@
 		"@typescript-eslint/eslint-plugin": "^6.21.0",
 		"@typescript-eslint/parser": "^6.21.0",
 		"@vscode/test-electron": "^3.1.0",
+		"@vscode/vsce": "^4.0.0",
 		"eslint": "^8.1.0",
 		"eslint-config-vscode-ext": "^1.1.0",
 		"mocha": "^12.0.3",
