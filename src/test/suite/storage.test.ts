@@ -207,8 +207,9 @@ suite("ProjectStorage", () => {
         const loaded = new ProjectStorage(filename);
         assert.strictEqual(loaded.load(), "");
         const mapped = loaded.map();
-        assert.deepStrictEqual(mapped.find(p => p.label === "WithIcon"), { label: "WithIcon", description: "/with", profile: "", icon: "rocket" });
-        assert.deepStrictEqual(mapped.find(p => p.label === "NoIcon"), { label: "NoIcon", description: "/without", profile: "" });
+        // load() switches local paths to the OS separator (`\with` on Windows)
+        assert.deepStrictEqual(mapped.find(p => p.label === "WithIcon"), { label: "WithIcon", description: `${path.sep}with`, profile: "", icon: "rocket" });
+        assert.deepStrictEqual(mapped.find(p => p.label === "NoIcon"), { label: "NoIcon", description: `${path.sep}without`, profile: "" });
         assert.strictEqual(loaded.getProjectsByTag("x")[0].icon, "rocket");
         assert.strictEqual(loaded.getProjectsByTags([ "x" ])[0].icon, "rocket");
 

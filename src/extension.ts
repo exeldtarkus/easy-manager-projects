@@ -135,6 +135,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     // register commands (here, because it needs to be used right below if an invalid JSON is present)
     vscode.commands.registerCommand("easyManagerProjects.saveProject", () => saveProject());
+    vscode.commands.registerCommand("easyManagerProjects.addFolderToFavorites", () => addFolderToFavorites());
     vscode.commands.registerCommand("easyManagerProjects.refreshProjects", () => refreshProjects(true, true));
     locators.registerCommands();
     vscode.commands.registerCommand("easyManagerProjects.editProjects", () => editProjects());
@@ -322,13 +323,17 @@ export async function activate(context: vscode.ExtensionContext) {
         }
     }
 
-    async function saveProject(node?: ProjectNode) {
+    // `picked` is a folder chosen in the OS dialog, not the current one, so it must not touch the status bar
+    async function saveProject(node?: ProjectNode, picked?: { name: string, path: string }) {
         let wpath: string;
         let rootPath: string;
 
         if (node) {
             wpath = node.label as string; 
             rootPath = node.command.arguments[0];
+        } else if (picked) {
+            wpath = picked.name;
+            rootPath = picked.path;
         } else {
             const projectDetails = await getProjectDetails();
             if (!projectDetails) {
@@ -362,7 +367,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 projectStorage.save();
                 providerManager.updateTreeViewStorage();
                 vscode.window.showInformationMessage(l10n.t("Project saved!"));
-                if (!node) {
+                if (!node && !picked) {
                     showStatusBar(projectStorage, locators, projectName);
                     updateCurrentProject();
                 }
@@ -395,7 +400,7 @@ export async function activate(context: vscode.ExtensionContext) {
                     projectStorage.save();
                     providerManager.updateTreeViewStorage();
                     vscode.window.showInformationMessage(l10n.t("Project saved!"));
-                    if (!node) {
+                    if (!node && !picked) {
                         showStatusBar(projectStorage, locators, projectName);
                     }
                     return true;
@@ -642,6 +647,23 @@ export async function activate(context: vscode.ExtensionContext) {
             projectStorage.save();
             vscode.window.showInformationMessage(l10n.t("Project updated!"));
         }
+    }
+
+    // the native folder dialog of each OS (File Explorer, Finder, GTK/KDE); in a remote window VS Code shows the remote file system
+    async function addFolderToFavorites() {
+        const uris = await vscode.window.showOpenDialog({
+            canSelectFolders: true,
+            canSelectFiles: false,
+            canSelectMany: false,
+            openLabel: l10n.t("Add to Favorites"),
+            title: l10n.t("Add Folder to Favorites")
+        });
+        if (!uris || uris.length === 0) {
+            return;
+        }
+        const uri = uris[ 0 ];
+        const folderPath = uri.scheme === "file" ? uri.fsPath : uri.toString();
+        saveProject(undefined, { name: path.basename(uri.path), path: folderPath });
     }
 
     async function editPath(node: ProjectNode) {

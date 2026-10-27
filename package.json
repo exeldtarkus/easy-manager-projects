@@ -2,7 +2,7 @@
 	"name": "easy-manager-projects",
 	"displayName": "Easy Manager Projects",
 	"description": "Easily switch between projects, including opening projects in WSL or Windows (fork of alefragnani's Project Manager)",
-	"version": "1.7.0",
+	"version": "1.8.0",
 	"publisher": "exeldtarkus",
 	"engines": {
 		"vscode": "^1.78.0"
@@ -115,6 +115,11 @@
 				"command": "easyManagerProjects.saveProject",
 				"title": "%easyManagerProjects.commands.saveProject.title%",
 				"icon": "$(save)"
+			},
+			{
+				"command": "easyManagerProjects.addFolderToFavorites",
+				"title": "%easyManagerProjects.commands.addFolderToFavorites.title%",
+				"icon": "$(new-folder)"
 			},
 			{
 				"command": "easyManagerProjects.listProjects",
@@ -499,6 +504,11 @@
 				}
 			],
 			"view/title": [
+				{
+					"command": "easyManagerProjects.addFolderToFavorites",
+					"when": "view == easyManagerProjectsExplorerFavorites",
+					"group": "navigation@9"
+				},
 				{
 					"command": "easyManagerProjects.saveProject",
 					"when": "view == easyManagerProjectsExplorerFavorites",

@@ -62,5 +62,7 @@
     "You must define a path for the project.": "You must define a path for the project.",
     "Favorites": "Favorites",
     "Open a Project": "Open a Project",
-    "Type to search favorites and repositories": "Type to search favorites and repositories"
+    "Type to search favorites and repositories": "Type to search favorites and repositories",
+    "Add to Favorites": "Add to Favorites",
+    "Add Folder to Favorites": "Add Folder to Favorites"
 }

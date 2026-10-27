@@ -1,3 +1,10 @@
+## [1.8.0] - 2026-10-27
+### Added
+- **Add Folder to Favorites...** (Favorites title bar and Command Palette): pick any folder in the system dialog (File Explorer on Windows, Finder on macOS, the GTK/KDE dialog on Linux, the remote file system in a remote window) and save it as a favorite without opening it
+
+### Fixed
+- Icon storage test now uses the OS path separator, so it passes on Windows CI
+
 ## [1.7.0] - 2026-10-27
 ### Changed
 - **Open a Project** (`Shift+Alt+P`) is grouped with headers: Favorites first, then Git, VSCode, Mercurial, SVN and Any. `easyManagerProjects.groupList` now defaults to `true` (set it to `false` for one mixed list)
