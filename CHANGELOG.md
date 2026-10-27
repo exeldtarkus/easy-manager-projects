@@ -1,3 +1,10 @@
+## [1.5.0] - 2026-10-27
+### Added
+- **Edit Path** in the Favorites context menu: change a favorite's path without editing `projects.json` (a missing folder only warns, so remote or offline paths can still be saved)
+
+### Changed
+- Clicking a project in the Side Bar (Favorites, Git and the other auto-detected views) now asks **Open in This Window** or **Open in New Window** instead of opening right away
+
 ## [1.4.0] - 2026-10-27
 ### Added
 - Favorites can have their own icon (any codicon): pick it with the new icon button in **Save Project**, or right-click a favorite in the Side Bar and choose **Edit Icon** (**No icon** removes it). The icon shows in the Side Bar and in **List Projects to Open** (`Shift+Alt+P`), and is stored as `"icon"` in `projects.json`

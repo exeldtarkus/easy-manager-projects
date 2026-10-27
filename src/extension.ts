@@ -18,7 +18,7 @@ import { StorageProvider } from "./sidebar/storageProvider";
 import { showStatusBar, updateStatusBar } from "./statusbar/statusBar";
 import { getProjectDetails } from "./utils/suggestion";
 import { CommandLocation, PROJECTS_FILE } from "./core/constants";
-import { isMacOS, isRemoteUri, isWindows } from "./utils/remote";
+import { isMacOS, isRemotePath, isRemoteUri, isWindows } from "./utils/remote";
 import { buildProjectUri, buildWindowsProjectUri, buildWslProjectUri } from "./utils/uri";
 import { missingWslUncHosts, parseDefaultWslDistro, parseWslUncPath } from "./utils/wsl";
 import { Container } from "./core/container";
@@ -89,10 +89,12 @@ export async function activate(context: vscode.ExtensionContext) {
 
     vscode.commands.registerCommand("_easyManagerProjects.open", async (projectPath: string, projectName: string, profile: string) => {
         const uri = buildProjectUri(projectPath);
-        if (!await canSwitchOnActiveWindow(CommandLocation.SideBar)) {
+        // the explicit window choice also answers the "switch active window" confirmation
+        const newWindow = await pickOpenInNewWindow(projectName);
+        if (newWindow === undefined) {
             return;
         }
-        vscode.commands.executeCommand("vscode.openFolder", uri, { forceProfile: profile , forceNewWindow: false } )
+        vscode.commands.executeCommand("vscode.openFolder", uri, { forceProfile: profile , forceNewWindow: newWindow } )
             .then(
                 () => ({}),  // done
                 () => vscode.window.showInformationMessage(l10n.t("Could not open the project!")));
@@ -153,6 +155,7 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("_easyManagerProjects.renameProject", (node) => renameProject(node));
     vscode.commands.registerCommand("_easyManagerProjects.editTags", (node) => editTags(node));
     vscode.commands.registerCommand("_easyManagerProjects.editIcon", (node) => editIcon(node));
+    vscode.commands.registerCommand("_easyManagerProjects.editPath", (node) => editPath(node));
     vscode.commands.registerCommand("easyManagerProjects.addToFavorites", (node) => saveProject(node));
     vscode.commands.registerCommand("_easyManagerProjects.toggleProjectEnabled", (node) => toggleProjectEnabled(node));
 
@@ -639,6 +642,38 @@ export async function activate(context: vscode.ExtensionContext) {
             projectStorage.save();
             vscode.window.showInformationMessage(l10n.t("Project updated!"));
         }
+    }
+
+    async function editPath(node: ProjectNode) {
+        const project = projectStorage.existsWithRootPath(node.command.arguments[0]);
+        if (!project) {
+            return;
+        }
+
+        const newPath = await vscode.window.showInputBox({
+            prompt: l10n.t("New Project Path"),
+            placeHolder: l10n.t("Type a new path for the project"),
+            value: project.rootPath,
+            validateInput: value => {
+                if (value.trim() === "") {
+                    return l10n.t("You must define a path for the project.");
+                }
+                // a warning, not an error: remote URIs or offline drives can still be saved
+                if (!isRemotePath(value) && !fs.existsSync(PathUtils.expandHomePath(value.trim()))) {
+                    return { message: l10n.t("Path does not exist or is unavailable."), severity: vscode.InputBoxValidationSeverity.Warning };
+                }
+                return undefined;
+            }
+        });
+        if (newPath === undefined || newPath.trim() === project.rootPath) {
+            return;
+        }
+
+        projectStorage.updateRootPath(project.name, newPath.trim());
+        projectStorage.save();
+        providerManager.storageProvider.refresh();
+        providerManager.updateTreeViewStorage();
+        vscode.window.showInformationMessage(l10n.t("Project updated!"));
     }
 
     async function editIcon(node: ProjectNode) {

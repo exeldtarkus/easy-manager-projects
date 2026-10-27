@@ -56,5 +56,8 @@
     "Where do you want to open \"{0}\"?": "Where do you want to open \"{0}\"?",
     "Select icon": "Select icon",
     "Select an icon for the project": "Select an icon for the project",
-    "No icon": "No icon"
+    "No icon": "No icon",
+    "New Project Path": "New Project Path",
+    "Type a new path for the project": "Type a new path for the project",
+    "You must define a path for the project.": "You must define a path for the project."
 }
