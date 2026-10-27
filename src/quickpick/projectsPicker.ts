@@ -285,10 +285,21 @@ export async function canSwitchOnActiveWindow(calledFrom: CommandLocation): Prom
     return answer === optionOpenProject;
 }
 
-export async function openPickedProject(picked: Picked<Project>, forceNewWindow: boolean, calledFrom: CommandLocation) {
+// second step after picking a project: undefined when the user cancels
+export async function pickOpenInNewWindow(projectName: string): Promise<boolean | undefined> {
+    const items = [
+        { label: `$(window) ${l10n.t("Open in This Window")}`, newWindow: false },
+        { label: `$(link-external) ${l10n.t("Open in New Window")}`, newWindow: true }
+    ];
+    const picked = await window.showQuickPick(items, { placeHolder: l10n.t("Where do you want to open \"{0}\"?", projectName) });
+    return picked?.newWindow;
+}
+
+export async function openPickedProject(picked: Picked<Project>, forceNewWindow: boolean, calledFrom: CommandLocation, chosenNewWindow?: boolean) {
     if (!picked) { return; }
 
-    if (!picked.button) {
+    // an explicit window choice already answers the "switch active window" confirmation
+    if (!picked.button && chosenNewWindow === undefined) {
         if (!forceNewWindow && !await canSwitchOnActiveWindow(calledFrom)) {
             return;
         }
@@ -297,7 +308,7 @@ export async function openPickedProject(picked: Picked<Project>, forceNewWindow:
     Container.stack.push(picked.item.name);
     Container.context.globalState.update("recent", Container.stack.toString());
 
-    const openInNewWindow = shouldOpenInNewWindow(forceNewWindow || !!picked.button, calledFrom);
+    const openInNewWindow = chosenNewWindow ?? shouldOpenInNewWindow(forceNewWindow || !!picked.button, calledFrom);
     const uri = buildProjectUri(picked.item.rootPath);
     commands.executeCommand("vscode.openFolder", uri, { forceProfile: picked.item.profile, forceNewWindow: openInNewWindow })
         .then(

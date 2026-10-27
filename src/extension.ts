@@ -29,7 +29,7 @@ import { registerOpenSettings } from "./commands/openSettings";
 import { pickTags } from "./quickpick/tagsPicker";
 import { ViewFavoritesAs } from "./sidebar/constants";
 import { registerSortBy, updateSortByContext } from "./commands/sortBy";
-import { canSwitchOnActiveWindow, openPickedProject, pickProjects, shouldOpenInNewWindow } from "./quickpick/projectsPicker";
+import { canSwitchOnActiveWindow, openPickedProject, pickOpenInNewWindow, pickProjects, shouldOpenInNewWindow } from "./quickpick/projectsPicker";
 import { CustomProjectLocator } from "./autodetect/abstractLocator";
 import { l10n } from "vscode";
 import { registerWalkthrough } from "./commands/walkthrough";
@@ -475,8 +475,15 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
     async function listProjects(forceNewWindow: boolean) {
-        const pick = await pickProjects(projectStorage, locators, !forceNewWindow, undefined); 
-        openPickedProject(pick, forceNewWindow, CommandLocation.CommandPalette);
+        const pick = await pickProjects(projectStorage, locators, !forceNewWindow, undefined);
+        if (!pick || forceNewWindow || pick.button) {
+            openPickedProject(pick, forceNewWindow, CommandLocation.CommandPalette);
+            return;
+        }
+        const newWindow = await pickOpenInNewWindow(pick.item.name);
+        if (newWindow !== undefined) {
+            openPickedProject(pick, forceNewWindow, CommandLocation.CommandPalette, newWindow);
+        }
     }
 
     async function listAutoDetectedProjects(locator: CustomProjectLocator) {

@@ -1,3 +1,7 @@
+## [1.2.0] - 2026-10-27
+### Added
+- **List Projects to Open** (`Shift+Alt+P`) asks where to open the picked project: **Open in This Window** (first, so Enter twice keeps the old behavior) or **Open in New Window**. The choice is always honored, even in an empty window
+
 ## [1.1.0] - 2026-10-27
 ### Added
 - WSL base folders (`\\wsl.localhost\...` / `\\wsl$\...`) now add their host to `security.allowedUNCHosts` automatically (Windows only), so WSL repositories are detected without editing that setting by hand

@@ -51,5 +51,7 @@
     "Open a folder first to save a project": "Open a folder first to save a project",
     "Save Project": "Save Project",
     "Reload Window": "Reload Window",
-    "Added {0} to `security.allowedUNCHosts` so WSL projects can be detected. Restart VS Code to apply it.": "Added {0} to `security.allowedUNCHosts` so WSL projects can be detected. Restart VS Code to apply it."
+    "Added {0} to `security.allowedUNCHosts` so WSL projects can be detected. Restart VS Code to apply it.": "Added {0} to `security.allowedUNCHosts` so WSL projects can be detected. Restart VS Code to apply it.",
+    "Open in This Window": "Open in This Window",
+    "Where do you want to open \"{0}\"?": "Where do you want to open \"{0}\"?"
 }
