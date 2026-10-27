@@ -18,10 +18,19 @@ interface ProjectInQuickPick {
     label: string;
     description: string;
     profile: string;
+    icon?: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ProjectInQuickPickList extends Array<ProjectInQuickPick> { }
+
+// a favorite's own codicon wins over the default folder icon
+function withCustomIcon(icon: string | undefined, node: ProjectNode): ProjectNode {
+    if (icon) {
+        node.iconPath = new vscode.ThemeIcon(icon);
+    }
+    return node;
+}
 
 export class StorageProvider implements vscode.TreeDataProvider<ProjectNode | TagNode> {
 
@@ -110,7 +119,7 @@ export class StorageProvider implements vscode.TreeDataProvider<ProjectNode | Ta
                     const projectPath = PathUtils.expandHomePath(prj.description);
                     const gitBranch = (showGitBranch === "always" || showGitBranch === "onlyInSideBar") ? getGitBranch(projectPath) : undefined;
 
-                    nodes.push(new ProjectNode(prj.label, vscode.TreeItemCollapsibleState.None,
+                    nodes.push(withCustomIcon(prj.icon, new ProjectNode(prj.label, vscode.TreeItemCollapsibleState.None,
                         iconFavorites, {
                             name: prj.label,
                             path: projectPath,
@@ -119,7 +128,7 @@ export class StorageProvider implements vscode.TreeDataProvider<ProjectNode | Ta
                             command: "_easyManagerProjects.open",
                             title: "",
                             arguments: [ projectPath, prj.label, prj.profile ],
-                        }));
+                        })));
                 }
 
                 resolve(nodes);
@@ -192,7 +201,7 @@ export class StorageProvider implements vscode.TreeDataProvider<ProjectNode | Ta
                     const projectPath = PathUtils.expandHomePath(prj.description);
                     const gitBranch = (showGitBranch === "always" || showGitBranch === "onlyInSideBar") ? getGitBranch(projectPath) : undefined;
 
-                    nodes.push(new ProjectNode(prj.label, vscode.TreeItemCollapsibleState.None,
+                    nodes.push(withCustomIcon(prj.icon, new ProjectNode(prj.label, vscode.TreeItemCollapsibleState.None,
                         iconFavorites, {
                             name: prj.label,
                             path: projectPath,
@@ -202,7 +211,7 @@ export class StorageProvider implements vscode.TreeDataProvider<ProjectNode | Ta
                             command: "_easyManagerProjects.open",
                             title: "",
                             arguments: [ projectPath, prj.label, prj.profile ],
-                        }));
+                        })));
                 }
 
                 resolve(nodes);

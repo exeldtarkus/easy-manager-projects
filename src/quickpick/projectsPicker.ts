@@ -150,6 +150,7 @@ export async function pickProjects(projectStorage: ProjectStorage, locators: Loc
                                 description: folder.description,
                                 detail: detail,
                                 profile: folder.profile,
+                                iconPath: folder.icon ? new ThemeIcon(folder.icon) : undefined,
                                 buttons: showOpenInNewWindowButton ? [ openInNewWindowButton ] : []
                             };
                         });

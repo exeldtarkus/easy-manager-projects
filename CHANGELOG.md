@@ -1,3 +1,7 @@
+## [1.4.0] - 2026-10-27
+### Added
+- Favorites can have their own icon (any codicon): pick it with the new icon button in **Save Project**, or right-click a favorite in the Side Bar and choose **Edit Icon** (**No icon** removes it). The icon shows in the Side Bar and in **List Projects to Open** (`Shift+Alt+P`), and is stored as `"icon"` in `projects.json`
+
 ## [1.3.0] - 2026-10-27
 ### Changed
 - **Open in WSL** for Windows-drive projects now uses the default WSL distribution (the one marked `*` in `wsl -l -v`). The `easyManagerProjects.wsl.distro` setting was removed

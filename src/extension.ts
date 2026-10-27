@@ -28,6 +28,7 @@ import { registerHelpAndFeedbackView } from "./sidebar/helpAndFeedbackView";
 import { registerRevealFileInOS } from "./commands/revealFileInOS";
 import { registerOpenSettings } from "./commands/openSettings";
 import { pickTags } from "./quickpick/tagsPicker";
+import { pickIcon } from "./quickpick/iconPicker";
 import { ViewFavoritesAs } from "./sidebar/constants";
 import { registerSortBy, updateSortByContext } from "./commands/sortBy";
 import { canSwitchOnActiveWindow, openPickedProject, pickOpenInNewWindow, pickProjects, shouldOpenInNewWindow } from "./quickpick/projectsPicker";
@@ -151,6 +152,7 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("_easyManagerProjects.deleteProject", (node) => deleteProject(node));
     vscode.commands.registerCommand("_easyManagerProjects.renameProject", (node) => renameProject(node));
     vscode.commands.registerCommand("_easyManagerProjects.editTags", (node) => editTags(node));
+    vscode.commands.registerCommand("_easyManagerProjects.editIcon", (node) => editIcon(node));
     vscode.commands.registerCommand("easyManagerProjects.addToFavorites", (node) => saveProject(node));
     vscode.commands.registerCommand("_easyManagerProjects.toggleProjectEnabled", (node) => toggleProjectEnabled(node));
 
@@ -334,6 +336,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }
 
         let selectedTags: string[] | undefined;
+        let selectedIcon: string | undefined;
 
         const saveProjectInternal = async (projectName: string, tags?: string[]): Promise<boolean> => {
             if (projectName === "") {
@@ -349,6 +352,9 @@ export async function activate(context: vscode.ExtensionContext) {
                 projectStorage.push(projectName, rootPath);
                 if (tagsToSave) {
                     projectStorage.editTags(projectName, tagsToSave);
+                }
+                if (selectedIcon) {
+                    projectStorage.editIcon(projectName, selectedIcon);
                 }
                 projectStorage.save();
                 providerManager.updateTreeViewStorage();
@@ -380,6 +386,9 @@ export async function activate(context: vscode.ExtensionContext) {
                     if (tagsToSave) {
                         projectStorage.editTags(projectName, tagsToSave);
                     }
+                    if (selectedIcon) {
+                        projectStorage.editIcon(projectName, selectedIcon);
+                    }
                     projectStorage.save();
                     providerManager.updateTreeViewStorage();
                     vscode.window.showInformationMessage(l10n.t("Project saved!"));
@@ -404,7 +413,12 @@ export async function activate(context: vscode.ExtensionContext) {
             tooltip: l10n.t("Select tags")
         };
 
-        input.buttons = [ tagsButton ];
+        const iconButton: vscode.QuickInputButton = {
+            iconPath: new vscode.ThemeIcon("symbol-color"),
+            tooltip: l10n.t("Select icon")
+        };
+
+        input.buttons = [ iconButton, tagsButton ];
 
         input.onDidAccept(async () => {
             const saved = await saveProjectInternal(input.value, selectedTags);
@@ -415,6 +429,19 @@ export async function activate(context: vscode.ExtensionContext) {
         });
 
         input.onDidTriggerButton(async (button) => {
+            if (button === iconButton) {
+                if (input.value === "") {
+                    vscode.window.showWarningMessage(l10n.t("You must define a name for the project."));
+                    return;
+                }
+                // the icon picker hides (and disposes) this input, so save right away like the tags button does
+                selectedIcon = await pickIcon();
+                if (selectedIcon && await saveProjectInternal(input.value, selectedTags)) {
+                    input.hide();
+                    input.dispose();
+                }
+                return;
+            }
             if (button !== tagsButton) {
                 return;
             }
@@ -610,6 +637,22 @@ export async function activate(context: vscode.ExtensionContext) {
         if (picked) {
             projectStorage.editTags(project.name, picked);
             projectStorage.save();
+            vscode.window.showInformationMessage(l10n.t("Project updated!"));
+        }
+    }
+
+    async function editIcon(node: ProjectNode) {
+        const project = projectStorage.existsWithRootPath(node.command.arguments[0]);
+        if (!project) {
+            return;
+        }
+
+        const picked = await pickIcon(true);
+        if (picked !== undefined) {
+            projectStorage.editIcon(project.name, picked);
+            projectStorage.save();
+            providerManager.storageProvider.refresh();
+            providerManager.updateTreeViewStorage();
             vscode.window.showInformationMessage(l10n.t("Project updated!"));
         }
     }

@@ -44,6 +44,7 @@
     "easyManagerProjects.commands.deleteProject.title": "Delete Project",
     "easyManagerProjects.commands.renameProject.title": "Rename Project",
     "easyManagerProjects.commands.editTags.title": "Edit Tags",
+    "easyManagerProjects.commands.editIcon.title": "Edit Icon",
     "easyManagerProjects.commands.viewAsTags#sideBarFavorites.title": "View as Tags",
     "easyManagerProjects.commands.viewAsList#sideBarFavorites.title": "View as List",
     "easyManagerProjects.submenus.viewAndSort#sideBarFavorites.title": "View & Sort",

@@ -53,5 +53,8 @@
     "Reload Window": "Reload Window",
     "Added {0} to `security.allowedUNCHosts` so WSL projects can be detected. Restart VS Code to apply it.": "Added {0} to `security.allowedUNCHosts` so WSL projects can be detected. Restart VS Code to apply it.",
     "Open in This Window": "Open in This Window",
-    "Where do you want to open \"{0}\"?": "Where do you want to open \"{0}\"?"
+    "Where do you want to open \"{0}\"?": "Where do you want to open \"{0}\"?",
+    "Select icon": "Select icon",
+    "Select an icon for the project": "Select an icon for the project",
+    "No icon": "No icon"
 }

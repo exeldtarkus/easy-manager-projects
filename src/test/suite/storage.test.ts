@@ -194,6 +194,30 @@ suite("ProjectStorage", () => {
         fs.unlinkSync(filename);
     });
 
+    test("icon survives save/load and is exposed only when set", () => {
+        const filename = createTempFilename();
+        const storage = new ProjectStorage(filename);
+
+        storage.push("WithIcon", "/with");
+        storage.push("NoIcon", "/without");
+        storage.editTags("WithIcon", [ "x" ]);
+        storage.editIcon("withicon", "rocket");
+        storage.save();
+
+        const loaded = new ProjectStorage(filename);
+        assert.strictEqual(loaded.load(), "");
+        const mapped = loaded.map();
+        assert.deepStrictEqual(mapped.find(p => p.label === "WithIcon"), { label: "WithIcon", description: "/with", profile: "", icon: "rocket" });
+        assert.deepStrictEqual(mapped.find(p => p.label === "NoIcon"), { label: "NoIcon", description: "/without", profile: "" });
+        assert.strictEqual(loaded.getProjectsByTag("x")[0].icon, "rocket");
+        assert.strictEqual(loaded.getProjectsByTags([ "x" ])[0].icon, "rocket");
+
+        loaded.editIcon("WithIcon", "");
+        assert.ok(!("icon" in loaded.getProjects().find(p => p.name === "WithIcon")));
+
+        fs.unlinkSync(filename);
+    });
+
     test("load migrates v1 format (label/description) to v2 projects", () => {
         const filename = createTempFilename();
         const v1Items = [
