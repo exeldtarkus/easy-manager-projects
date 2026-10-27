@@ -1,99 +1,86 @@
 <p align="center">
   <br />
-  <img src="images/vscode-project-manager-logo-readme.png" alt="Easy Manager Projects Logo" width="70%" />
+  <img src="images/vscode-project-manager-logo-readme.png" alt="Easy Manager Projects logo" width="70%" />
 </p>
 
 # Easy Manager Projects
 
-**Jump between your projects, and between WSL and Windows, in one click.**
+One list of your projects, and each one opens on the right side of WSL or Windows.
 
-> Forked from [Project Manager](https://github.com/alefragnani/vscode-project-manager) by Alessandro Fragnani. See [Credits & origin](#credits--origin).
+Forked from [Project Manager](https://github.com/alefragnani/vscode-project-manager) by Alessandro Fragnani.
 
-## Why Easy Manager Projects
+Easy Manager Projects keeps saved favorites and auto-detected repositories (Git, VS Code, Mercurial, SVN or any folder) in one place. Press `Shift+Alt+P`, pick a project, choose this window or a new one. A project stored under `\\wsl.localhost\<distro>\...` opens as a real WSL remote window instead of a slow UNC folder, and any project can be reopened on the other side with **Open in WSL** or **Open in Windows**.
 
-If you code on Windows with WSL, opening `\\wsl.localhost\...` folders as plain UNC paths is slow, and auto-detecting repositories inside WSL tends to fail without any error. Easy Manager Projects keeps everything the original Project Manager does, and adds:
+## Highlights
 
-* **WSL projects open as a WSL remote window.** Anything under `\\wsl$\<distro>\...` or `\\wsl.localhost\<distro>\...` (saved or auto-detected) opens as `vscode-remote://wsl+<distro>/...`, not as a slow local UNC folder.
-* **Open in WSL / Open in Windows** in the Side Bar context menu (Windows only), so you can switch where a project runs without retyping paths.
-* **Repositories inside WSL are auto-detected.** Point any `baseFolders` setting (Git, Mercurial, SVN, VS Code, Any) at a `\\wsl.localhost\<distro>\...` folder.
-* **New in 1.1.0: UNC hosts are allowed for you.** VS Code blocks UNC hosts that are not listed in `security.allowedUNCHosts`, and does it silently: WSL base folders just come back empty. On Windows, when one of your base folders is a WSL UNC path, the extension now adds `wsl.localhost` and/or `wsl$` to `security.allowedUNCHosts` (an application-scope setting, so it is written to the **Default** profile settings) and offers to reload the window. If a reload is not enough, restart VS Code completely.
+- **One grouped list.** Favorites first, then Git, VSCode, Mercurial, SVN and Any, each under its own separator.
+- **You choose the window.** Every open from the list or the Side Bar asks **Open in This Window** or **Open in New Window**.
+- **WSL-aware.** WSL paths open as WSL remote windows, WSL repositories are auto-detected, and `security.allowedUNCHosts` is set up for you.
+- **Favorites you can shape.** Tags, custom icons, rename, change the path, disable or delete, all from the Side Bar.
+- **Familiar storage.** Favorites live in a plain `projects.json` you can still edit by hand.
+
+## Contents
+
+- [Quick start](#quick-start)
+- [Open a project](#open-a-project)
+- [Organize favorites](#organize-favorites)
+- [Auto-detect repositories](#auto-detect-repositories)
+- [WSL and Windows](#wsl-and-windows)
+- [Side Bar, Status Bar and What's New](#side-bar-status-bar-and-whats-new)
+- [Commands](#commands)
+- [Settings reference](#settings-reference)
+- [Troubleshooting](#troubleshooting)
+- [Extension API](#extension-api)
+- [Credits & origin](#credits--origin)
+- [License](#license)
 
 ## Quick start
 
-1. Install **Easy Manager Projects** (`exeldtarkus.easy-manager-projects`) from the Extensions view. See [installing extensions](https://code.visualstudio.com/docs/editor/extension-gallery) if needed.
-2. Open a folder or workspace and run **Easy Manager Projects: Save Project**. A name is suggested for you.
-3. Tell the extension where to look for repositories:
+1. **Install** Easy Manager Projects (`exeldtarkus.easy-manager-projects`) from the Extensions view.
+2. **Save a favorite.** Open a folder or workspace and run **Easy Manager Projects: Save Project**. Accept the suggested name, and optionally use the buttons in the input box to add tags or pick an icon.
+3. **Point it at your repositories.** Add base folders to your user `settings.json`:
 
-```jsonc
-// settings.json
-"easyManagerProjects.git.baseFolders": [
-    "c:\\Projects\\code",
-    "\\\\wsl.localhost\\Ubuntu\\home\\me\\repos"
-]
-```
+   ```jsonc
+   // settings.json
+   "easyManagerProjects.git.baseFolders": [
+       "C:\\Projects",
+       "\\\\wsl.localhost\\Ubuntu\\home\\me\\repos"
+   ]
+   ```
 
-4. Open the **Easy Manager Projects** Side Bar, or run **Easy Manager Projects: List Projects to Open**.
+4. **Open something.** Press `Shift+Alt+P` (`Cmd+Alt+P` on macOS), or use the **Easy Manager Projects** view in the Activity Bar.
 
-> **Mind the backslashes.** In `settings.json` every backslash is escaped, so a WSL folder is written `"\\\\wsl.localhost\\Ubuntu\\home\\me\\repos"`. In the **Settings UI** you type the real path with single backslashes: `\\wsl.localhost\Ubuntu\home\me\repos`. Doubling the backslashes in the Settings UI is a common mistake, and it silently finds nothing.
+> **Backslashes differ between the two editors.** In `settings.json` each backslash is escaped, so a WSL folder is written `"\\\\wsl.localhost\\Ubuntu\\home\\me\\repos"`. In the Settings UI you type the real path with single backslashes: `\\wsl.localhost\Ubuntu\home\me\repos`. Doubled backslashes in the Settings UI find nothing, and no error is shown.
 
-**Open in WSL** needs no setting: a project on a Windows drive opens in your default WSL distribution (the one marked `*` in `wsl -l -v`; change it with `wsl --set-default <distro>`). WSL UNC paths already carry their own distro.
+## Open a project
 
-## Features
+| Where | What happens |
+|---|---|
+| `Shift+Alt+P` (**List Projects to Open**) | A grouped list titled "Open a Project". Pick one, then choose **Open in This Window** (listed first, so pressing `Enter` twice keeps you in place) or **Open in New Window**. |
+| The `link-external` button on a list item | Opens that project in a new window right away, without the second question. |
+| **List Projects to Open in New Window** | Same list, every pick opens in a new window. |
+| Clicking a project in the Side Bar | Asks **Open in This Window** or **Open in New Window**. |
+| The inline **Open in New Window** button in the Side Bar | Opens in a new window directly. |
+| The project name in the Status Bar | Runs **List Projects to Open** (or the new-window variant, see `openInNewWindowWhenClickingInStatusBar`). |
 
-### Saved projects (Favorites)
+### How the list is built
 
-* **Save Project** stores the current folder or workspace, optionally with tags.
-* **Edit Projects** opens `projects.json` so you can edit the list by hand:
+With `easyManagerProjects.groupList` set to `true` (the default) the list shows one section per kind, in this order:
 
-```json
-[
-    {
-        "name": "Bookmarks",
-        "rootPath": "$home\\Documents\\GitHub\\vscode-bookmarks",
-        "tags": [ "Personal", "VS Code" ],
-        "enabled": true,
-        "profile": "VSCode"
-    }
-]
-```
+1. **Favorites**, with their custom icon, a folder icon, or a remote icon for remote paths
+2. **Git**
+3. **VSCode**
+4. **Mercurial**
+5. **SVN**
+6. **Any**
 
-`~` and `$home` are replaced by your HOME folder. Keep the file valid JSON; if it is broken, the extension shows an error with an **Open File** button so you can fix it.
+Within each section projects follow `easyManagerProjects.sortList` (`Saved`, `Name`, `Path` or `Recent`). Set `groupList` to `false` for a single flat list without separators.
 
-![Corrupted projects.json](docs/images/project-manager-edit-corrupted-projectsJson.png)
+Typing filters by name. Turn on `filterOnFullPath` to match the path too. The current project is hidden from the list unless you turn off `removeCurrentProjectFromList`, and with `git.showBranchName` set to `onlyInCommandPalette` or `always` each Git project shows its current branch.
 
-Projects whose path no longer exists (deleted or renamed) are flagged in the list.
+### Keyboard navigation
 
-### Auto-detected projects
-
-Git, Mercurial, SVN, VS Code workspaces and "any" folders are found under the `baseFolders` you configure, including WSL UNC paths and [glob patterns](https://code.visualstudio.com/docs/editor/glob-patterns). Each kind gets its own Side Bar view once it has base folders.
-
-### Tags
-
-Define tags with `easyManagerProjects.tags`, attach several to each project, and filter by them with **Easy Manager Projects: Filter Projects by Tag** or from the Side Bar.
-
-![Tags in the Side Bar](docs/images/vscode-project-manager-side-bar-tags.gif)
-
-### Side Bar
-
-A dedicated Side Bar with Favorites and one view per detected kind. Right-click a project to open it (same or new window), **Open in WSL**, **Open in Windows**, add it to the workspace, reveal it in the file manager, rename it, edit its tags, disable it or delete it.
-
-![Side Bar](docs/images/vscode-project-manager-side-bar.png)
-
-The current project can be highlighted with a custom color:
-
-```json
-"workbench.colorCustomizations": {
-    "easyManagerProjects.sideBar.currentProjectHighlightForeground": "#e13015"
-}
-```
-
-### Status Bar and quick pick
-
-The Status Bar shows the current project name; clicking it lists your projects. The quick pick can be sorted and grouped (see settings).
-
-![Sorted by name](docs/images/project-manager-list-sort-by-name.png)
-
-Keyboard users can bind their own navigation keys with the `inProjectManagerList` context:
+While the list is open the `inProjectManagerList` context is set, so you can bind your own keys:
 
 ```json
 {
@@ -108,119 +95,211 @@ Keyboard users can bind their own navigation keys with the `inProjectManagerList
 }
 ```
 
-### Commands
+## Organize favorites
+
+### Save
+
+**Save Project** stores the current folder or workspace. The name box has two buttons: one to select tags, one to select an icon (any codicon). Saving a name that already exists offers to update it. Projects from the auto-detected views can be promoted with **Add to Favorites** in their context menu.
+
+### Edit from the Side Bar
+
+Right-click a favorite:
+
+| Action | Effect |
+|---|---|
+| **Edit Path** | Change the folder a favorite points to. A missing folder only shows a warning, so remote or offline paths can still be saved. |
+| **Edit Icon** | Pick a codicon, or **No icon** to remove it. The icon appears in the Side Bar and in the project list. |
+| **Edit Tags** | Choose which tags the project carries. |
+| **Rename Project** | Give it a new name. |
+| **Disable Project** | Hide it without deleting it; an **Undo** button appears right after. |
+| **Delete Project** | Remove it from the favorites. |
+
+All projects also offer **Add to Workspace** and **Reveal in Explorer** / **Reveal in Finder** / **Reveal in File Manager**, depending on your OS.
+
+### Tags
+
+Tags available for selection come from `easyManagerProjects.tags` (default `Personal`, `Work`). Switch the Favorites view between **View as List** and **View as Tags** from its title bar, and use **Filter Projects by Tag** to show only some tags in both the view and the list. `tags.collapseItems` controls whether tag groups start expanded or collapsed.
+
+![Favorites grouped by tag in the Side Bar](docs/images/vscode-project-manager-side-bar-tags.gif)
+
+### Edit projects.json by hand
+
+**Edit Projects** opens the file behind the favorites:
+
+```json
+[
+    {
+        "name": "Bookmarks",
+        "rootPath": "$home\\Documents\\GitHub\\vscode-bookmarks",
+        "tags": [ "Personal", "VS Code" ],
+        "icon": "rocket",
+        "enabled": true,
+        "profile": "VSCode"
+    }
+]
+```
+
+- `~` and `$home` expand to your home folder.
+- `icon` is a codicon id; leave it out for the default folder icon.
+- `profile` opens the project with that VS Code profile.
+- Set `easyManagerProjects.projectsLocation` to keep the file in another folder, for example one shared between Stable and Insiders.
+
+If the file is not valid JSON the extension says so and offers **Open File** so you can fix it.
+
+![Error shown for a corrupted projects.json](docs/images/project-manager-edit-corrupted-projectsJson.png)
+
+## Auto-detect repositories
+
+Each kind has its own settings and, once it has base folders, its own Side Bar view:
+
+| Kind | Settings prefix | Detects |
+|---|---|---|
+| Git | `easyManagerProjects.git.*` | Git repositories |
+| VSCode | `easyManagerProjects.vscode.*` | Folders with a `.vscode` folder, and `.code-workspace` files |
+| Mercurial | `easyManagerProjects.hg.*` | Mercurial repositories |
+| SVN | `easyManagerProjects.svn.*` | Subversion working copies |
+| Any | `easyManagerProjects.any.*` | Any folder |
+
+For each kind:
+
+- `baseFolders` lists folders or [glob patterns](https://code.visualstudio.com/docs/editor/glob-patterns) to scan. Windows paths, WSL UNC paths, `~` and `$home` all work.
+- `ignoredFolders` lists folders or glob patterns to skip.
+- `maxDepthRecursion` limits how deep the scan goes (default `4`; any value below `1` means no limit).
+
+```json
+"easyManagerProjects.git.baseFolders": [
+    "C:\\Projects",
+    "D:\\Work\\client-*",
+    "$home\\personal"
+],
+"easyManagerProjects.git.ignoredFolders": [ "node_modules", "out", "fork*" ],
+"easyManagerProjects.git.maxDepthRecursion": 4
+```
+
+Related switches: `supportSymlinksOnBaseFolders` follows symlinks, `ignoreProjectsWithinProjects` skips nested projects, `any.excludeBaseFoldersFromResults` leaves the base folders themselves out of the Any list, and `cacheProjectsBetweenSessions` avoids a full rescan at every start. Run **Refresh Projects** (or the per-kind refresh button in each view) after changing folders on disk.
+
+## WSL and Windows
+
+### WSL paths open as WSL windows
+
+Any favorite or detected project under `\\wsl.localhost\<distro>\...` or `\\wsl$\<distro>\...` opens as `vscode-remote://wsl+<distro>/...`. You get a WSL remote window with Linux tools and fast file access, not a local window browsing a network share.
+
+### Open in WSL / Open in Windows
+
+On Windows, every project in the Side Bar has two extra context menu entries:
+
+| Command | From | Opens as |
+|---|---|---|
+| **Open in WSL** | `C:\src\app` | `/mnt/c/src/app` in your **default** WSL distribution |
+| **Open in WSL** | `\\wsl.localhost\Ubuntu\home\me\app` | `/home/me/app` in `Ubuntu` |
+| **Open in Windows** | `vscode-remote://wsl+Ubuntu/home/me/app` | `\\wsl.localhost\Ubuntu\home\me\app` |
+| **Open in Windows** | `/mnt/c/src/app` | `C:\src\app` |
+
+The default distribution is the one marked `*` in `wsl -l -v`; change it with `wsl --set-default <distro>`. If none is found, the project is not opened and a message explains why. Only WSL projects can be opened in Windows.
+
+The default automount root `/mnt/` is assumed; a custom `root` in `/etc/wsl.conf` is not supported.
+
+### Allowed UNC hosts are handled for you
+
+VS Code refuses UNC hosts that are not listed in `security.allowedUNCHosts`, and it does so silently: a WSL base folder simply returns no projects. On Windows, when any `baseFolders` entry points at `\\wsl.localhost\...` or `\\wsl$\...`, the extension adds the missing host (`wsl.localhost` and/or `wsl$`) to that setting and offers **Reload Window**. The setting is application-scoped, so it is written to the **Default** profile's settings. If a reload is not enough, restart VS Code.
+
+## Side Bar, Status Bar and What's New
+
+- **Side Bar.** The Easy Manager Projects view has Favorites plus one view per configured kind. Each view has buttons to list its projects, refresh (auto-detected views) and open the related settings. The Favorites title bar adds **Save Project**, **Edit Projects**, the list/tags toggle, **Filter Projects by Tag**, and a **View & Sort** menu (**Sort by Saved**, **Name**, **Path** or **Recent**).
+- **Current project highlight.** The open project is highlighted; pick your own color:
+
+  ```json
+  "workbench.colorCustomizations": {
+      "easyManagerProjects.sideBar.currentProjectHighlightForeground": "#e13015"
+  }
+  ```
+
+- **Status Bar.** Shows the current project name (`showProjectNameInStatusBar`); click it to open the project list.
+- **What's New.** **Easy Manager Projects: What's New** shows the latest changes, the release timeline of this fork, and shortcuts to open a project, save one or set Git base folders. It follows your VS Code theme.
+
+![Easy Manager Projects in the Side Bar](docs/images/vscode-project-manager-side-bar.png)
+
+## Commands
 
 | Command | What it does |
 |---|---|
-| `Easy Manager Projects: Save Project` | Save the current folder/workspace as a project |
-| `Easy Manager Projects: Edit Projects` | Open `projects.json` |
-| `Easy Manager Projects: List Projects to Open` | Pick a saved or detected project to open |
-| `Easy Manager Projects: List Projects to Open in New Window` | Same, always in a new window |
-| `Easy Manager Projects: Filter Projects by Tag` | Show only favorites with the selected tags |
-| `Easy Manager Projects: Add Project to Workspace` | Add a project folder to the current workspace |
-| `Easy Manager Projects: Refresh Projects` | Re-scan all base folders (per-kind refresh commands also exist) |
-| `Easy Manager Projects: What's New` | Show the release notes |
+| **Easy Manager Projects: Save Project** | Save the current folder or workspace as a favorite |
+| **Easy Manager Projects: List Projects to Open** (`Shift+Alt+P`) | Pick a project, then choose this window or a new one |
+| **Easy Manager Projects: List Projects to Open in New Window** | Pick a project and open it in a new window |
+| **Easy Manager Projects: Edit Projects** | Open `projects.json` |
+| **Easy Manager Projects: Filter Projects by Tag** | Show only favorites with the selected tags |
+| **Easy Manager Projects: Add Project to Workspace** | Add a project folder to the current workspace |
+| **Easy Manager Projects: Refresh Projects** | Rescan all base folders (Git, VSCode, Mercurial, SVN and Any also have their own refresh command) |
+| **Easy Manager Projects: What's New** | Show the release notes page |
+| **Easy Manager Projects: Support the Original Project Manager** | Show ways to sponsor or donate to the original extension |
 
-### Remote Development
+## Settings reference
 
-Out of the box the extension runs locally: you can save Container, SSH, WSL or Codespaces projects as favorites, each with its own icon, and VS Code opens the remote when you pick one.
+All settings start with `easyManagerProjects.`.
 
-If you mostly work *inside* a remote and want favorites or auto-detection on that remote, run the extension there by adding this to your User Settings ([details](https://code.visualstudio.com/docs/remote/containers#_advanced-forcing-an-extension-to-run-locally-or-remotely)):
-
-```json
-"remote.extensionKind": {
-    "exeldtarkus.easy-manager-projects": [ "workspace" ]
-}
-```
-
-## WSL and Windows in detail
-
-* **Open in WSL**
-  * A Windows-drive project such as `C:\src\app` opens in WSL as `/mnt/c/src/app`, using the default WSL distribution (marked `*` in `wsl -l -v`). If none is found, the project is not opened and a message tells you why.
-  * A WSL UNC path opens in its own distro.
-* **Open in Windows**
-  * A WSL project such as `vscode-remote://wsl+Ubuntu/home/u/app` opens locally as `\\wsl.localhost\Ubuntu\home\u\app`.
-  * A `/mnt/c/...` path maps back to `C:\...`.
-
-> **Limitation:** the default WSL automount root `/mnt/` is assumed. A custom `root` in `/etc/wsl.conf` is not supported.
-
-## Settings
-
-All settings use the `easyManagerProjects.` prefix.
-
-### Lists and windows
+### List and windows
 
 | Setting | Default | Description |
 |---|---|---|
-| `sortList` | `"Name"` | Quick pick order: `Saved`, `Name`, `Path` or `Recent` |
-| `groupList` | `false` | Group the list by kind (Favorites, Git, Mercurial, SVN, VS Code) |
+| `groupList` | `true` | Group the list by kind with separators: Favorites, Git, VSCode, Mercurial, SVN, Any |
+| `sortList` | `"Name"` | Order inside the list: `Saved`, `Name`, `Path` or `Recent` |
 | `removeCurrentProjectFromList` | `true` | Hide the current project from the list |
-| `checkInvalidPathsBeforeListing` | `true` | Flag projects whose path no longer exists |
+| `checkInvalidPathsBeforeListing` | `true` | Check that project paths still exist before listing |
 | `showParentFolderInfoOnDuplicates` | `false` | Show the parent folder when two projects share a name |
-| `filterOnFullPath` | `false` | Match the quick pick filter against the full path |
-| `openInCurrentWindowIfEmpty` | `"always"` | When "open in new window" reuses an empty current window: `always`, `onlyUsingCommandPalette`, `onlyUsingSideBar`, `never` |
+| `filterOnFullPath` | `false` | Match typed text against the full path, not only the name |
+| `openInCurrentWindowIfEmpty` | `"always"` | When a new-window open may reuse an empty window: `always`, `onlyUsingCommandPalette`, `onlyUsingSideBar`, `never` |
 | `confirmSwitchOnActiveWindow` | `"never"` | Ask before replacing the active window: `never`, `onlyUsingCommandPalette`, `onlyUsingSideBar`, `always` |
 | `showProjectNameInStatusBar` | `true` | Show the project name in the Status Bar |
-| `openInNewWindowWhenClickingInStatusBar` | `false` | Status Bar click opens projects in a new window |
-| `projectsLocation` | `""` | Folder holding `projects.json` (share it between Stable/Insiders or a synced folder; `~`/`$home` allowed) |
+| `openInNewWindowWhenClickingInStatusBar` | `false` | Status Bar click lists projects to open in a new window |
+| `projectsLocation` | `""` | Folder that holds `projects.json` (`~` and `$home` allowed) |
 
 ### Tags
 
 | Setting | Default | Description |
 |---|---|---|
-| `tags` | `["Personal", "Work"]` | Tags available for your projects |
-| `tags.collapseItems` | `"startExpanded"` | Tag groups in Favorites: `alwaysExpanded`, `alwaysCollapsed`, `startExpanded`, `startCollapsed` (the last two remember your state) |
+| `tags` | `["Personal", "Work"]` | Tags you can assign to favorites |
+| `tags.collapseItems` | `"startExpanded"` | Tag groups in Favorites: `alwaysExpanded`, `alwaysCollapsed`, `startExpanded`, `startCollapsed` |
 
 ### Auto-detection
 
-Each kind (`git`, `hg`, `svn`, `vscode`, `any`) has the same three settings:
+Per kind (`git`, `vscode`, `hg`, `svn`, `any`):
 
 | Setting | Default | Description |
 |---|---|---|
-| `<kind>.baseFolders` | `[]` | Folders or glob patterns to scan (WSL UNC paths supported) |
-| `<kind>.ignoredFolders` | `node_modules`, `out`, `typings`, `test` (+ `.haxelib` for git/hg) | Folders or glob patterns to skip |
-| `<kind>.maxDepthRecursion` | `4` | How deep to search |
+| `<kind>.baseFolders` | `[]` | Folders or glob patterns to scan |
+| `<kind>.ignoredFolders` | `["node_modules", "out", "typings", "test"]`, plus `".haxelib"` for `git` and `hg` | Folders or glob patterns to skip |
+| `<kind>.maxDepthRecursion` | `4` | Maximum folder depth; below `1` means no limit |
+
+General:
 
 | Setting | Default | Description |
 |---|---|---|
-| `any.excludeBaseFoldersFromResults` | `false` | Return only matching subfolders, not the `any` base folders themselves |
 | `git.showBranchName` | `"never"` | Show the Git branch: `never`, `onlyInSideBar`, `onlyInCommandPalette`, `always` |
-| `ignoreProjectsWithinProjects` | `false` | Skip projects found inside other projects |
+| `any.excludeBaseFoldersFromResults` | `false` | List only subfolders, not the Any base folders themselves |
+| `ignoreProjectsWithinProjects` | `false` | Skip projects nested inside other projects |
 | `supportSymlinksOnBaseFolders` | `false` | Follow symlinks inside base folders |
-| `cacheProjectsBetweenSessions` | `true` | Cache detected projects between sessions |
-
-Example:
-
-```json
-"easyManagerProjects.git.baseFolders": [
-    "c:\\Projects\\code",
-    "d:\\MoreProjects\\code-*",
-    "$home\\personal-coding"
-],
-"easyManagerProjects.git.ignoredFolders": [ "node_modules", "out", "fork*" ],
-"easyManagerProjects.git.maxDepthRecursion": 4
-```
+| `cacheProjectsBetweenSessions` | `true` | Keep detected projects between sessions |
 
 ## Troubleshooting
 
 ### WSL repositories are not detected
 
 1. **Check the backslashes.** `settings.json` needs `"\\\\wsl.localhost\\Ubuntu\\..."`; the Settings UI needs `\\wsl.localhost\Ubuntu\...`.
-2. **Check `security.allowedUNCHosts`.** It must list `wsl.localhost` (or `wsl$`, matching your path) in the **Default** profile's `settings.json`. Since 1.1.0 the extension adds it for you; if you use a custom profile, a copy in that profile's settings is not enough.
-3. **Restart VS Code** after the host is added. A window reload is sometimes not enough.
-4. **Make sure WSL is running**, for example by opening a WSL terminal, so the `\\wsl.localhost` share is reachable.
-5. **Increase `maxDepthRecursion`** if your repositories sit deeper than 4 levels below the base folder.
+2. **Check `security.allowedUNCHosts`.** It must contain `wsl.localhost` (or `wsl$`, whichever your paths use) in the **Default** profile's `settings.json`. The extension adds it for you; a copy only in a custom profile is not enough.
+3. **Restart VS Code** after the host is added. A window reload sometimes is not.
+4. **Make sure WSL is running**, for example by opening a WSL terminal, so `\\wsl.localhost` is reachable.
+5. **Raise `maxDepthRecursion`** if your repositories sit more than 4 levels below the base folder.
 6. Run **Easy Manager Projects: Refresh Projects**.
 
-### Migrating from the original Project Manager
+### Coming from the original Project Manager
 
-* **Favorites are stored separately.** Copy `projects.json` from the original extension's globalStorage folder (`alefragnani.project-manager`) into this extension's folder (`exeldtarkus.easy-manager-projects`), or point `easyManagerProjects.projectsLocation` at the folder that already holds your `projects.json`.
-* **Settings are renamed.** Replace the `projectManager.` prefix with `easyManagerProjects.` in your `settings.json`.
-* **Remote extension kind.** If you had `remote.extensionKind` set for `alefragnani.project-manager`, add the same entry for `exeldtarkus.easy-manager-projects`.
+- **Favorites are stored separately.** Copy `projects.json` from the original extension's global storage folder (`alefragnani.project-manager`) into this one's (`exeldtarkus.easy-manager-projects`), or point `easyManagerProjects.projectsLocation` at the folder that already holds it.
+- **Settings are renamed.** Replace the `projectManager.` prefix with `easyManagerProjects.` in your `settings.json`.
+- **Remote extension kind.** Do not set `remote.extensionKind` to `workspace` for `exeldtarkus.easy-manager-projects`. The extension has to run on the local (Windows) side to switch between WSL and Windows, so running it inside the remote turns those features off. Favorites for Containers, SSH, WSL or Codespaces still work from the local side and open the remote when picked.
 
 ## Extension API
 
-Other extensions can use the public API. Declare the dependency:
+Other extensions can save projects through the public API. Declare the dependency:
 
 ```json
 "extensionDependencies": [
@@ -228,7 +307,7 @@ Other extensions can use the public API. Declare the dependency:
 ]
 ```
 
-Then get the exports:
+Then use the exports:
 
 ```ts
 import { ProjectManagerPublicApi } from './api/projectManager/api';
@@ -240,13 +319,13 @@ async function useProjectManagerApi() {
 }
 ```
 
-The contract is defined in [/api/api.d.ts](/api/api.d.ts). See also the [VS Code extensions API](https://code.visualstudio.com/api/references/vscode-api#extensions).
+The contract is in [api/api.d.ts](api/api.d.ts). See also the [VS Code extensions API](https://code.visualstudio.com/api/references/vscode-api#extensions).
 
 ## Credits & origin
 
-Easy Manager Projects is a fork of **[Project Manager](https://github.com/alefragnani/vscode-project-manager)** by **Alessandro Fragnani**, taken at version **13.1.1**. Everything this extension does beyond WSL/Windows switching (saved projects, auto-detection, tags, Side Bar, Status Bar, the API) is his work, and all credit for it goes to him. The history of the original project is kept in [CHANGELOG.md](CHANGELOG.md).
+Easy Manager Projects is a fork of [Project Manager](https://github.com/alefragnani/vscode-project-manager) **13.1.1** by **Alessandro Fragnani**. The core of this extension (saved projects, auto-detection, tags, the Side Bar, the Status Bar and the API) is his work, and all credit for it goes to him. This fork adds WSL and Windows switching and the changes listed in [CHANGELOG.md](CHANGELOG.md), which also keeps the history of the original project.
 
-If you find the original useful, consider supporting it with **Easy Manager Projects: Support the Original Project Manager**.
+If the original helps you, consider supporting it with **Easy Manager Projects: Support the Original Project Manager**.
 
 ## License
 

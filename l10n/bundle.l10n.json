@@ -59,5 +59,8 @@
     "No icon": "No icon",
     "New Project Path": "New Project Path",
     "Type a new path for the project": "Type a new path for the project",
-    "You must define a path for the project.": "You must define a path for the project."
+    "You must define a path for the project.": "You must define a path for the project.",
+    "Favorites": "Favorites",
+    "Open a Project": "Open a Project",
+    "Type to search favorites and repositories": "Type to search favorites and repositories"
 }

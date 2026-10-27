@@ -63,7 +63,8 @@ export class Locators implements Disposable {
                     newItems = dirList.map(item => {
                         return {
                             label: item.icon + " " + item.name,
-                            description: item.fullPath
+                            description: item.fullPath,
+                            group: locator.displayName
                         };
                     });
 
@@ -74,7 +75,7 @@ export class Locators implements Disposable {
     }
 
     public sortGroupedList(items): any[] {
-        if (workspace.getConfiguration("easyManagerProjects").get("groupList", false)) {
+        if (workspace.getConfiguration("easyManagerProjects").get("groupList", true)) {
             return this.sortProjectList(items);
         } else {
             return items;

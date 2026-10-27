@@ -69,7 +69,7 @@
     "easyManagerProjects.configuration.openInNewWindowWhenClickingInStatusBar.description": "Should the project be opened using a New Window when you click the Status Bar?",
     "easyManagerProjects.configuration.removeCurrentProjectFromList.description": "Should the current project be hidden in the list of available projects?",
     "easyManagerProjects.configuration.sortList.description": "List the projects sorted by...(Saved, Name, Path or Recent)",
-    "easyManagerProjects.configuration.groupList.description": "List the projects grouped by...(Favorites, VSCode, Git, Mercurial and SVN)",
+    "easyManagerProjects.configuration.groupList.description": "Group the project list by kind, Favorites first, then Git, VSCode, Mercurial, SVN and Any",
     "easyManagerProjects.configuration.projectsLocation.description": "Indicates an alternative location (folder path) where the `projects.json` file is stored",
     "easyManagerProjects.configuration.vscode.baseFolders.description": "Indicates folders or [glob patterns](https://code.visualstudio.com/docs/editor/glob-patterns) to search for VSCode projects",
     "easyManagerProjects.configuration.vscode.ignoredFolders.description": "Indicates folders or [glob patterns](https://code.visualstudio.com/docs/editor/glob-patterns) to be ignored when searching for projects",

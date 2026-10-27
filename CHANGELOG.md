@@ -1,3 +1,9 @@
+## [1.7.0] - 2026-10-27
+### Changed
+- **Open a Project** (`Shift+Alt+P`) is grouped with headers: Favorites first, then Git, VSCode, Mercurial, SVN and Any. `easyManagerProjects.groupList` now defaults to `true` (set it to `false` for one mixed list)
+- Favorites show their custom icon (or a folder / remote icon) in the list
+- README rewritten
+
 ## [1.6.0] - 2026-10-27
 ### Changed
 - New **What's New** page designed for Easy Manager Projects: the latest changes, a timeline of this fork's releases, and shortcuts to open a project, save one, and set Git base folders. It follows the VS Code theme and no longer shows the original extension's sponsor links

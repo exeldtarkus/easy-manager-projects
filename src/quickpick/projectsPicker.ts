@@ -4,7 +4,7 @@
 *--------------------------------------------------------------------------------------------*/
 
 import fs = require("fs");
-import { commands, Disposable, l10n, MessageItem, QuickInputButton, QuickPickItem, ThemeIcon, window, workspace } from "vscode";
+import { commands, Disposable, l10n, MessageItem, QuickInputButton, QuickPickItem, QuickPickItemKind, ThemeIcon, window, workspace } from "vscode";
 import { ThemeIcons } from "vscode-ext-codicons";
 import { CustomProjectLocator } from "../autodetect/abstractLocator";
 import { Locators } from "../autodetect/locators";
@@ -109,10 +109,10 @@ export async function pickProjects(projectStorage: ProjectStorage, locators: Loc
 
             getProjects(items)
                 .then((folders) => {
-                    return getProjectsFromLocator(folders, locators, locatorToFilter, locators?.vscLocator);
+                    return getProjectsFromLocator(folders, locators, locatorToFilter, locators?.gitLocator);
                 })
                 .then((folders) => {
-                    return getProjectsFromLocator(folders, locators, locatorToFilter, locators?.gitLocator);
+                    return getProjectsFromLocator(folders, locators, locatorToFilter, locators?.vscLocator);
                 })
                 .then((folders) => {
                     return getProjectsFromLocator(folders, locators, locatorToFilter, locators?.mercurialLocator);
@@ -128,7 +128,8 @@ export async function pickProjects(projectStorage: ProjectStorage, locators: Loc
                         window.showInformationMessage(l10n.t("No projects saved yet!"));
                         return resolve(undefined);
                     } else {
-                        if (!workspace.getConfiguration("easyManagerProjects").get("groupList", false)) {
+                        const grouped = workspace.getConfiguration("easyManagerProjects").get("groupList", true);
+                        if (!grouped) {
                             if (locators) {
                                 folders = locators?.sortProjectList(folders);
                             }
@@ -137,7 +138,7 @@ export async function pickProjects(projectStorage: ProjectStorage, locators: Loc
 
                         //
                         const showGitBranchInCommandPalette = workspace.getConfiguration("easyManagerProjects").get<string>("git.showBranchName", "never");
-                        folders = (<any[]>folders).map(folder => {
+                        const toQuickPickItem = (folder) => {
                             let detail: string | undefined;
                             if (showGitBranchInCommandPalette === "onlyInCommandPalette" || showGitBranchInCommandPalette === "always") {
                                 const gitBranch = getGitBranch(PathUtils.expandHomePath(folder.description));
@@ -150,15 +151,30 @@ export async function pickProjects(projectStorage: ProjectStorage, locators: Loc
                                 description: folder.description,
                                 detail: detail,
                                 profile: folder.profile,
-                                iconPath: folder.icon ? new ThemeIcon(folder.icon) : undefined,
+                                // auto-detected labels already start with `$(git-branch)`, favorites get their own icon or a plain folder
+                                iconPath: folder.group ? undefined : new ThemeIcon(folder.icon ?? (isRemotePath(folder.description) ? "remote" : "folder")),
                                 buttons: showOpenInNewWindowButton ? [ openInNewWindowButton ] : []
                             };
-                        });
+                        };
+
+                        // one separator per kind (Favorites, Git, ...) when the list is grouped
+                        const items: any[] = [];
+                        let currentGroup: string | undefined;
+                        for (const folder of <any[]>folders) {
+                            const group: string = folder.group ?? l10n.t("Favorites");
+                            if (grouped && group !== currentGroup) {
+                                items.push({ label: group, kind: QuickPickItemKind.Separator });
+                                currentGroup = group;
+                            }
+                            items.push(toQuickPickItem(folder));
+                        }
+
                         const input = window.createQuickPick();
-                        input.placeholder = l10n.t("Loading projects (pick one)...");
+                        input.title = l10n.t("Open a Project");
+                        input.placeholder = l10n.t("Type to search favorites and repositories");
                         input.matchOnDescription = workspace.getConfiguration("easyManagerProjects").get("filterOnFullPath", false);
                         input.matchOnDetail = false;
-                        input.items = <any[]>folders;
+                        input.items = items;
                         input.onDidChangeSelection(items => {
                             const item = <any>items[ 0 ];
                             if (item) {

@@ -12,6 +12,12 @@ export interface Release {
 // newest first; add the new release on top when bumping the minor version
 export const RELEASES: Release[] = [
     {
+        version: "1.7.0", date: "Oct 27, 2026", changes: [
+            "<b>Open a Project</b> (<kbd>Shift+Alt+P</kbd>) groups the list with headers: Favorites first, then Git, VSCode, Mercurial, SVN and Any. Set <code>groupList</code> to <code>false</code> for one mixed list.",
+            "Favorites show their icon in the list, and the README was rewritten."
+        ]
+    },
+    {
         version: "1.6.0", date: "Oct 27, 2026", changes: [
             "A new What's New page that lists the changes made in Easy Manager Projects, with shortcuts to open a project, save one, and set your Git base folders."
         ]
