@@ -64,5 +64,11 @@
     "Open a Project": "Open a Project",
     "Type to search favorites and repositories": "Type to search favorites and repositories",
     "Add to Favorites": "Add to Favorites",
-    "Add Folder to Favorites": "Add Folder to Favorites"
+    "Add Folder to Favorites": "Add Folder to Favorites",
+    "Keep current icon ({0})": "Keep current icon ({0})",
+    "Add Base Folder": "Add Base Folder",
+    "Add Git Base Folder": "Add Git Base Folder",
+    "Only local or WSL folders can be Git base folders.": "Only local or WSL folders can be Git base folders.",
+    "{0} is already a Git base folder.": "{0} is already a Git base folder.",
+    "Added {0} to the Git base folders.": "Added {0} to the Git base folders."
 }

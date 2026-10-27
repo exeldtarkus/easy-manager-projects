@@ -12,6 +12,12 @@ export interface Release {
 // newest first; add the new release on top when bumping the minor version
 export const RELEASES: Release[] = [
     {
+        version: "1.9.0", date: "Oct 27, 2026", changes: [
+            "Saving a favorite now walks you through its name, tags and icon, so it is ready without editing it afterwards. Existing tags and the current icon are preselected when you update a project.",
+            "<b>Add Git Base Folder</b> in the Git view title bar picks a folder in the system dialog and adds it to <code>git.baseFolders</code>."
+        ]
+    },
+    {
         version: "1.8.0", date: "Oct 27, 2026", changes: [
             "<b>Add Folder to Favorites</b> opens your system's folder picker (File Explorer, Finder or the Linux file dialog), so you can save any folder without opening it first. Find it in the Favorites title bar or the Command Palette."
         ]

@@ -1,3 +1,10 @@
+## [1.9.0] - 2026-10-27
+### Added
+- **Add Git Base Folder...** (Git view title bar, Git welcome view and Command Palette): pick a folder in the system dialog and add it to `easyManagerProjects.git.baseFolders` (WSL folders picked in a WSL window are stored as `\\wsl.localhost\...`)
+
+### Changed
+- Saving a favorite (Save Project, Add Folder to Favorites, Add to Favorites) asks for the name, then the tags, then the icon, and saves them together. When the project already exists, its tags and icon are preselected (**Keep current icon**)
+
 ## [1.8.0] - 2026-10-27
 ### Added
 - **Add Folder to Favorites...** (Favorites title bar and Command Palette): pick any folder in the system dialog (File Explorer on Windows, Finder on macOS, the GTK/KDE dialog on Linux, the remote file system in a remote window) and save it as a favorite without opening it

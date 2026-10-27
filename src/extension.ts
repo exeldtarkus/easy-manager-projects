@@ -136,6 +136,7 @@ export async function activate(context: vscode.ExtensionContext) {
     // register commands (here, because it needs to be used right below if an invalid JSON is present)
     vscode.commands.registerCommand("easyManagerProjects.saveProject", () => saveProject());
     vscode.commands.registerCommand("easyManagerProjects.addFolderToFavorites", () => addFolderToFavorites());
+    vscode.commands.registerCommand("easyManagerProjects.addGitBaseFolder", () => addGitBaseFolder());
     vscode.commands.registerCommand("easyManagerProjects.refreshProjects", () => refreshProjects(true, true));
     locators.registerCommands();
     vscode.commands.registerCommand("easyManagerProjects.editProjects", () => editProjects());
@@ -343,27 +344,13 @@ export async function activate(context: vscode.ExtensionContext) {
             wpath = projectDetails.name;
         }
 
-        let selectedTags: string[] | undefined;
-        let selectedIcon: string | undefined;
-
-        const saveProjectInternal = async (projectName: string, tags?: string[]): Promise<boolean> => {
-            if (projectName === "") {
-                vscode.window.showWarningMessage(l10n.t("You must define a name for the project."));
-                return false;
-            }
-
-            const tagsToSave = (tags && tags.length > 0) ? tags : undefined;
-
+        const saveProjectInternal = async (projectName: string, tags: string[], icon: string): Promise<boolean> => {
             if (!projectStorage.exists(projectName)) {
                 Container.stack.push(projectName);
                 context.globalState.update("recent", Container.stack.toString());
                 projectStorage.push(projectName, rootPath);
-                if (tagsToSave) {
-                    projectStorage.editTags(projectName, tagsToSave);
-                }
-                if (selectedIcon) {
-                    projectStorage.editIcon(projectName, selectedIcon);
-                }
+                projectStorage.editTags(projectName, tags);
+                projectStorage.editIcon(projectName, icon);
                 projectStorage.save();
                 providerManager.updateTreeViewStorage();
                 vscode.window.showInformationMessage(l10n.t("Project saved!"));
@@ -391,12 +378,9 @@ export async function activate(context: vscode.ExtensionContext) {
                     Container.stack.push(projectName);
                     context.globalState.update("recent", Container.stack.toString());
                     projectStorage.updateRootPath(projectName, rootPath);
-                    if (tagsToSave) {
-                        projectStorage.editTags(projectName, tagsToSave);
-                    }
-                    if (selectedIcon) {
-                        projectStorage.editIcon(projectName, selectedIcon);
-                    }
+                    // tags and icon were preselected from the existing project, so the picks replace them
+                    projectStorage.editTags(projectName, tags);
+                    projectStorage.editIcon(projectName, icon);
                     projectStorage.save();
                     providerManager.updateTreeViewStorage();
                     vscode.window.showInformationMessage(l10n.t("Project saved!"));
@@ -410,91 +394,34 @@ export async function activate(context: vscode.ExtensionContext) {
             }
         };
 
-        const input = vscode.window.createInputBox();
-        input.title = l10n.t("Save Project");
-        input.prompt = l10n.t("Project Name");
-        input.placeholder = l10n.t("Type a name for your project");
-        input.value = wpath;
-
-        const tagsButton: vscode.QuickInputButton = {
-            iconPath: new vscode.ThemeIcon("tag"),
-            tooltip: l10n.t("Select tags")
-        };
-
-        const iconButton: vscode.QuickInputButton = {
-            iconPath: new vscode.ThemeIcon("symbol-color"),
-            tooltip: l10n.t("Select icon")
-        };
-
-        input.buttons = [ iconButton, tagsButton ];
-
-        input.onDidAccept(async () => {
-            const saved = await saveProjectInternal(input.value, selectedTags);
-            if (saved) {
-                input.hide();
-                input.dispose();
-            }
+        // step 1 of 3: name
+        const projectName = await vscode.window.showInputBox({
+            title: l10n.t("Save Project"),
+            prompt: l10n.t("Project Name"),
+            placeHolder: l10n.t("Type a name for your project"),
+            value: wpath,
+            validateInput: value => value.trim() === "" ? l10n.t("You must define a name for the project.") : undefined
         });
+        if (projectName === undefined) {
+            return;
+        }
 
-        input.onDidTriggerButton(async (button) => {
-            if (button === iconButton) {
-                if (input.value === "") {
-                    vscode.window.showWarningMessage(l10n.t("You must define a name for the project."));
-                    return;
-                }
-                // the icon picker hides (and disposes) this input, so save right away like the tags button does
-                selectedIcon = await pickIcon();
-                if (selectedIcon && await saveProjectInternal(input.value, selectedTags)) {
-                    input.hide();
-                    input.dispose();
-                }
-                return;
-            }
-            if (button !== tagsButton) {
-                return;
-            }
-
-            if (input.value === "") {
-                vscode.window.showWarningMessage(l10n.t("You must define a name for the project."));
-                return;
-            }
-
-            let preselectedTags: string[] = selectedTags ?? [];
-            const existingProject = projectStorage.existsWithRootPath(rootPath);
-            if (existingProject && existingProject.name.toLowerCase() === input.value.toLowerCase() && (!selectedTags || selectedTags.length === 0)) {
-                preselectedTags = existingProject.tags;
-            }
-
-            const picked = await pickTags(projectStorage, preselectedTags, {
-                useDefaultTags: true,
-                useNoTagsDefined: false,
-                allowAddingNewTags: true
-            });
-
-            if (!picked) {
-                return;
-            }
-
-            selectedTags = picked;
-
-            if (selectedTags.length > 0) {
-                input.prompt = l10n.t("Selected tags: {0}", selectedTags.join(", "));
-            } else {
-                input.prompt = l10n.t("Project Name");
-            }
-
-            const saved = await saveProjectInternal(input.value, selectedTags);
-            if (saved) {
-                input.hide();
-                input.dispose();
-            }
+        // steps 2 and 3: tags and icon, preselected from a project that already has this name; Esc cancels the save
+        const existing = projectStorage.getProjects().find(p => p.name.toLowerCase() === projectName.toLowerCase());
+        const tags = await pickTags(projectStorage, existing?.tags ?? [], {
+            useDefaultTags: true,
+            useNoTagsDefined: false,
+            allowAddingNewTags: true
         });
+        if (tags === undefined) {
+            return;
+        }
+        const icon = await pickIcon(true, existing?.icon);
+        if (icon === undefined) {
+            return;
+        }
 
-        input.onDidHide(() => {
-            input.dispose();
-        });
-
-        input.show();
+        await saveProjectInternal(projectName, tags, icon);
     }
 
     function updateCurrentProject() {
@@ -666,6 +593,36 @@ export async function activate(context: vscode.ExtensionContext) {
         saveProject(undefined, { name: path.basename(uri.path), path: folderPath });
     }
 
+    // base folders are scanned with the local file system, so a WSL folder picked in a WSL window is stored as `\\wsl.localhost\...`
+    async function addGitBaseFolder() {
+        const uris = await vscode.window.showOpenDialog({
+            canSelectFolders: true,
+            canSelectFiles: false,
+            canSelectMany: false,
+            openLabel: l10n.t("Add Base Folder"),
+            title: l10n.t("Add Git Base Folder")
+        });
+        if (!uris || uris.length === 0) {
+            return;
+        }
+        const local = uris[ 0 ].scheme === "file" ? uris[ 0 ] : buildWindowsProjectUri(uris[ 0 ].toString());
+        if (!local) {
+            vscode.window.showWarningMessage(l10n.t("Only local or WSL folders can be Git base folders."));
+            return;
+        }
+
+        const config = vscode.workspace.getConfiguration("easyManagerProjects");
+        // user settings only, so workspace values are not copied into them
+        const folders = config.inspect<string[]>("git.baseFolders")?.globalValue ?? [];
+        if (folders.some(folder => folder.toLowerCase() === local.fsPath.toLowerCase())) {
+            vscode.window.showInformationMessage(l10n.t("{0} is already a Git base folder.", local.fsPath));
+            return;
+        }
+        // the configuration listener rescans Git projects (and allows WSL hosts) once this is saved
+        await config.update("git.baseFolders", [ ...folders, local.fsPath ], vscode.ConfigurationTarget.Global);
+        vscode.window.showInformationMessage(l10n.t("Added {0} to the Git base folders.", local.fsPath));
+    }
+
     async function editPath(node: ProjectNode) {
         const project = projectStorage.existsWithRootPath(node.command.arguments[0]);
         if (!project) {
@@ -704,7 +661,7 @@ export async function activate(context: vscode.ExtensionContext) {
             return;
         }
 
-        const picked = await pickIcon(true);
+        const picked = await pickIcon(true, project.icon);
         if (picked !== undefined) {
             projectStorage.editIcon(project.name, picked);
             projectStorage.save();

@@ -2,7 +2,7 @@
 	"name": "easy-manager-projects",
 	"displayName": "Easy Manager Projects",
 	"description": "Easily switch between projects, including opening projects in WSL or Windows (fork of alefragnani's Project Manager)",
-	"version": "1.8.0",
+	"version": "1.9.0",
 	"publisher": "exeldtarkus",
 	"engines": {
 		"vscode": "^1.78.0"
@@ -198,6 +198,11 @@
 				"command": "easyManagerProjects.refreshGitProjects",
 				"title": "%easyManagerProjects.commands.refreshGitProjects.title%",
 				"icon": "$(refresh)"
+			},
+			{
+				"command": "easyManagerProjects.addGitBaseFolder",
+				"title": "%easyManagerProjects.commands.addGitBaseFolder.title%",
+				"icon": "$(new-folder)"
 			},
 			{
 				"command": "easyManagerProjects.listGitProjects#sideBarGit",
@@ -568,6 +573,11 @@
 					"command": "easyManagerProjects.openSettings#sideBarVSCode",
 					"when": "view == easyManagerProjectsExplorerVSCode",
 					"group": "2_easyManagerProjects"
+				},
+				{
+					"command": "easyManagerProjects.addGitBaseFolder",
+					"when": "view == easyManagerProjectsExplorerGit",
+					"group": "navigation@9"
 				},
 				{
 					"command": "easyManagerProjects.listGitProjects#sideBarGit",
