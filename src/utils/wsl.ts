@@ -35,6 +35,12 @@ export function windowsPathToWsl(windowsPath: string, distro: string): WslLocati
     return { distro, path: `/mnt/${match[ 1 ].toLowerCase()}/${rest}` };
 }
 
+// default distro is the line marked `*` in `wsl.exe -l -v` (UTF-16 output, decoded by the caller)
+export function parseDefaultWslDistro(listOutput: string): string | undefined {
+    const line = listOutput.replace(/\0/g, "").split(/\r?\n/).find(l => l.trim().startsWith("*"));
+    return line?.trim().substring(1).trim().split(/\s+/)[ 0 ] || undefined;
+}
+
 // VS Code blocks UNC hosts missing from `security.allowedUNCHosts`, so WSL base folders silently find nothing
 export function missingWslUncHosts(folders: string[], allowedHosts: string[]): string[] {
     const allowed = allowedHosts.map(host => host.toLowerCase());

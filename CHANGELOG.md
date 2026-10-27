@@ -1,3 +1,7 @@
+## [1.3.0] - 2026-10-27
+### Changed
+- **Open in WSL** for Windows-drive projects now uses the default WSL distribution (the one marked `*` in `wsl -l -v`). The `easyManagerProjects.wsl.distro` setting was removed
+
 ## [1.2.0] - 2026-10-27
 ### Added
 - **List Projects to Open** (`Shift+Alt+P`) asks where to open the picked project: **Open in This Window** (first, so Enter twice keeps the old behavior) or **Open in New Window**. The choice is always honored, even in an empty window

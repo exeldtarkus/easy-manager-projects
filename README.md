@@ -29,16 +29,14 @@ If you code on Windows with WSL, opening `\\wsl.localhost\...` folders as plain 
 "easyManagerProjects.git.baseFolders": [
     "c:\\Projects\\code",
     "\\\\wsl.localhost\\Ubuntu\\home\\me\\repos"
-],
-// only used by "Open in WSL" for Windows-drive projects
-"easyManagerProjects.wsl.distro": "Ubuntu"
+]
 ```
 
 4. Open the **Easy Manager Projects** Side Bar, or run **Easy Manager Projects: List Projects to Open**.
 
 > **Mind the backslashes.** In `settings.json` every backslash is escaped, so a WSL folder is written `"\\\\wsl.localhost\\Ubuntu\\home\\me\\repos"`. In the **Settings UI** you type the real path with single backslashes: `\\wsl.localhost\Ubuntu\home\me\repos`. Doubling the backslashes in the Settings UI is a common mistake, and it silently finds nothing.
 
-About `easyManagerProjects.wsl.distro` (default `""`): it holds one distro name and is only used by **Open in WSL** for projects on a Windows drive. WSL UNC paths already carry their own distro, so they ignore it.
+**Open in WSL** needs no setting: a project on a Windows drive opens in your default WSL distribution (the one marked `*` in `wsl -l -v`; change it with `wsl --set-default <distro>`). WSL UNC paths already carry their own distro.
 
 ## Features
 
@@ -138,7 +136,7 @@ If you mostly work *inside* a remote and want favorites or auto-detection on tha
 ## WSL and Windows in detail
 
 * **Open in WSL**
-  * A Windows-drive project such as `C:\src\app` opens in WSL as `/mnt/c/src/app`, using `easyManagerProjects.wsl.distro`.
+  * A Windows-drive project such as `C:\src\app` opens in WSL as `/mnt/c/src/app`, using the default WSL distribution (marked `*` in `wsl -l -v`). If none is found, the project is not opened and a message tells you why.
   * A WSL UNC path opens in its own distro.
 * **Open in Windows**
   * A WSL project such as `vscode-remote://wsl+Ubuntu/home/u/app` opens locally as `\\wsl.localhost\Ubuntu\home\u\app`.
@@ -165,7 +163,6 @@ All settings use the `easyManagerProjects.` prefix.
 | `showProjectNameInStatusBar` | `true` | Show the project name in the Status Bar |
 | `openInNewWindowWhenClickingInStatusBar` | `false` | Status Bar click opens projects in a new window |
 | `projectsLocation` | `""` | Folder holding `projects.json` (share it between Stable/Insiders or a synced folder; `~`/`$home` allowed) |
-| `wsl.distro` | `""` | Distro used by **Open in WSL** for Windows-drive projects |
 
 ### Tags
 

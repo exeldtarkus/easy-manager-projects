@@ -5,6 +5,7 @@
 
 import fs = require("fs");
 import path = require("path");
+import { execFile } from "child_process";
 import * as vscode from "vscode";
 
 import { Locators } from "./autodetect/locators";
@@ -19,7 +20,7 @@ import { getProjectDetails } from "./utils/suggestion";
 import { CommandLocation, PROJECTS_FILE } from "./core/constants";
 import { isMacOS, isRemoteUri, isWindows } from "./utils/remote";
 import { buildProjectUri, buildWindowsProjectUri, buildWslProjectUri } from "./utils/uri";
-import { missingWslUncHosts } from "./utils/wsl";
+import { missingWslUncHosts, parseDefaultWslDistro, parseWslUncPath } from "./utils/wsl";
 import { Container } from "./core/container";
 import { registerWhatsNew } from "./whats-new/commands";
 import { registerSupportProjectManager } from "./commands/supportProjectManager";
@@ -103,10 +104,12 @@ export async function activate(context: vscode.ExtensionContext) {
                 () => ({}),  // done
                 () => vscode.window.showInformationMessage(l10n.t("Could not open the project!")));
     });
-    vscode.commands.registerCommand("_easyManagerProjects.openInWsl", (node) => {
-        const distro = vscode.workspace.getConfiguration("easyManagerProjects").get<string>("wsl.distro", "");
-        openOnOtherSide(node, buildWslProjectUri(node.command.arguments[0], distro),
-            l10n.t("This project can't be opened in WSL. For Windows drives, set the WSL distribution in `easyManagerProjects.wsl.distro`."));
+    vscode.commands.registerCommand("_easyManagerProjects.openInWsl", async (node) => {
+        const rootPath: string = node.command.arguments[0];
+        // WSL UNC paths carry their own distro, Windows drives use the default one
+        const distro = parseWslUncPath(rootPath) ? "" : await getDefaultWslDistro();
+        openOnOtherSide(node, buildWslProjectUri(rootPath, distro),
+            l10n.t("This project can't be opened in WSL. No default WSL distribution was found."));
     });
     vscode.commands.registerCommand("_easyManagerProjects.openInWindows", (node) => {
         openOnOtherSide(node, buildWindowsProjectUri(node.command.arguments[0]),
@@ -643,6 +646,19 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
     return api;
+}
+
+function getDefaultWslDistro(): Promise<string> {
+    return new Promise(resolve => {
+        execFile("wsl.exe", [ "-l", "-v" ], { encoding: "buffer", windowsHide: true }, (error, stdout) => {
+            if (error) {
+                console.error("getDefaultWslDistro - EXCEPTION CAUGHT | wsl.exe -l -v failed", error);
+                resolve("");
+                return;
+            }
+            resolve(parseDefaultWslDistro(stdout.toString(stdout.includes(0) ? "utf16le" : "utf8")) ?? "");
+        });
+    });
 }
 
 // WSL base folders (`\\wsl.localhost\...`) need their UNC host allowed, or VS Code hides them from the scan

@@ -4,7 +4,7 @@
 *--------------------------------------------------------------------------------------------*/
 
 import * as assert from "assert";
-import { missingWslUncHosts, parseWslUncPath, windowsPathToWsl, wslToWindowsPath } from "../../utils/wsl";
+import { missingWslUncHosts, parseDefaultWslDistro, parseWslUncPath, windowsPathToWsl, wslToWindowsPath } from "../../utils/wsl";
 
 suite("WSL utils", () => {
 
@@ -30,6 +30,14 @@ suite("WSL utils", () => {
         assert.strictEqual(windowsPathToWsl("C:\\src\\app", ""), undefined);
         assert.deepStrictEqual(windowsPathToWsl("\\\\wsl$\\Ubuntu\\home\\u", ""), { distro: "Ubuntu", path: "/home/u" });
         assert.strictEqual(windowsPathToWsl("\\\\server\\share", "Ubuntu"), undefined);
+    });
+
+    test("parseDefaultWslDistro picks the distro marked with *", () => {
+        const list = "  NAME              STATE           VERSION\r\n* Ubuntu            Running         2\r\n  docker-desktop    Stopped         2\r\n";
+        assert.strictEqual(parseDefaultWslDistro(list), "Ubuntu");
+        assert.strictEqual(parseDefaultWslDistro(list.replace(/(.)/g, "$1\0")), "Ubuntu");
+        assert.strictEqual(parseDefaultWslDistro("  NAME STATE VERSION\r\n  Debian Stopped 2\r\n"), undefined);
+        assert.strictEqual(parseDefaultWslDistro(""), undefined);
     });
 
     test("missingWslUncHosts lists WSL hosts not yet allowed, once each", () => {
