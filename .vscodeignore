@@ -33,3 +33,5 @@ docs/**
 
 # local tooling
 scripts/**
+# Open VSX token
+deployment/**

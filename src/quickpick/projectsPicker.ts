@@ -340,7 +340,8 @@ export async function openPickedProject(picked: Picked<Project>, forceNewWindow:
 
     const openInNewWindow = chosenNewWindow ?? shouldOpenInNewWindow(forceNewWindow || !!picked.button, calledFrom);
     const uri = buildProjectUri(picked.item.rootPath);
-    commands.executeCommand("vscode.openFolder", uri, { forceProfile: picked.item.profile, forceNewWindow: openInNewWindow })
+    // an explicit "This Window" must win over `window.openFoldersInNewWindow: on`
+    commands.executeCommand("vscode.openFolder", uri, { forceProfile: picked.item.profile, forceNewWindow: openInNewWindow, forceReuseWindow: chosenNewWindow === false })
         .then(
             () => ({}),  // done
             () => window.showInformationMessage(l10n.t("Could not open the project!")));

@@ -94,7 +94,8 @@ export async function activate(context: vscode.ExtensionContext) {
         if (newWindow === undefined) {
             return;
         }
-        vscode.commands.executeCommand("vscode.openFolder", uri, { forceProfile: profile , forceNewWindow: newWindow } )
+        // forceReuseWindow: "This Window" must win over `window.openFoldersInNewWindow: on`
+        vscode.commands.executeCommand("vscode.openFolder", uri, { forceProfile: profile , forceNewWindow: newWindow, forceReuseWindow: !newWindow } )
             .then(
                 () => ({}),  // done
                 () => vscode.window.showInformationMessage(l10n.t("Could not open the project!")));

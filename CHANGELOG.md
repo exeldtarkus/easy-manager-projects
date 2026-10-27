@@ -1,3 +1,10 @@
+## [1.10.2] - 2026-10-27
+### Fixed
+- **Open in This Window** opened a new window when VS Code's `window.openFoldersInNewWindow` was `on`. The chosen window is now always used
+
+### Added
+- Published on [Open VSX](https://open-vsx.org/extension/exeltarkus/easy-manager-projects) (`npm run deploy`)
+
 ## [1.10.1] - 2026-10-27
 ### Changed
 - Publisher is now `exeltarkus`, matching the VS Code Marketplace, so the extension ID is `exeltarkus.easy-manager-projects`. Users of an earlier local build (`exeldtarkus.easy-manager-projects`) can copy `projects.json` from that extension's global storage folder into the new one, then uninstall the old build
