@@ -1,3 +1,7 @@
+## [1.10.3] - 2026-10-27
+### Changed
+- Renamed to **Easy Projects Manager**, with the extension ID `exeltarkus.easy-projects-manager` (the previous Marketplace name cannot be reused). Settings and commands keep their `easyManagerProjects.*` IDs, so existing settings keep working. To keep your favorites from an earlier build, copy `projects.json` from the old extension's global storage folder into `exeltarkus.easy-projects-manager`
+
 ## [1.10.2] - 2026-10-27
 ### Fixed
 - **Open in This Window** opened a new window when VS Code's `window.openFoldersInNewWindow` was `on`. The chosen window is now always used

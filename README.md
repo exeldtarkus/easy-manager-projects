@@ -1,15 +1,15 @@
 <p align="center">
   <br />
-  <img src="images/vscode-project-manager-logo-readme.png" alt="Easy Manager Projects logo" width="70%" />
+  <img src="images/vscode-project-manager-logo-readme.png" alt="Easy Projects Manager logo" width="70%" />
 </p>
 
-# Easy Manager Projects
+# Easy Projects Manager
 
 One list of your projects, and each one opens on the right side of WSL or Windows.
 
 Forked from [Project Manager](https://github.com/alefragnani/vscode-project-manager) by Alessandro Fragnani.
 
-Easy Manager Projects keeps saved favorites and auto-detected repositories (Git, VS Code, Mercurial, SVN or any folder) in one place. Press `Shift+Alt+P`, pick a project, choose this window or a new one. A project stored under `\\wsl.localhost\<distro>\...` opens as a real WSL remote window instead of a slow UNC folder, and any project can be reopened on the other side with **Open in WSL** or **Open in Windows**.
+Easy Projects Manager keeps saved favorites and auto-detected repositories (Git, VS Code, Mercurial, SVN or any folder) in one place. Press `Shift+Alt+P`, pick a project, choose this window or a new one. A project stored under `\\wsl.localhost\<distro>\...` opens as a real WSL remote window instead of a slow UNC folder, and any project can be reopened on the other side with **Open in WSL** or **Open in Windows**.
 
 ## Highlights
 
@@ -36,8 +36,8 @@ Easy Manager Projects keeps saved favorites and auto-detected repositories (Git,
 
 ## Quick start
 
-1. **Install** Easy Manager Projects (`exeltarkus.easy-manager-projects`) from the Extensions view.
-2. **Save a favorite.** Open a folder or workspace and run **Easy Manager Projects: Save Project**. Accept the suggested name, and optionally use the buttons in the input box to add tags or pick an icon.
+1. **Install** Easy Projects Manager (`exeltarkus.easy-projects-manager`) from the Extensions view.
+2. **Save a favorite.** Open a folder or workspace and run **Easy Projects Manager: Save Project**. Accept the suggested name, and optionally use the buttons in the input box to add tags or pick an icon.
 3. **Point it at your repositories.** Add base folders to your user `settings.json`:
 
    ```jsonc
@@ -48,7 +48,7 @@ Easy Manager Projects keeps saved favorites and auto-detected repositories (Git,
    ]
    ```
 
-4. **Open something.** Press `Shift+Alt+P` (`Cmd+Alt+P` on macOS), or use the **Easy Manager Projects** view in the Activity Bar.
+4. **Open something.** Press `Shift+Alt+P` (`Cmd+Alt+P` on macOS), or use the **Easy Projects Manager** view in the Activity Bar.
 
 > **Backslashes differ between the two editors.** In `settings.json` each backslash is escaped, so a WSL folder is written `"\\\\wsl.localhost\\Ubuntu\\home\\me\\repos"`. In the Settings UI you type the real path with single backslashes: `\\wsl.localhost\Ubuntu\home\me\repos`. Doubled backslashes in the Settings UI find nothing, and no error is shown.
 
@@ -205,7 +205,7 @@ VS Code refuses UNC hosts that are not listed in `security.allowedUNCHosts`, and
 
 ## Side Bar, Status Bar and What's New
 
-- **Side Bar.** The Easy Manager Projects view has Favorites plus one view per configured kind. Each view has buttons to list its projects, refresh (auto-detected views) and open the related settings. The Favorites title bar adds **Save Project**, **Edit Projects**, the list/tags toggle, **Filter Projects by Tag**, and a **View & Sort** menu (**Sort by Saved**, **Name**, **Path** or **Recent**).
+- **Side Bar.** The Easy Projects Manager view has Favorites plus one view per configured kind. Each view has buttons to list its projects, refresh (auto-detected views) and open the related settings. The Favorites title bar adds **Save Project**, **Edit Projects**, the list/tags toggle, **Filter Projects by Tag**, and a **View & Sort** menu (**Sort by Saved**, **Name**, **Path** or **Recent**).
 - **Current project highlight.** The open project is highlighted; pick your own color:
 
   ```json
@@ -215,23 +215,23 @@ VS Code refuses UNC hosts that are not listed in `security.allowedUNCHosts`, and
   ```
 
 - **Status Bar.** Shows the current project name (`showProjectNameInStatusBar`); click it to open the project list.
-- **What's New.** **Easy Manager Projects: What's New** shows the latest changes, the release timeline of this fork, and shortcuts to open a project, save one or set Git base folders. It follows your VS Code theme.
+- **What's New.** **Easy Projects Manager: What's New** shows the latest changes, the release timeline of this fork, and shortcuts to open a project, save one or set Git base folders. It follows your VS Code theme.
 
-![Easy Manager Projects in the Side Bar](docs/images/vscode-project-manager-side-bar.png)
+![Easy Projects Manager in the Side Bar](docs/images/vscode-project-manager-side-bar.png)
 
 ## Commands
 
 | Command | What it does |
 |---|---|
-| **Easy Manager Projects: Save Project** | Save the current folder or workspace as a favorite |
-| **Easy Manager Projects: List Projects to Open** (`Shift+Alt+P`) | Pick a project, then choose this window or a new one |
-| **Easy Manager Projects: List Projects to Open in New Window** | Pick a project and open it in a new window |
-| **Easy Manager Projects: Edit Projects** | Open `projects.json` |
-| **Easy Manager Projects: Filter Projects by Tag** | Show only favorites with the selected tags |
-| **Easy Manager Projects: Add Project to Workspace** | Add a project folder to the current workspace |
-| **Easy Manager Projects: Refresh Projects** | Rescan all base folders (Git, VSCode, Mercurial, SVN and Any also have their own refresh command) |
-| **Easy Manager Projects: What's New** | Show the release notes page |
-| **Easy Manager Projects: Support the Original Project Manager** | Show ways to sponsor or donate to the original extension |
+| **Easy Projects Manager: Save Project** | Save the current folder or workspace as a favorite |
+| **Easy Projects Manager: List Projects to Open** (`Shift+Alt+P`) | Pick a project, then choose this window or a new one |
+| **Easy Projects Manager: List Projects to Open in New Window** | Pick a project and open it in a new window |
+| **Easy Projects Manager: Edit Projects** | Open `projects.json` |
+| **Easy Projects Manager: Filter Projects by Tag** | Show only favorites with the selected tags |
+| **Easy Projects Manager: Add Project to Workspace** | Add a project folder to the current workspace |
+| **Easy Projects Manager: Refresh Projects** | Rescan all base folders (Git, VSCode, Mercurial, SVN and Any also have their own refresh command) |
+| **Easy Projects Manager: What's New** | Show the release notes page |
+| **Easy Projects Manager: Support the Original Project Manager** | Show ways to sponsor or donate to the original extension |
 
 ## Settings reference
 
@@ -289,14 +289,14 @@ General:
 3. **Restart VS Code** after the host is added. A window reload sometimes is not.
 4. **Make sure WSL is running**, for example by opening a WSL terminal, so `\\wsl.localhost` is reachable.
 5. **Raise `maxDepthRecursion`** if your repositories sit more than 4 levels below the base folder.
-6. Run **Easy Manager Projects: Refresh Projects**.
+6. Run **Easy Projects Manager: Refresh Projects**.
 
 ### Coming from the original Project Manager
 
-- **Favorites are stored separately.** Copy `projects.json` from the original extension's global storage folder (`alefragnani.project-manager`) into this one's (`exeltarkus.easy-manager-projects`), or point `easyManagerProjects.projectsLocation` at the folder that already holds it.
-- **Earlier local build.** If you installed a local build with the ID `exeldtarkus.easy-manager-projects`, copy `projects.json` from that extension's global storage folder into the `exeltarkus.easy-manager-projects` folder, then uninstall the old build.
+- **Favorites are stored separately.** Copy `projects.json` from the original extension's global storage folder (`alefragnani.project-manager`) into this one's (`exeltarkus.easy-projects-manager`), or point `easyManagerProjects.projectsLocation` at the folder that already holds it.
+- **Earlier local build.** If you installed a build with the ID `exeldtarkus.easy-manager-projects` or `exeltarkus.easy-manager-projects`, copy `projects.json` from that extension's global storage folder into the `exeltarkus.easy-projects-manager` folder, then uninstall the old build.
 - **Settings are renamed.** Replace the `projectManager.` prefix with `easyManagerProjects.` in your `settings.json`.
-- **Remote extension kind.** Do not set `remote.extensionKind` to `workspace` for `exeltarkus.easy-manager-projects`. The extension has to run on the local (Windows) side to switch between WSL and Windows, so running it inside the remote turns those features off. Favorites for Containers, SSH, WSL or Codespaces still work from the local side and open the remote when picked.
+- **Remote extension kind.** Do not set `remote.extensionKind` to `workspace` for `exeltarkus.easy-projects-manager`. The extension has to run on the local (Windows) side to switch between WSL and Windows, so running it inside the remote turns those features off. Favorites for Containers, SSH, WSL or Codespaces still work from the local side and open the remote when picked.
 
 ## Extension API
 
@@ -304,7 +304,7 @@ Other extensions can save projects through the public API. Declare the dependenc
 
 ```json
 "extensionDependencies": [
-    "exeltarkus.easy-manager-projects"
+    "exeltarkus.easy-projects-manager"
 ]
 ```
 
@@ -314,7 +314,7 @@ Then use the exports:
 import { ProjectManagerPublicApi } from './api/projectManager/api';
 
 async function useProjectManagerApi() {
-    const projectManagerApi = <ProjectManagerPublicApi>vscode.extensions.getExtension('exeltarkus.easy-manager-projects')?.exports;
+    const projectManagerApi = <ProjectManagerPublicApi>vscode.extensions.getExtension('exeltarkus.easy-projects-manager')?.exports;
 
     await projectManagerApi.saveProject("My Project", "/path/to/project", ["work"], "Default");
 }
@@ -324,9 +324,9 @@ The contract is in [api/api.d.ts](api/api.d.ts). See also the [VS Code extension
 
 ## Credits & origin
 
-Easy Manager Projects is a fork of [Project Manager](https://github.com/alefragnani/vscode-project-manager) **13.1.1** by **Alessandro Fragnani**. The core of this extension (saved projects, auto-detection, tags, the Side Bar, the Status Bar and the API) is his work, and all credit for it goes to him. This fork adds WSL and Windows switching and the changes listed in [CHANGELOG.md](CHANGELOG.md), which also keeps the history of the original project.
+Easy Projects Manager is a fork of [Project Manager](https://github.com/alefragnani/vscode-project-manager) **13.1.1** by **Alessandro Fragnani**. The core of this extension (saved projects, auto-detection, tags, the Side Bar, the Status Bar and the API) is his work, and all credit for it goes to him. This fork adds WSL and Windows switching and the changes listed in [CHANGELOG.md](CHANGELOG.md), which also keeps the history of the original project.
 
-If the original helps you, consider supporting it with **Easy Manager Projects: Support the Original Project Manager**.
+If the original helps you, consider supporting it with **Easy Projects Manager: Support the Original Project Manager**.
 
 ## License
 

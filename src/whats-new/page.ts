@@ -37,7 +37,7 @@ export const RELEASES: Release[] = [
     },
     {
         version: "1.6.0", date: "Oct 27, 2026", changes: [
-            "A new What's New page that lists the changes made in Easy Manager Projects, with shortcuts to open a project, save one, and set your Git base folders."
+            "A new What's New page that lists the changes made in Easy Projects Manager, with shortcuts to open a project, save one, and set your Git base folders."
         ]
     },
     {
@@ -100,7 +100,7 @@ export function buildWhatsNewHtml(cspSource: string, version: string): string {
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${cspSource} 'unsafe-inline';">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>What's New in Easy Manager Projects</title>
+<title>What's New in Easy Projects Manager</title>
 <style>
     :root {
         --fg: var(--vscode-foreground);
@@ -192,7 +192,7 @@ export function buildWhatsNewHtml(cspSource: string, version: string): string {
 <body>
 <main>
     <header>
-        <h1>Easy Manager Projects<span class="version">${version}</span></h1>
+        <h1>Easy Projects Manager<span class="version">${version}</span></h1>
         <p class="tagline">Your projects in one list, opened on the right side of WSL or Windows.</p>
     </header>
 
@@ -220,7 +220,7 @@ export function buildWhatsNewHtml(cspSource: string, version: string): string {
     </section>
 
     <footer>
-        <p>Easy Manager Projects is a fork of <a href="https://github.com/alefragnani/vscode-project-manager">Project Manager</a> by Alessandro Fragnani, who built everything it started from.
+        <p>Easy Projects Manager is a fork of <a href="https://github.com/alefragnani/vscode-project-manager">Project Manager</a> by Alessandro Fragnani, who built everything it started from.
         Report problems or ideas on <a href="https://github.com/exeldtarkus/easy-manager-projects/issues">GitHub</a>.</p>
     </footer>
 </main>
