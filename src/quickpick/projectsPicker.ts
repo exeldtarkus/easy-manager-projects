@@ -51,13 +51,18 @@ function folderNotFound(name: string, projectStorage: ProjectStorage) {
     });
 }
 
-function canPickSelectedProject(item: QuickPickItem, projectStorage: ProjectStorage): boolean {
+// items of the project list keep the raw project path next to the displayed one
+type ProjectPickItem = QuickPickItem & { path?: string };
 
-    if (isRemotePath(item.description)) {
+function canPickSelectedProject(item: ProjectPickItem, projectStorage: ProjectStorage): boolean {
+    // the list shows the path on the detail line and keeps the raw value in `path`
+    const projectPath: string = item.path ?? item.description;
+
+    if (isRemotePath(projectPath)) {
         return true;
     }
 
-    if (fs.existsSync(item.description.toString())) {
+    if (fs.existsSync(projectPath.toString())) {
         return true;
     }
 
@@ -138,18 +143,20 @@ export async function pickProjects(projectStorage: ProjectStorage, locators: Loc
 
                         //
                         const showGitBranchInCommandPalette = workspace.getConfiguration("easyManagerProjects").get<string>("git.showBranchName", "never");
+                        // two lines per project: name (+ branch or a missing-path warning) on top, the path below
                         const toQuickPickItem = (folder) => {
-                            let detail: string | undefined;
-                            if (showGitBranchInCommandPalette === "onlyInCommandPalette" || showGitBranchInCommandPalette === "always") {
+                            let description: string | undefined = folder.detail; // set by indicateInvalidPaths for missing folders
+                            if (!description && (showGitBranchInCommandPalette === "onlyInCommandPalette" || showGitBranchInCommandPalette === "always")) {
                                 const gitBranch = getGitBranch(PathUtils.expandHomePath(folder.description));
                                 if (gitBranch) {
-                                    detail = `$(git-branch) ${gitBranch}`;
+                                    description = `$(git-branch) ${gitBranch}`;
                                 }
                             }
                             return {
                                 label: folder.label,
-                                description: folder.description,
-                                detail: detail,
+                                description: description,
+                                detail: folder.description,
+                                path: folder.description,
                                 profile: folder.profile,
                                 // auto-detected labels already start with `$(git-branch)`, favorites get their own icon or a plain folder
                                 iconPath: folder.group ? undefined : new ThemeIcon(folder.icon ?? (isRemotePath(folder.description) ? "remote" : "folder")),
@@ -157,13 +164,19 @@ export async function pickProjects(projectStorage: ProjectStorage, locators: Loc
                             };
                         };
 
-                        // one separator per kind (Favorites, Git, ...) when the list is grouped
+                        // one separator per kind (Favorites, Git, ...) when the list is grouped, with the number of projects in it
+                        const groupOf = (folder): string => folder.group ?? l10n.t("Favorites");
+                        const projects = <any[]>folders;
+                        const groupSizes = new Map<string, number>();
+                        for (const folder of projects) {
+                            groupSizes.set(groupOf(folder), (groupSizes.get(groupOf(folder)) ?? 0) + 1);
+                        }
                         const items: any[] = [];
                         let currentGroup: string | undefined;
-                        for (const folder of <any[]>folders) {
-                            const group: string = folder.group ?? l10n.t("Favorites");
+                        for (const folder of projects) {
+                            const group = groupOf(folder);
                             if (grouped && group !== currentGroup) {
-                                items.push({ label: group, kind: QuickPickItemKind.Separator });
+                                items.push({ label: `${group} (${groupSizes.get(group)})`, kind: QuickPickItemKind.Separator });
                                 currentGroup = group;
                             }
                             items.push(toQuickPickItem(folder));
@@ -171,9 +184,9 @@ export async function pickProjects(projectStorage: ProjectStorage, locators: Loc
 
                         const input = window.createQuickPick();
                         input.title = l10n.t("Open a Project");
-                        input.placeholder = l10n.t("Type to search favorites and repositories");
-                        input.matchOnDescription = workspace.getConfiguration("easyManagerProjects").get("filterOnFullPath", false);
-                        input.matchOnDetail = false;
+                        input.placeholder = l10n.t("Type a name or part of a path");
+                        input.matchOnDescription = false;
+                        input.matchOnDetail = workspace.getConfiguration("easyManagerProjects").get("filterOnFullPath", true);
                         input.items = items;
                         input.onDidChangeSelection(items => {
                             const item = <any>items[ 0 ];
@@ -187,7 +200,7 @@ export async function pickProjects(projectStorage: ProjectStorage, locators: Loc
                                 resolve(<Picked<Project>>{
                                     item: {
                                         name: item.label,
-                                        rootPath: PathUtils.normalizePath(item.description),
+                                        rootPath: PathUtils.normalizePath(item.path),
                                         profile: item.profile,
                                     }, button: undefined
                                 });
@@ -206,7 +219,7 @@ export async function pickProjects(projectStorage: ProjectStorage, locators: Loc
                                 resolve(<Picked<Project>>{
                                     item: {
                                         name: item.item.label,
-                                        rootPath: PathUtils.normalizePath(item.item.description)
+                                        rootPath: PathUtils.normalizePath((item.item as ProjectPickItem).path)
                                     }, button: item.button
                                 });
                                 input.hide();

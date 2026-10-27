@@ -1,3 +1,11 @@
+## [1.10.0] - 2026-10-27
+### Changed
+- **Open a Project** (`Shift+Alt+P`) shows two lines per project (name on top, path below) and each group header shows its number of projects, for example `Git (55)`
+- `easyManagerProjects.filterOnFullPath` now defaults to `true`: typing matches the path too, not only the name
+
+### Fixed
+- Projects whose folder no longer exists show **Path does not exist** in the list again (the marker was computed but never displayed)
+
 ## [1.9.0] - 2026-10-27
 ### Added
 - **Add Git Base Folder...** (Git view title bar, Git welcome view and Command Palette): pick a folder in the system dialog and add it to `easyManagerProjects.git.baseFolders` (WSL folders picked in a WSL window are stored as `\\wsl.localhost\...`)

@@ -12,6 +12,13 @@ export interface Release {
 // newest first; add the new release on top when bumping the minor version
 export const RELEASES: Release[] = [
     {
+        version: "1.10.0", date: "Oct 27, 2026", changes: [
+            "<b>Open a Project</b> shows each project on two lines, name on top and path below, and each group header shows how many projects it holds.",
+            "Typing in the list matches the path too, for example <code>wsl.localhost</code> or <code>repos\\api</code>. Set <code>filterOnFullPath</code> to <code>false</code> to match names only.",
+            "Projects whose folder no longer exists are marked in the list."
+        ]
+    },
+    {
         version: "1.9.0", date: "Oct 27, 2026", changes: [
             "Saving a favorite now walks you through its name, tags and icon, so it is ready without editing it afterwards. Existing tags and the current icon are preselected when you update a project.",
             "<b>Add Git Base Folder</b> in the Git view title bar picks a folder in the system dialog and adds it to <code>git.baseFolders</code>."

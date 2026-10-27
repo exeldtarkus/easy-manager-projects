@@ -2,7 +2,7 @@
 	"name": "easy-manager-projects",
 	"displayName": "Easy Manager Projects",
 	"description": "Easily switch between projects, including opening projects in WSL or Windows (fork of alefragnani's Project Manager)",
-	"version": "1.9.0",
+	"version": "1.10.0",
 	"publisher": "exeldtarkus",
 	"engines": {
 		"vscode": "^1.78.0"
@@ -831,7 +831,7 @@
 					},
 					"easyManagerProjects.filterOnFullPath": {
 						"type": "boolean",
-						"default": false,
+						"default": true,
 						"description": "%easyManagerProjects.configuration.filterOnFullPath.description%"
 					},
 					"easyManagerProjects.openInCurrenWindowIfEmpty": {

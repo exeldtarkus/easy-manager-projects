@@ -76,7 +76,7 @@ With `easyManagerProjects.groupList` set to `true` (the default) the list shows 
 
 Within each section projects follow `easyManagerProjects.sortList` (`Saved`, `Name`, `Path` or `Recent`). Set `groupList` to `false` for a single flat list without separators.
 
-Typing filters by name. Turn on `filterOnFullPath` to match the path too. The current project is hidden from the list unless you turn off `removeCurrentProjectFromList`, and with `git.showBranchName` set to `onlyInCommandPalette` or `always` each Git project shows its current branch.
+Typing matches the name and the path (for example `wsl.localhost` or `repos\api`). Set `filterOnFullPath` to `false` to match names only. The current project is hidden from the list unless you turn off `removeCurrentProjectFromList`, and with `git.showBranchName` set to `onlyInCommandPalette` or `always` each Git project shows its current branch.
 
 ### Keyboard navigation
 
@@ -246,7 +246,7 @@ All settings start with `easyManagerProjects.`.
 | `removeCurrentProjectFromList` | `true` | Hide the current project from the list |
 | `checkInvalidPathsBeforeListing` | `true` | Check that project paths still exist before listing |
 | `showParentFolderInfoOnDuplicates` | `false` | Show the parent folder when two projects share a name |
-| `filterOnFullPath` | `false` | Match typed text against the full path, not only the name |
+| `filterOnFullPath` | `true` | Match typed text against the path too, not only the name |
 | `openInCurrentWindowIfEmpty` | `"always"` | When a new-window open may reuse an empty window: `always`, `onlyUsingCommandPalette`, `onlyUsingSideBar`, `never` |
 | `confirmSwitchOnActiveWindow` | `"never"` | Ask before replacing the active window: `never`, `onlyUsingCommandPalette`, `onlyUsingSideBar`, `always` |
 | `showProjectNameInStatusBar` | `true` | Show the project name in the Status Bar |
