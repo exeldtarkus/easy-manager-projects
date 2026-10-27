@@ -1,3 +1,7 @@
+## [1.1.0] - 2026-10-27
+### Added
+- WSL base folders (`\\wsl.localhost\...` / `\\wsl$\...`) now add their host to `security.allowedUNCHosts` automatically (Windows only), so WSL repositories are detected without editing that setting by hand
+
 ## [1.0.0] - 2026-10-26
 ### Added
 - Initial release as **Easy Manager Projects**, forked from [Project Manager](https://github.com/alefragnani/vscode-project-manager) 13.1.1 by Alessandro Fragnani (GPLv3)

@@ -4,7 +4,7 @@
 *--------------------------------------------------------------------------------------------*/
 
 import * as assert from "assert";
-import { parseWslUncPath, windowsPathToWsl, wslToWindowsPath } from "../../utils/wsl";
+import { missingWslUncHosts, parseWslUncPath, windowsPathToWsl, wslToWindowsPath } from "../../utils/wsl";
 
 suite("WSL utils", () => {
 
@@ -30,6 +30,14 @@ suite("WSL utils", () => {
         assert.strictEqual(windowsPathToWsl("C:\\src\\app", ""), undefined);
         assert.deepStrictEqual(windowsPathToWsl("\\\\wsl$\\Ubuntu\\home\\u", ""), { distro: "Ubuntu", path: "/home/u" });
         assert.strictEqual(windowsPathToWsl("\\\\server\\share", "Ubuntu"), undefined);
+    });
+
+    test("missingWslUncHosts lists WSL hosts not yet allowed, once each", () => {
+        const folders = [ "D:\\repos", "\\\\wsl.localhost\\Ubuntu\\home\\u", "\\\\WSL.LOCALHOST\\Debian\\x", "\\\\wsl$\\Ubuntu\\y", "\\\\server\\share" ];
+        assert.deepStrictEqual(missingWslUncHosts(folders, []), [ "wsl.localhost", "wsl$" ]);
+        assert.deepStrictEqual(missingWslUncHosts(folders, [ "10.1.40.128", "WSL.localhost" ]), [ "wsl$" ]);
+        assert.deepStrictEqual(missingWslUncHosts(folders, [ "wsl.localhost", "wsl$" ]), []);
+        assert.deepStrictEqual(missingWslUncHosts([ "\\\\wsl.localhostx\\a" ], []), []);
     });
 
     test("wslToWindowsPath maps /mnt back to drives and the rest to wsl.localhost", () => {

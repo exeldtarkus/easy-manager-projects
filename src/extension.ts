@@ -19,6 +19,7 @@ import { getProjectDetails } from "./utils/suggestion";
 import { CommandLocation, PROJECTS_FILE } from "./core/constants";
 import { isMacOS, isRemoteUri, isWindows } from "./utils/remote";
 import { buildProjectUri, buildWindowsProjectUri, buildWslProjectUri } from "./utils/uri";
+import { missingWslUncHosts } from "./utils/wsl";
 import { Container } from "./core/container";
 import { registerWhatsNew } from "./whats-new/commands";
 import { registerSupportProjectManager } from "./commands/supportProjectManager";
@@ -65,6 +66,7 @@ export async function activate(context: vscode.ExtensionContext) {
     await registerWalkthrough();
 
     registerWhatsNew();
+    allowWslUncHosts();
 
     context.subscriptions.push(vscode.commands.registerCommand("_easyManagerProjects.openFolderWelcome", () => {
         const openFolderCommand = isWindows || isMacOS ? "workbench.action.files.openFolder" : "workbench.action.files.openFileFolder";
@@ -208,6 +210,7 @@ export async function activate(context: vscode.ExtensionContext) {
             cfg.affectsConfiguration("easyManagerProjects.any") || 
             cfg.affectsConfiguration("easyManagerProjects.ignoreProjectsWithinProjects") || 
             cfg.affectsConfiguration("easyManagerProjects.supportSymlinksOnBaseFolders")) {
+            allowWslUncHosts();
             refreshProjects();
         }
 
@@ -633,6 +636,35 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
     return api;
+}
+
+// WSL base folders (`\\wsl.localhost\...`) need their UNC host allowed, or VS Code hides them from the scan
+async function allowWslUncHosts() {
+    if (!isWindows) {
+        return;
+    }
+    const config = vscode.workspace.getConfiguration("easyManagerProjects");
+    const baseFolders = [ "git", "hg", "svn", "vscode", "any" ].flatMap(kind => config.get<string[]>(`${kind}.baseFolders`, []));
+    const security = vscode.workspace.getConfiguration("security");
+    const allowedHosts = security.get<string[]>("allowedUNCHosts", []);
+    const missing = missingWslUncHosts(baseFolders, allowedHosts);
+    if (missing.length === 0) {
+        return;
+    }
+
+    try {
+        // application scoped: VS Code writes it to the default profile settings
+        await security.update("allowedUNCHosts", [ ...allowedHosts, ...missing ], vscode.ConfigurationTarget.Global);
+    } catch (error) {
+        console.error("allowWslUncHosts - EXCEPTION CAUGHT | Could not update security.allowedUNCHosts", error);
+        return;
+    }
+    const restart = l10n.t("Reload Window");
+    const answer = await vscode.window.showInformationMessage(
+        l10n.t("Added {0} to `security.allowedUNCHosts` so WSL projects can be detected. Restart VS Code to apply it.", missing.join(", ")), restart);
+    if (answer === restart) {
+        vscode.commands.executeCommand("workbench.action.reloadWindow");
+    }
 }
 
 export function deactivate() {

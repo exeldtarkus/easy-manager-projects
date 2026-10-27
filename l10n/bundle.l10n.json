@@ -49,5 +49,7 @@
     "filtered by tags": "filtered by tags",
     "Save the workspace first to save a project": "Save the workspace first to save a project",
     "Open a folder first to save a project": "Open a folder first to save a project",
-    "Save Project": "Save Project"
+    "Save Project": "Save Project",
+    "Reload Window": "Reload Window",
+    "Added {0} to `security.allowedUNCHosts` so WSL projects can be detected. Restart VS Code to apply it.": "Added {0} to `security.allowedUNCHosts` so WSL projects can be detected. Restart VS Code to apply it."
 }

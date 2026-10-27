@@ -35,6 +35,19 @@ export function windowsPathToWsl(windowsPath: string, distro: string): WslLocati
     return { distro, path: `/mnt/${match[ 1 ].toLowerCase()}/${rest}` };
 }
 
+// VS Code blocks UNC hosts missing from `security.allowedUNCHosts`, so WSL base folders silently find nothing
+export function missingWslUncHosts(folders: string[], allowedHosts: string[]): string[] {
+    const allowed = allowedHosts.map(host => host.toLowerCase());
+    const missing: string[] = [];
+    for (const folder of folders) {
+        const host = /^\\\\(wsl\$|wsl\.localhost)(?:\\|$)/i.exec(folder)?.[ 1 ].toLowerCase();
+        if (host && !allowed.includes(host) && !missing.includes(host)) {
+            missing.push(host);
+        }
+    }
+    return missing;
+}
+
 export function wslToWindowsPath(location: WslLocation): string {
     const mounted = /^\/mnt\/([a-zA-Z])(?:\/(.*))?$/.exec(location.path);
     if (mounted) {
