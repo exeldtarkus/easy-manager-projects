@@ -1,3 +1,7 @@
+## [1.10.1] - 2026-10-27
+### Changed
+- Publisher is now `exeltarkus`, matching the VS Code Marketplace, so the extension ID is `exeltarkus.easy-manager-projects`. Users of an earlier local build (`exeldtarkus.easy-manager-projects`) can copy `projects.json` from that extension's global storage folder into the new one, then uninstall the old build
+
 ## [1.10.0] - 2026-10-27
 ### Changed
 - **Open a Project** (`Shift+Alt+P`) shows two lines per project (name on top, path below) and each group header shows its number of projects, for example `Git (55)`

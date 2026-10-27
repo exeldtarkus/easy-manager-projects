@@ -2,8 +2,8 @@
 	"name": "easy-manager-projects",
 	"displayName": "Easy Manager Projects",
 	"description": "Easily switch between projects, including opening projects in WSL or Windows (fork of alefragnani's Project Manager)",
-	"version": "1.10.0",
-	"publisher": "exeldtarkus",
+	"version": "1.10.1",
+	"publisher": "exeltarkus",
 	"engines": {
 		"vscode": "^1.78.0"
 	},
@@ -726,7 +726,7 @@
 				{
 					"command": "_easyManagerProjects.whatsNewContextMenu",
 					"group": "easyManagerProjects",
-					"when": "extension == exeldtarkus.easy-manager-projects && extensionStatus == installed"
+					"when": "extension == exeltarkus.easy-manager-projects && extensionStatus == installed"
 				}
 			],
 			"easyManagerProjects.sideBar.favorites.title": [

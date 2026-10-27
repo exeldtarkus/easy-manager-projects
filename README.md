@@ -36,7 +36,7 @@ Easy Manager Projects keeps saved favorites and auto-detected repositories (Git,
 
 ## Quick start
 
-1. **Install** Easy Manager Projects (`exeldtarkus.easy-manager-projects`) from the Extensions view.
+1. **Install** Easy Manager Projects (`exeltarkus.easy-manager-projects`) from the Extensions view.
 2. **Save a favorite.** Open a folder or workspace and run **Easy Manager Projects: Save Project**. Accept the suggested name, and optionally use the buttons in the input box to add tags or pick an icon.
 3. **Point it at your repositories.** Add base folders to your user `settings.json`:
 
@@ -293,9 +293,10 @@ General:
 
 ### Coming from the original Project Manager
 
-- **Favorites are stored separately.** Copy `projects.json` from the original extension's global storage folder (`alefragnani.project-manager`) into this one's (`exeldtarkus.easy-manager-projects`), or point `easyManagerProjects.projectsLocation` at the folder that already holds it.
+- **Favorites are stored separately.** Copy `projects.json` from the original extension's global storage folder (`alefragnani.project-manager`) into this one's (`exeltarkus.easy-manager-projects`), or point `easyManagerProjects.projectsLocation` at the folder that already holds it.
+- **Earlier local build.** If you installed a local build with the ID `exeldtarkus.easy-manager-projects`, copy `projects.json` from that extension's global storage folder into the `exeltarkus.easy-manager-projects` folder, then uninstall the old build.
 - **Settings are renamed.** Replace the `projectManager.` prefix with `easyManagerProjects.` in your `settings.json`.
-- **Remote extension kind.** Do not set `remote.extensionKind` to `workspace` for `exeldtarkus.easy-manager-projects`. The extension has to run on the local (Windows) side to switch between WSL and Windows, so running it inside the remote turns those features off. Favorites for Containers, SSH, WSL or Codespaces still work from the local side and open the remote when picked.
+- **Remote extension kind.** Do not set `remote.extensionKind` to `workspace` for `exeltarkus.easy-manager-projects`. The extension has to run on the local (Windows) side to switch between WSL and Windows, so running it inside the remote turns those features off. Favorites for Containers, SSH, WSL or Codespaces still work from the local side and open the remote when picked.
 
 ## Extension API
 
@@ -303,7 +304,7 @@ Other extensions can save projects through the public API. Declare the dependenc
 
 ```json
 "extensionDependencies": [
-    "exeldtarkus.easy-manager-projects"
+    "exeltarkus.easy-manager-projects"
 ]
 ```
 
@@ -313,7 +314,7 @@ Then use the exports:
 import { ProjectManagerPublicApi } from './api/projectManager/api';
 
 async function useProjectManagerApi() {
-    const projectManagerApi = <ProjectManagerPublicApi>vscode.extensions.getExtension('exeldtarkus.easy-manager-projects')?.exports;
+    const projectManagerApi = <ProjectManagerPublicApi>vscode.extensions.getExtension('exeltarkus.easy-manager-projects')?.exports;
 
     await projectManagerApi.saveProject("My Project", "/path/to/project", ["work"], "Default");
 }
