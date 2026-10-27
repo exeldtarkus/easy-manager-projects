@@ -1,3 +1,7 @@
+## [1.6.0] - 2026-10-27
+### Changed
+- New **What's New** page designed for Easy Manager Projects: the latest changes, a timeline of this fork's releases, and shortcuts to open a project, save one, and set Git base folders. It follows the VS Code theme and no longer shows the original extension's sponsor links
+
 ## [1.5.0] - 2026-10-27
 ### Added
 - **Edit Path** in the Favorites context menu: change a favorite's path without editing `projects.json` (a missing folder only warns, so remote or offline paths can still be saved)
