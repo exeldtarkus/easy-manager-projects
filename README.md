@@ -5,28 +5,33 @@
 
 # Lemari - Project Manager
 
-One list of your projects, and each one opens on the right side of WSL or Windows.
+Keep all your projects in one place, and open any of them in a couple of keystrokes.
+
+*Lemari* is Indonesian for wardrobe: a cabinet where everything has its place. The extension keeps the projects you save as favorites and the repositories it finds on disk in one organized list. Press `Shift+Alt+P`, type part of a name or path, and choose whether to open the project in this window or a new one.
 
 Forked from [Project Manager](https://github.com/alefragnani/vscode-project-manager) by Alessandro Fragnani.
 
-Lemari keeps saved favorites and auto-detected repositories (Git, VS Code, Mercurial, SVN or any folder) in one place. Press `Shift+Alt+P`, pick a project, choose this window or a new one. A project stored under `\\wsl.localhost\<distro>\...` opens as a real WSL remote window instead of a slow UNC folder, and any project can be reopened on the other side with **Open in WSL** or **Open in Windows**.
+## Features
 
-## Highlights
-
-- **One grouped list.** Favorites first, then Git, VSCode, Mercurial, SVN and Any, each under its own separator.
-- **You choose the window.** Every open from the list or the Side Bar asks **Open in This Window** or **Open in New Window**.
-- **WSL-aware.** WSL paths open as WSL remote windows, WSL repositories are auto-detected, and `security.allowedUNCHosts` is set up for you.
-- **Favorites you can shape.** Tags, custom icons, rename, change the path, disable or delete, all from the Side Bar.
-- **Familiar storage.** Favorites live in a plain `projects.json` you can still edit by hand.
+- **Favorites.** Save the current folder or workspace, or any folder picked in the system dialog, under a name of your choice.
+- **Tags and icons.** Saving asks for the name, the tags and an icon in one flow. Group the Favorites view by tag, filter by tag, and change tags, icon, name or path later from the Side Bar.
+- **Auto-detected repositories.** Point Lemari at base folders and it lists every Git, SVN and Mercurial repository, every VS Code project, or every folder inside them.
+- **Quick switching.** One grouped list (Favorites, Git, VSCode, Mercurial, SVN, Any) with the name and path on two lines. Typing matches both.
+- **Side Bar.** A Lemari view in the Activity Bar with Favorites plus one view per kind of detected project.
+- **Sorting.** Order projects by saved order, name, path or most recently used.
+- **Status Bar.** Shows the current project name; click it to switch.
+- **Remote projects.** Favorites can point at remote folders (Containers, SSH, Codespaces and more) and open the remote when picked.
+- **Plain storage.** Favorites live in a `projects.json` file you can edit by hand.
+- **Working across WSL and Windows.** WSL paths open as real WSL remote windows, and any project can be reopened on the other side.
 
 ## Contents
 
 - [Quick start](#quick-start)
-- [Open a project](#open-a-project)
-- [Organize favorites](#organize-favorites)
+- [Save and organize favorites](#save-and-organize-favorites)
 - [Auto-detect repositories](#auto-detect-repositories)
-- [WSL and Windows](#wsl-and-windows)
+- [Open a project](#open-a-project)
 - [Side Bar, Status Bar and What's New](#side-bar-status-bar-and-whats-new)
+- [Working across WSL and Windows](#working-across-wsl-and-windows)
 - [Commands](#commands)
 - [Settings reference](#settings-reference)
 - [Troubleshooting](#troubleshooting)
@@ -37,69 +42,21 @@ Lemari keeps saved favorites and auto-detected repositories (Git, VS Code, Mercu
 ## Quick start
 
 1. **Install** Lemari (`exeltarkus.lemari`) from the Extensions view.
-2. **Save a favorite.** Open a folder or workspace and run **Lemari: Save Project**. Accept the suggested name, and optionally use the buttons in the input box to add tags or pick an icon.
-3. **Point it at your repositories.** Add base folders to your user `settings.json`:
+2. **Save a favorite.** Open a folder or workspace and run **Lemari: Save Project**, or use **Add Folder to Favorites...** in the Favorites title bar to pick a folder without opening it. Enter a name, then pick tags and an icon (or skip them).
+3. **Add a base folder.** In the Git view, click **Add Git Base Folder...** and pick the folder that holds your repositories. Every repository inside it is listed.
+4. **Switch.** Press `Shift+Alt+P` (`Cmd+Alt+P` on macOS), or open the **Lemari** view in the Activity Bar.
 
-   ```jsonc
-   // settings.json
-   "lemari.git.baseFolders": [
-       "C:\\Projects",
-       "\\\\wsl.localhost\\Ubuntu\\home\\me\\repos"
-   ]
-   ```
-
-4. **Open something.** Press `Shift+Alt+P` (`Cmd+Alt+P` on macOS), or use the **Lemari** view in the Activity Bar.
-
-> **Backslashes differ between the two editors.** In `settings.json` each backslash is escaped, so a WSL folder is written `"\\\\wsl.localhost\\Ubuntu\\home\\me\\repos"`. In the Settings UI you type the real path with single backslashes: `\\wsl.localhost\Ubuntu\home\me\repos`. Doubled backslashes in the Settings UI find nothing, and no error is shown.
-
-## Open a project
-
-| Where | What happens |
-|---|---|
-| `Shift+Alt+P` (**List Projects to Open**) | A grouped list titled "Open a Project". Pick one, then choose **Open in This Window** (listed first, so pressing `Enter` twice keeps you in place) or **Open in New Window**. |
-| The `link-external` button on a list item | Opens that project in a new window right away, without the second question. |
-| **List Projects to Open in New Window** | Same list, every pick opens in a new window. |
-| Clicking a project in the Side Bar | Asks **Open in This Window** or **Open in New Window**. |
-| The inline **Open in New Window** button in the Side Bar | Opens in a new window directly. |
-| The project name in the Status Bar | Runs **List Projects to Open** (or the new-window variant, see `openInNewWindowWhenClickingInStatusBar`). |
-
-### How the list is built
-
-With `lemari.groupList` set to `true` (the default) the list shows one section per kind, in this order:
-
-1. **Favorites**, with their custom icon, a folder icon, or a remote icon for remote paths
-2. **Git**
-3. **VSCode**
-4. **Mercurial**
-5. **SVN**
-6. **Any**
-
-Within each section projects follow `lemari.sortList` (`Saved`, `Name`, `Path` or `Recent`). Set `groupList` to `false` for a single flat list without separators.
-
-Typing matches the name and the path (for example `wsl.localhost` or `repos\api`). Set `filterOnFullPath` to `false` to match names only. The current project is hidden from the list unless you turn off `removeCurrentProjectFromList`, and with `git.showBranchName` set to `onlyInCommandPalette` or `always` each Git project shows its current branch.
-
-### Keyboard navigation
-
-While the list is open the `inProjectManagerList` context is set, so you can bind your own keys:
-
-```json
-{
-    "key": "ctrl+j",
-    "command": "workbench.action.quickOpenSelectNext",
-    "when": "inProjectManagerList && (isWindows || isLinux)"
-},
-{
-    "key": "ctrl+shift+j",
-    "command": "workbench.action.quickOpenSelectPrevious",
-    "when": "inProjectManagerList && (isWindows || isLinux)"
-}
-```
-
-## Organize favorites
+## Save and organize favorites
 
 ### Save
 
-**Save Project** stores the current folder or workspace. The name box has two buttons: one to select tags, one to select an icon (any codicon). Saving a name that already exists offers to update it. Projects from the auto-detected views can be promoted with **Add to Favorites** in their context menu.
+There are three ways to save a favorite:
+
+- **Lemari: Save Project** saves the current folder or workspace.
+- **Add Folder to Favorites...** (Favorites title bar and Command Palette) opens the system folder dialog, so you can save any folder without opening it. In a remote window the dialog shows the remote file system.
+- **Add to Favorites** in the context menu of an auto-detected project promotes it to a favorite.
+
+Each one asks for the name, then the tags (with a button to add new tags), then an icon (any codicon). Press `Esc` at any step to cancel. Saving a name that already exists updates that project, with its current tags and icon preselected.
 
 ### Edit from the Side Bar
 
@@ -118,7 +75,7 @@ All projects also offer **Add to Workspace** and **Reveal in Explorer** / **Reve
 
 ### Tags
 
-Tags available for selection come from `lemari.tags` (default `Personal`, `Work`). Switch the Favorites view between **View as List** and **View as Tags** from its title bar, and use **Filter Projects by Tag** to show only some tags in both the view and the list. `tags.collapseItems` controls whether tag groups start expanded or collapsed.
+The tags offered when saving come from `lemari.tags` (default `Personal`, `Work`) plus any tag already used by a favorite. Switch the Favorites view between **View as List** and **View as Tags** from its title bar, and use **Filter Projects by Tag** to show only some tags in both the view and the project list. `tags.collapseItems` controls whether tag groups start expanded or collapsed.
 
 ![Favorites grouped by tag in the Side Bar](docs/images/vscode-project-manager-side-bar-tags.gif)
 
@@ -166,6 +123,8 @@ For each kind:
 - `ignoredFolders` lists folders or glob patterns to skip.
 - `maxDepthRecursion` limits how deep the scan goes (default `4`; any value below `1` means no limit).
 
+For Git, **Add Git Base Folder...** (Git view title bar, Git welcome view and Command Palette) picks a folder in the system dialog and adds it to `lemari.git.baseFolders` in your user settings. For the other kinds, edit `settings.json`:
+
 ```json
 "lemari.git.baseFolders": [
     "C:\\Projects",
@@ -176,17 +135,94 @@ For each kind:
 "lemari.git.maxDepthRecursion": 4
 ```
 
+> **Backslashes differ between the two editors.** In `settings.json` each backslash is escaped, as above. In the Settings UI you type the real path with single backslashes, for example `C:\Projects`. Doubled backslashes in the Settings UI find nothing, and no error is shown.
+
 Related switches: `supportSymlinksOnBaseFolders` follows symlinks, `ignoreProjectsWithinProjects` skips nested projects, `any.excludeBaseFoldersFromResults` leaves the base folders themselves out of the Any list, and `cacheProjectsBetweenSessions` avoids a full rescan at every start. Run **Refresh Projects** (or the per-kind refresh button in each view) after changing folders on disk.
 
-## WSL and Windows
+## Open a project
+
+| Where | What happens |
+|---|---|
+| `Shift+Alt+P` (**List Projects to Open**) | A grouped list titled "Open a Project". Pick one, then choose **Open in This Window** (listed first, so pressing `Enter` twice keeps you in place) or **Open in New Window**. |
+| The `link-external` button on a list item | Opens that project in a new window right away, without the second question. |
+| **List Projects to Open in New Window** | Same list, every pick opens in a new window. |
+| Clicking a project in the Side Bar | Asks **Open in This Window** or **Open in New Window**. |
+| The inline **Open in New Window** button in the Side Bar | Opens in a new window directly. |
+| The project name in the Status Bar | Runs **List Projects to Open** (or the new-window variant, see `openInNewWindowWhenClickingInStatusBar`). |
+
+### How the list is built
+
+Each project takes two lines: the name on top, the path below. A project whose folder no longer exists is marked **Path does not exist**.
+
+With `lemari.groupList` set to `true` (the default) the list shows one section per kind, each header with its number of projects (for example `Git (55)`), in this order:
+
+1. **Favorites**, with their custom icon, a folder icon, or a remote icon for remote paths
+2. **Git**
+3. **VSCode**
+4. **Mercurial**
+5. **SVN**
+6. **Any**
+
+Within each section projects follow `lemari.sortList` (`Saved`, `Name`, `Path` or `Recent`). Set `groupList` to `false` for a single flat list without separators.
+
+Typing matches the name and the path (for example `repos\api`). Set `filterOnFullPath` to `false` to match names only. The current project is hidden from the list unless you turn off `removeCurrentProjectFromList`, and with `git.showBranchName` set to `onlyInCommandPalette` or `always` each Git project shows its current branch.
+
+### Keyboard navigation
+
+While the list is open the `inProjectManagerList` context is set, so you can bind your own keys:
+
+```json
+{
+    "key": "ctrl+j",
+    "command": "workbench.action.quickOpenSelectNext",
+    "when": "inProjectManagerList && (isWindows || isLinux)"
+},
+{
+    "key": "ctrl+shift+j",
+    "command": "workbench.action.quickOpenSelectPrevious",
+    "when": "inProjectManagerList && (isWindows || isLinux)"
+}
+```
+
+## Side Bar, Status Bar and What's New
+
+- **Side Bar.** The Lemari view has Favorites plus one view per configured kind. Each view has buttons to list its projects, refresh (auto-detected views) and open the related settings. The Favorites title bar adds **Save Project**, **Add Folder to Favorites...**, **Edit Projects**, the list/tags toggle, **Filter Projects by Tag**, and a **View & Sort** menu (**Sort by Saved**, **Name**, **Path** or **Recent**).
+- **Current project highlight.** The open project is highlighted; pick your own color:
+
+  ```json
+  "workbench.colorCustomizations": {
+      "lemari.sideBar.currentProjectHighlightForeground": "#e13015"
+  }
+  ```
+
+- **Status Bar.** Shows the current project name (`showProjectNameInStatusBar`); click it to open the project list.
+- **What's New.** **Lemari: What's New** shows the latest changes, the release timeline of this fork, and shortcuts to open a project, save one or set Git base folders. It follows your VS Code theme.
+
+![Lemari in the Side Bar](docs/images/vscode-project-manager-side-bar.png)
+
+## Working across WSL and Windows
+
+On Windows, Lemari runs on the local side and handles projects stored in WSL.
 
 ### WSL paths open as WSL windows
 
 Any favorite or detected project under `\\wsl.localhost\<distro>\...` or `\\wsl$\<distro>\...` opens as `vscode-remote://wsl+<distro>/...`. You get a WSL remote window with Linux tools and fast file access, not a local window browsing a network share.
 
+WSL folders work as base folders too. In `settings.json` escape every backslash:
+
+```jsonc
+// settings.json
+"lemari.git.baseFolders": [
+    "C:\\Projects",
+    "\\\\wsl.localhost\\Ubuntu\\home\\me\\repos"
+]
+```
+
+In the Settings UI type `\\wsl.localhost\Ubuntu\home\me\repos` with single backslashes. **Add Git Base Folder...** used in a WSL window stores the folder as `\\wsl.localhost\...` for you.
+
 ### Open in WSL / Open in Windows
 
-On Windows, every project in the Side Bar has two extra context menu entries:
+Every project in the Side Bar has two extra context menu entries on Windows:
 
 | Command | From | Opens as |
 |---|---|---|
@@ -203,32 +239,18 @@ The default automount root `/mnt/` is assumed; a custom `root` in `/etc/wsl.conf
 
 VS Code refuses UNC hosts that are not listed in `security.allowedUNCHosts`, and it does so silently: a WSL base folder simply returns no projects. On Windows, when any `baseFolders` entry points at `\\wsl.localhost\...` or `\\wsl$\...`, the extension adds the missing host (`wsl.localhost` and/or `wsl$`) to that setting and offers **Reload Window**. The setting is application-scoped, so it is written to the **Default** profile's settings. If a reload is not enough, restart VS Code.
 
-## Side Bar, Status Bar and What's New
-
-- **Side Bar.** The Lemari view has Favorites plus one view per configured kind. Each view has buttons to list its projects, refresh (auto-detected views) and open the related settings. The Favorites title bar adds **Save Project**, **Edit Projects**, the list/tags toggle, **Filter Projects by Tag**, and a **View & Sort** menu (**Sort by Saved**, **Name**, **Path** or **Recent**).
-- **Current project highlight.** The open project is highlighted; pick your own color:
-
-  ```json
-  "workbench.colorCustomizations": {
-      "lemari.sideBar.currentProjectHighlightForeground": "#e13015"
-  }
-  ```
-
-- **Status Bar.** Shows the current project name (`showProjectNameInStatusBar`); click it to open the project list.
-- **What's New.** **Lemari: What's New** shows the latest changes, the release timeline of this fork, and shortcuts to open a project, save one or set Git base folders. It follows your VS Code theme.
-
-![Lemari in the Side Bar](docs/images/vscode-project-manager-side-bar.png)
-
 ## Commands
 
 | Command | What it does |
 |---|---|
 | **Lemari: Save Project** | Save the current folder or workspace as a favorite |
+| **Add Folder to Favorites...** | Pick any folder in the system dialog and save it as a favorite |
 | **Lemari: List Projects to Open** (`Shift+Alt+P`) | Pick a project, then choose this window or a new one |
 | **Lemari: List Projects to Open in New Window** | Pick a project and open it in a new window |
 | **Lemari: Edit Projects** | Open `projects.json` |
 | **Lemari: Filter Projects by Tag** | Show only favorites with the selected tags |
 | **Lemari: Add Project to Workspace** | Add a project folder to the current workspace |
+| **Add Git Base Folder...** | Pick a folder in the system dialog and add it to `lemari.git.baseFolders` |
 | **Lemari: Refresh Projects** | Rescan all base folders (Git, VSCode, Mercurial, SVN and Any also have their own refresh command) |
 | **Lemari: What's New** | Show the release notes page |
 | **Lemari: Support the Original Project Manager** | Show ways to sponsor or donate to the original extension |
@@ -282,6 +304,13 @@ General:
 
 ## Troubleshooting
 
+### Repositories are not detected
+
+1. **Check the backslashes.** `settings.json` needs escaped backslashes (`"C:\\Projects"`); the Settings UI needs single ones (`C:\Projects`).
+2. **Raise `maxDepthRecursion`** if your repositories sit more than 4 levels below the base folder.
+3. **Check `ignoredFolders`** does not match the folders you expect.
+4. Run **Lemari: Refresh Projects**.
+
 ### WSL repositories are not detected
 
 1. **Check the backslashes.** `settings.json` needs `"\\\\wsl.localhost\\Ubuntu\\..."`; the Settings UI needs `\\wsl.localhost\Ubuntu\...`.
@@ -325,7 +354,7 @@ The contract is in [api/api.d.ts](api/api.d.ts). See also the [VS Code extension
 
 ## Credits & origin
 
-Lemari is a fork of [Project Manager](https://github.com/alefragnani/vscode-project-manager) **13.1.1** by **Alessandro Fragnani**. The core of this extension (saved projects, auto-detection, tags, the Side Bar, the Status Bar and the API) is his work, and all credit for it goes to him. This fork adds WSL and Windows switching and the changes listed in [CHANGELOG.md](CHANGELOG.md), which also keeps the history of the original project.
+Lemari is a fork of [Project Manager](https://github.com/alefragnani/vscode-project-manager) **13.1.1** by **Alessandro Fragnani**. The core of this extension (saved projects, auto-detection, tags, the Side Bar, the Status Bar and the API) is his work, and all credit for it goes to him. This fork adds the two-line grouped list, saving with tags and icon in one flow, the folder dialogs for favorites and Git base folders, WSL and Windows switching, and the other changes listed in [CHANGELOG.md](CHANGELOG.md), which also keeps the history of the original project.
 
 If the original helps you, consider supporting it with **Lemari: Support the Original Project Manager**.
 

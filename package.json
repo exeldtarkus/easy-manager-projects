@@ -2,7 +2,7 @@
 	"name": "lemari",
 	"displayName": "Lemari - Project Manager",
 	"description": "Easily switch between projects, including opening projects in WSL or Windows (fork of alefragnani's Project Manager)",
-	"version": "1.11.0",
+	"version": "1.11.1",
 	"publisher": "exeltarkus",
 	"engines": {
 		"vscode": "^1.78.0"

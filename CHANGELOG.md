@@ -1,3 +1,7 @@
+## [1.11.1] - 2026-10-30
+### Changed
+- README rewritten around project management: favorites, tags, auto-detection and quick switching come first, and WSL/Windows switching has its own section
+
 ## [1.11.0] - 2026-10-30
 ### Changed
 - Settings, commands and views moved from the `easyManagerProjects.*` prefix to `lemari.*`, so the Settings UI now shows **Lemari › ...**. Existing `easyManagerProjects.*` settings are no longer read: rename them in `settings.json`, and any command IDs in `keybindings.json`
