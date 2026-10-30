@@ -33,13 +33,13 @@
 	},
 	"icon": "docs/images/icon.png",
 	"license": "SEE LICENSE IN LICENSE.md",
-	"homepage": "https://github.com/exeldtarkus/easy-manager-projects/blob/main/README.md",
+	"homepage": "https://github.com/exeldtarkus/lemari/blob/main/README.md",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/exeldtarkus/easy-manager-projects.git"
+		"url": "https://github.com/exeldtarkus/lemari.git"
 	},
 	"bugs": {
-		"url": "https://github.com/exeldtarkus/easy-manager-projects/issues"
+		"url": "https://github.com/exeldtarkus/lemari/issues"
 	},
 	"activationEvents": [
 		"onStartupFinished"

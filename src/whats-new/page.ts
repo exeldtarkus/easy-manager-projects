@@ -221,7 +221,7 @@ export function buildWhatsNewHtml(cspSource: string, version: string): string {
 
     <footer>
         <p>Lemari is a fork of <a href="https://github.com/alefragnani/vscode-project-manager">Project Manager</a> by Alessandro Fragnani, who built everything it started from.
-        Report problems or ideas on <a href="https://github.com/exeldtarkus/easy-manager-projects/issues">GitHub</a>.</p>
+        Report problems or ideas on <a href="https://github.com/exeldtarkus/lemari/issues">GitHub</a>.</p>
     </footer>
 </main>
 </body>

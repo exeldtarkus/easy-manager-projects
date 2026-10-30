@@ -330,4 +330,4 @@ If the original helps you, consider supporting it with **Lemari: Support the Ori
 
 ## License
 
-[GPL-3.0 with VS Code Extension Host API Exception](LICENSE.md) &copy; Alessandro Fragnani (original [Project Manager](https://github.com/alefragnani/vscode-project-manager)). Fork maintained by [exeldtarkus](https://github.com/exeldtarkus/easy-manager-projects).
+[GPL-3.0 with VS Code Extension Host API Exception](LICENSE.md) &copy; Alessandro Fragnani (original [Project Manager](https://github.com/alefragnani/vscode-project-manager)). Fork maintained by [exeldtarkus](https://github.com/exeldtarkus/lemari).
