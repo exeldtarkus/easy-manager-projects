@@ -1,3 +1,7 @@
+## [1.11.2] - 2026-10-30
+### Changed
+- What's New page leads with project management: a new tagline and a sample of the grouped project list replace the WSL/Windows path example
+
 ## [1.11.1] - 2026-10-30
 ### Changed
 - README rewritten around project management: favorites, tags, auto-detection and quick switching come first, and WSL/Windows switching has its own section

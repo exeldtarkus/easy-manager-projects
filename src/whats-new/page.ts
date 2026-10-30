@@ -140,7 +140,7 @@ export function buildWhatsNewHtml(cspSource: string, version: string): string {
     a { color: var(--accent); }
     a:focus-visible { outline: 1px solid var(--vscode-focusBorder); outline-offset: 2px; }
 
-    /* the one memorable element: the same folder seen from both sides */
+    /* the one memorable element: a small sample of the grouped project list */
     .bridge {
         font-family: var(--mono);
         font-size: 15px;
@@ -198,13 +198,16 @@ export function buildWhatsNewHtml(cspSource: string, version: string): string {
 <main>
     <header>
         <h1>Lemari<span class="version">${version}</span></h1>
-        <p class="tagline">Your projects in one list, opened on the right side of WSL or Windows.</p>
+        <p class="tagline">Keep all your projects in one place, and open any of them in a couple of keystrokes.</p>
     </header>
 
-    <div class="bridge" aria-label="The same folder, seen from Windows and from WSL">
-        <span class="side">Windows</span><span class="path">\\\\wsl.localhost\\Ubuntu\\home\\me\\repos\\api</span>
-        <span class="link">same folder, opened as a WSL window</span>
-        <span class="side">WSL</span><span class="path">/home/me/repos/api</span>
+    <div class="bridge" aria-label="Example of the project list: favorites and detected repositories, grouped">
+        <span class="side">Favorites</span><span class="path">api</span>
+        <span class="link">~/repos/api &middot; work, backend</span>
+        <span class="side">Git</span><span class="path">web-shop</span>
+        <span class="link">~/repos/web-shop</span>
+        <span class="side">Any</span><span class="path">notes</span>
+        <span class="link">~/Documents/notes</span>
     </div>
 
     <section class="latest">
