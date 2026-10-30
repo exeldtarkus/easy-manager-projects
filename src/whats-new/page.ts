@@ -12,6 +12,11 @@ export interface Release {
 // newest first; add the new release on top when bumping the minor version
 export const RELEASES: Release[] = [
     {
+        version: "1.11.0", date: "Oct 30, 2026", changes: [
+            "The extension is now called <b>Lemari</b>. Settings and commands moved from <code>easyManagerProjects.*</code> to <code>lemari.*</code>, so rename those keys in your <code>settings.json</code> and keybindings."
+        ]
+    },
+    {
         version: "1.10.0", date: "Oct 27, 2026", changes: [
             "<b>Open a Project</b> shows each project on two lines, name on top and path below, and each group header shows how many projects it holds.",
             "Typing in the list matches the path too, for example <code>wsl.localhost</code> or <code>repos\\api</code>. Set <code>filterOnFullPath</code> to <code>false</code> to match names only.",
@@ -88,7 +93,7 @@ function commandLink(command: string, args?: unknown): string {
     return `command:${command}${args === undefined ? "" : "?" + encodeURIComponent(JSON.stringify(args))}`;
 }
 
-export const PAGE_COMMANDS = [ "easyManagerProjects.listProjects", "easyManagerProjects.saveProject", "workbench.action.openSettings" ];
+export const PAGE_COMMANDS = [ "lemari.listProjects", "lemari.saveProject", "workbench.action.openSettings" ];
 
 export function buildWhatsNewHtml(cspSource: string, version: string): string {
     const [ latest, ...earlier ] = RELEASES;
@@ -206,9 +211,9 @@ export function buildWhatsNewHtml(cspSource: string, version: string): string {
         <h2>New in ${latest.version}</h2>
         <ul>${list(latest.changes)}</ul>
         <div class="actions">
-            <a class="primary" href="${commandLink("easyManagerProjects.listProjects")}">Open a project</a>
-            <a href="${commandLink("easyManagerProjects.saveProject")}">Save this folder as a project</a>
-            <a href="${commandLink("workbench.action.openSettings", "easyManagerProjects.git.baseFolders")}">Set Git base folders</a>
+            <a class="primary" href="${commandLink("lemari.listProjects")}">Open a project</a>
+            <a href="${commandLink("lemari.saveProject")}">Save this folder as a project</a>
+            <a href="${commandLink("workbench.action.openSettings", "lemari.git.baseFolders")}">Set Git base folders</a>
         </div>
     </section>
 

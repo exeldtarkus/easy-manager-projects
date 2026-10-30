@@ -33,7 +33,7 @@ export class ProjectNode extends TreeItem {
         }
 
         this.resourceUri = Uri.from({
-            scheme: 'easyManagerProjects-view',
+            scheme: 'lemari-view',
             path: preview.path
         });
 

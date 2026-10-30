@@ -70,24 +70,24 @@ export async function activate(context: vscode.ExtensionContext) {
     registerWhatsNew();
     allowWslUncHosts();
 
-    context.subscriptions.push(vscode.commands.registerCommand("_easyManagerProjects.openFolderWelcome", () => {
+    context.subscriptions.push(vscode.commands.registerCommand("_lemari.openFolderWelcome", () => {
         const openFolderCommand = isWindows || isMacOS ? "workbench.action.files.openFolder" : "workbench.action.files.openFileFolder";
         vscode.commands.executeCommand(openFolderCommand);
     }));
-    context.subscriptions.push(vscode.commands.registerCommand("easyManagerProjects.hideGitWelcome", () => {
+    context.subscriptions.push(vscode.commands.registerCommand("lemari.hideGitWelcome", () => {
         context.globalState.update("hideGitWelcome", true);
         providerManager.showTreeViewFromAllProviders();
-        vscode.commands.executeCommand("setContext", "easyManagerProjects.hiddenGitWelcome", true);
+        vscode.commands.executeCommand("setContext", "lemari.hiddenGitWelcome", true);
     }));
-    context.subscriptions.push(vscode.commands.registerCommand("easyManagerProjects.showGitWelcome", () => {
+    context.subscriptions.push(vscode.commands.registerCommand("lemari.showGitWelcome", () => {
         context.globalState.update("hideGitWelcome", false);
         providerManager.showTreeViewFromAllProviders();
-        vscode.commands.executeCommand("setContext", "easyManagerProjects.hiddenGitWelcome", false);
+        vscode.commands.executeCommand("setContext", "lemari.hiddenGitWelcome", false);
     }));
     const hideGitWelcome = context.globalState.get<boolean>("hideGitWelcome", false);
-    vscode.commands.executeCommand("setContext", "easyManagerProjects.hiddenGitWelcome", hideGitWelcome);
+    vscode.commands.executeCommand("setContext", "lemari.hiddenGitWelcome", hideGitWelcome);
 
-    vscode.commands.registerCommand("_easyManagerProjects.open", async (projectPath: string, projectName: string, profile: string) => {
+    vscode.commands.registerCommand("_lemari.open", async (projectPath: string, projectName: string, profile: string) => {
         const uri = buildProjectUri(projectPath);
         // the explicit window choice also answers the "switch active window" confirmation
         const newWindow = await pickOpenInNewWindow(projectName);
@@ -100,7 +100,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 () => ({}),  // done
                 () => vscode.window.showInformationMessage(l10n.t("Could not open the project!")));
     });
-    vscode.commands.registerCommand("_easyManagerProjects.openInNewWindow", (node) => {
+    vscode.commands.registerCommand("_lemari.openInNewWindow", (node) => {
         const uri = buildProjectUri(node.command.arguments[0]);
         const openInNewWindow = shouldOpenInNewWindow(true, CommandLocation.SideBar);
         vscode.commands.executeCommand("vscode.openFolder", uri, { forceProfile: node.command.arguments[2] , forceNewWindow: openInNewWindow } )
@@ -108,14 +108,14 @@ export async function activate(context: vscode.ExtensionContext) {
                 () => ({}),  // done
                 () => vscode.window.showInformationMessage(l10n.t("Could not open the project!")));
     });
-    vscode.commands.registerCommand("_easyManagerProjects.openInWsl", async (node) => {
+    vscode.commands.registerCommand("_lemari.openInWsl", async (node) => {
         const rootPath: string = node.command.arguments[0];
         // WSL UNC paths carry their own distro, Windows drives use the default one
         const distro = parseWslUncPath(rootPath) ? "" : await getDefaultWslDistro();
         openOnOtherSide(node, buildWslProjectUri(rootPath, distro),
             l10n.t("This project can't be opened in WSL. No default WSL distribution was found."));
     });
-    vscode.commands.registerCommand("_easyManagerProjects.openInWindows", (node) => {
+    vscode.commands.registerCommand("_lemari.openInWindows", (node) => {
         openOnOtherSide(node, buildWindowsProjectUri(node.command.arguments[0]),
             l10n.t("This project can't be opened in Windows. Only WSL projects are supported."));
     });
@@ -135,45 +135,45 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
     // register commands (here, because it needs to be used right below if an invalid JSON is present)
-    vscode.commands.registerCommand("easyManagerProjects.saveProject", () => saveProject());
-    vscode.commands.registerCommand("easyManagerProjects.addFolderToFavorites", () => addFolderToFavorites());
-    vscode.commands.registerCommand("easyManagerProjects.addGitBaseFolder", () => addGitBaseFolder());
-    vscode.commands.registerCommand("easyManagerProjects.refreshProjects", () => refreshProjects(true, true));
+    vscode.commands.registerCommand("lemari.saveProject", () => saveProject());
+    vscode.commands.registerCommand("lemari.addFolderToFavorites", () => addFolderToFavorites());
+    vscode.commands.registerCommand("lemari.addGitBaseFolder", () => addGitBaseFolder());
+    vscode.commands.registerCommand("lemari.refreshProjects", () => refreshProjects(true, true));
     locators.registerCommands();
-    vscode.commands.registerCommand("easyManagerProjects.editProjects", () => editProjects());
-    vscode.commands.registerCommand("easyManagerProjects.listProjects", () => listProjects(false));
-    vscode.commands.registerCommand("easyManagerProjects.listProjectsNewWindow", () => listProjects(true));
+    vscode.commands.registerCommand("lemari.editProjects", () => editProjects());
+    vscode.commands.registerCommand("lemari.listProjects", () => listProjects(false));
+    vscode.commands.registerCommand("lemari.listProjectsNewWindow", () => listProjects(true));
     
-    vscode.commands.registerCommand("easyManagerProjects.listFavoriteProjects#sideBarFavorites", () => listStorageProjects());
-    vscode.commands.registerCommand("easyManagerProjects.listGitProjects#sideBarGit", () => listAutoDetectedProjects(locators.gitLocator));
-    vscode.commands.registerCommand("easyManagerProjects.listVSCodeProjects#sideBarVSCode", () => listAutoDetectedProjects(locators.vscLocator));
-    vscode.commands.registerCommand("easyManagerProjects.listSVNProjects#sideBarSVN", () => listAutoDetectedProjects(locators.svnLocator));
-    vscode.commands.registerCommand("easyManagerProjects.listMercurialProjects#sideBarMercurial", () => listAutoDetectedProjects(locators.mercurialLocator));
-    vscode.commands.registerCommand("easyManagerProjects.listAnyProjects#sideBarAny", () => listAutoDetectedProjects(locators.anyLocator));
+    vscode.commands.registerCommand("lemari.listFavoriteProjects#sideBarFavorites", () => listStorageProjects());
+    vscode.commands.registerCommand("lemari.listGitProjects#sideBarGit", () => listAutoDetectedProjects(locators.gitLocator));
+    vscode.commands.registerCommand("lemari.listVSCodeProjects#sideBarVSCode", () => listAutoDetectedProjects(locators.vscLocator));
+    vscode.commands.registerCommand("lemari.listSVNProjects#sideBarSVN", () => listAutoDetectedProjects(locators.svnLocator));
+    vscode.commands.registerCommand("lemari.listMercurialProjects#sideBarMercurial", () => listAutoDetectedProjects(locators.mercurialLocator));
+    vscode.commands.registerCommand("lemari.listAnyProjects#sideBarAny", () => listAutoDetectedProjects(locators.anyLocator));
 
     // new commands (ActivityBar)
-    vscode.commands.registerCommand("easyManagerProjects.addToWorkspace#sideBar", (node) => addProjectToWorkspace(node));
-    vscode.commands.registerCommand("easyManagerProjects.addToWorkspace", () => addProjectToWorkspace(undefined));
-    vscode.commands.registerCommand("_easyManagerProjects.deleteProject", (node) => deleteProject(node));
-    vscode.commands.registerCommand("_easyManagerProjects.renameProject", (node) => renameProject(node));
-    vscode.commands.registerCommand("_easyManagerProjects.editTags", (node) => editTags(node));
-    vscode.commands.registerCommand("_easyManagerProjects.editIcon", (node) => editIcon(node));
-    vscode.commands.registerCommand("_easyManagerProjects.editPath", (node) => editPath(node));
-    vscode.commands.registerCommand("easyManagerProjects.addToFavorites", (node) => saveProject(node));
-    vscode.commands.registerCommand("_easyManagerProjects.toggleProjectEnabled", (node) => toggleProjectEnabled(node));
+    vscode.commands.registerCommand("lemari.addToWorkspace#sideBar", (node) => addProjectToWorkspace(node));
+    vscode.commands.registerCommand("lemari.addToWorkspace", () => addProjectToWorkspace(undefined));
+    vscode.commands.registerCommand("_lemari.deleteProject", (node) => deleteProject(node));
+    vscode.commands.registerCommand("_lemari.renameProject", (node) => renameProject(node));
+    vscode.commands.registerCommand("_lemari.editTags", (node) => editTags(node));
+    vscode.commands.registerCommand("_lemari.editIcon", (node) => editIcon(node));
+    vscode.commands.registerCommand("_lemari.editPath", (node) => editPath(node));
+    vscode.commands.registerCommand("lemari.addToFavorites", (node) => saveProject(node));
+    vscode.commands.registerCommand("_lemari.toggleProjectEnabled", (node) => toggleProjectEnabled(node));
 
     const viewAsList = Container.context.globalState.get<boolean>("viewAsList", true);
-    vscode.commands.executeCommand("setContext", "easyManagerProjects.viewAsList", viewAsList);
-    vscode.commands.registerCommand("_easyManagerProjects.viewAsTags#sideBarFavorites", () => toggleViewAsFavoriteProjects(ViewFavoritesAs.VIEW_AS_TAGS));
-    vscode.commands.registerCommand("_easyManagerProjects.viewAsList#sideBarFavorites", () => toggleViewAsFavoriteProjects(ViewFavoritesAs.VIEW_AS_LIST));
-    vscode.commands.registerCommand("easyManagerProjects.filterProjectsByTag", () => filterProjectsByTag());
-    vscode.commands.registerCommand("easyManagerProjects.filterProjectsByTag#sideBar", () => filterProjectsByTag());
+    vscode.commands.executeCommand("setContext", "lemari.viewAsList", viewAsList);
+    vscode.commands.registerCommand("_lemari.viewAsTags#sideBarFavorites", () => toggleViewAsFavoriteProjects(ViewFavoritesAs.VIEW_AS_TAGS));
+    vscode.commands.registerCommand("_lemari.viewAsList#sideBarFavorites", () => toggleViewAsFavoriteProjects(ViewFavoritesAs.VIEW_AS_LIST));
+    vscode.commands.registerCommand("lemari.filterProjectsByTag", () => filterProjectsByTag());
+    vscode.commands.registerCommand("lemari.filterProjectsByTag#sideBar", () => filterProjectsByTag());
 
     function toggleViewAsFavoriteProjects(view: ViewFavoritesAs) {
         if (view === ViewFavoritesAs.VIEW_AS_LIST) {
-            vscode.commands.executeCommand("setContext", "easyManagerProjects.viewAsList", true);
+            vscode.commands.executeCommand("setContext", "lemari.viewAsList", true);
         } else {
-            vscode.commands.executeCommand("setContext", "easyManagerProjects.viewAsList", false);
+            vscode.commands.executeCommand("setContext", "lemari.viewAsList", false);
         }
         Container.context.globalState.update("viewAsList", view === ViewFavoritesAs.VIEW_AS_LIST);
         providerManager.refreshTreeViews();
@@ -216,11 +216,11 @@ export async function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(async cfg => {
-        if (cfg.affectsConfiguration("easyManagerProjects.git") || cfg.affectsConfiguration("easyManagerProjects.hg") ||
-            cfg.affectsConfiguration("easyManagerProjects.vscode") || cfg.affectsConfiguration("easyManagerProjects.svn") || 
-            cfg.affectsConfiguration("easyManagerProjects.any") || 
-            cfg.affectsConfiguration("easyManagerProjects.ignoreProjectsWithinProjects") || 
-            cfg.affectsConfiguration("easyManagerProjects.supportSymlinksOnBaseFolders")) {
+        if (cfg.affectsConfiguration("lemari.git") || cfg.affectsConfiguration("lemari.hg") ||
+            cfg.affectsConfiguration("lemari.vscode") || cfg.affectsConfiguration("lemari.svn") || 
+            cfg.affectsConfiguration("lemari.any") || 
+            cfg.affectsConfiguration("lemari.ignoreProjectsWithinProjects") || 
+            cfg.affectsConfiguration("lemari.supportSymlinksOnBaseFolders")) {
             allowWslUncHosts();
             refreshProjects();
         }
@@ -229,22 +229,22 @@ export async function activate(context: vscode.ExtensionContext) {
             providerManager.refreshTreeViews();
         }
 
-        if (cfg.affectsConfiguration("easyManagerProjects.sortList")) {
+        if (cfg.affectsConfiguration("lemari.sortList")) {
             updateSortByContext();
             providerManager.storageProvider.refresh();
             providerManager.updateTreeViewStorage();
         }
 
-        if (cfg.affectsConfiguration("easyManagerProjects.showParentFolderInfoOnDuplicates")) {
+        if (cfg.affectsConfiguration("lemari.showParentFolderInfoOnDuplicates")) {
             providerManager.refreshTreeViews();
         }
 
-        if (cfg.affectsConfiguration("easyManagerProjects.tags.collapseItems")) {
+        if (cfg.affectsConfiguration("lemari.tags.collapseItems")) {
             await StorageProvider.resetTagExpansionState();
             providerManager.refreshStorageTreeView();
         }
 
-        if (cfg.affectsConfiguration("easyManagerProjects.git.showBranchName")) {
+        if (cfg.affectsConfiguration("lemari.git.showBranchName")) {
             providerManager.storageProvider.refresh();
             providerManager.updateTreeViewStorage();
         }
@@ -317,7 +317,7 @@ export async function activate(context: vscode.ExtensionContext) {
                     projectStorage.push("Project Name", "Root Path");
                     projectStorage.save();
                     providerManager.updateTreeViewStorage();
-                    vscode.commands.executeCommand("easyManagerProjects.editProjects");
+                    vscode.commands.executeCommand("lemari.editProjects");
                 } else {
                     return;
                 }
@@ -476,7 +476,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 }
 
                 if (option.title === l10n.t("Open File")) {
-                    vscode.commands.executeCommand("easyManagerProjects.editProjects");
+                    vscode.commands.executeCommand("lemari.editProjects");
                 } else {
                     return;
                 }
@@ -487,7 +487,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     function getProjectFilePath() {
         let projectFile: string;
-        const projectsLocation: string = vscode.workspace.getConfiguration("easyManagerProjects").get<string>("projectsLocation");
+        const projectsLocation: string = vscode.workspace.getConfiguration("lemari").get<string>("projectsLocation");
         if (projectsLocation !== "") {
             projectFile = path.join(PathUtils.expandHomePath(projectsLocation), PROJECTS_FILE);
         } else {
@@ -612,7 +612,7 @@ export async function activate(context: vscode.ExtensionContext) {
             return;
         }
 
-        const config = vscode.workspace.getConfiguration("easyManagerProjects");
+        const config = vscode.workspace.getConfiguration("lemari");
         // user settings only, so workspace values are not copied into them
         const folders = config.inspect<string[]>("git.baseFolders")?.globalValue ?? [];
         if (folders.some(folder => folder.toLowerCase() === local.fsPath.toLowerCase())) {
@@ -724,7 +724,7 @@ async function allowWslUncHosts() {
     if (!isWindows) {
         return;
     }
-    const config = vscode.workspace.getConfiguration("easyManagerProjects");
+    const config = vscode.workspace.getConfiguration("lemari");
     const baseFolders = [ "git", "hg", "svn", "vscode", "any" ].flatMap(kind => config.get<string[]>(`${kind}.baseFolders`, []));
     const security = vscode.workspace.getConfiguration("security");
     const allowedHosts = security.get<string[]>("allowedUNCHosts", []);

@@ -8,18 +8,18 @@ import { Container } from "../core/container";
 import { buildWhatsNewHtml, isNewerMinor, PAGE_COMMANDS } from "./page";
 
 // same key the previous What's New used, so upgrading does not show the page twice
-const VERSION_KEY = "easy-manager-projects.version";
+const VERSION_KEY = "lemari.version";
 
 function showPage() {
     const version: string = Container.context.extension.packageJSON.version;
-    const panel = window.createWebviewPanel("easy-manager-projects.whatsNew", "What's New in Lemari", ViewColumn.One,
+    const panel = window.createWebviewPanel("lemari.whatsNew", "What's New in Lemari", ViewColumn.One,
         { enableCommandUris: PAGE_COMMANDS });
     panel.webview.html = buildWhatsNewHtml(panel.webview.cspSource, version);
 }
 
 export function registerWhatsNew() {
-    Container.context.subscriptions.push(commands.registerCommand("easyManagerProjects.whatsNew", showPage));
-    Container.context.subscriptions.push(commands.registerCommand("_easyManagerProjects.whatsNewContextMenu", showPage));
+    Container.context.subscriptions.push(commands.registerCommand("lemari.whatsNew", showPage));
+    Container.context.subscriptions.push(commands.registerCommand("_lemari.whatsNewContextMenu", showPage));
 
     const version: string = Container.context.extension.packageJSON.version;
     const previous = Container.context.globalState.get<string>(VERSION_KEY);

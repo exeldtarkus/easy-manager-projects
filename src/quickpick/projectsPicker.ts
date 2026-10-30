@@ -42,7 +42,7 @@ function folderNotFound(name: string, projectStorage: ProjectStorage) {
         }
 
         if (option.title === l10n.t("Update Project")) {
-            commands.executeCommand("easyManagerProjects.editProjects");
+            commands.executeCommand("lemari.editProjects");
         } else { // Update Project
             projectStorage.pop(name);
             projectStorage.save();
@@ -133,7 +133,7 @@ export async function pickProjects(projectStorage: ProjectStorage, locators: Loc
                         window.showInformationMessage(l10n.t("No projects saved yet!"));
                         return resolve(undefined);
                     } else {
-                        const grouped = workspace.getConfiguration("easyManagerProjects").get("groupList", true);
+                        const grouped = workspace.getConfiguration("lemari").get("groupList", true);
                         if (!grouped) {
                             if (locators) {
                                 folders = locators?.sortProjectList(folders);
@@ -142,7 +142,7 @@ export async function pickProjects(projectStorage: ProjectStorage, locators: Loc
                         commands.executeCommand("setContext", "inProjectManagerList", true);
 
                         //
-                        const showGitBranchInCommandPalette = workspace.getConfiguration("easyManagerProjects").get<string>("git.showBranchName", "never");
+                        const showGitBranchInCommandPalette = workspace.getConfiguration("lemari").get<string>("git.showBranchName", "never");
                         // two lines per project: name (+ branch or a missing-path warning) on top, the path below
                         const toQuickPickItem = (folder) => {
                             let description: string | undefined = folder.detail; // set by indicateInvalidPaths for missing folders
@@ -186,7 +186,7 @@ export async function pickProjects(projectStorage: ProjectStorage, locators: Loc
                         input.title = l10n.t("Open a Project");
                         input.placeholder = l10n.t("Type a name or part of a path");
                         input.matchOnDescription = false;
-                        input.matchOnDetail = workspace.getConfiguration("easyManagerProjects").get("filterOnFullPath", true);
+                        input.matchOnDetail = workspace.getConfiguration("lemari").get("filterOnFullPath", true);
                         input.items = items;
                         input.onDidChangeSelection(items => {
                             const item = <any>items[ 0 ];
@@ -254,14 +254,14 @@ export function shouldOpenInNewWindow(openInNewWindow: boolean, calledFrom: Comm
     }
 
     // Check for setting name before and after typo was corrected
-    const oldValue = workspace.getConfiguration("easyManagerProjects").inspect("openInCurrenWindowIfEmpty");
-    const newValue = workspace.getConfiguration("easyManagerProjects").inspect("openInCurrentWindowIfEmpty");
+    const oldValue = workspace.getConfiguration("lemari").inspect("openInCurrenWindowIfEmpty");
+    const newValue = workspace.getConfiguration("lemari").inspect("openInCurrentWindowIfEmpty");
 
     let config: string | unknown;
     if (oldValue.globalValue) {
         config = newValue.globalValue === undefined ? oldValue.globalValue : newValue.globalValue;
     } else {
-        config = workspace.getConfiguration("easyManagerProjects").get<string>("openInCurrentWindowIfEmpty");
+        config = workspace.getConfiguration("lemari").get<string>("openInCurrentWindowIfEmpty");
     }
 
     if (config === OpenInCurrentWindowIfEmptyMode.always) {
@@ -288,7 +288,7 @@ function shouldConfirmSwitchOnActiveWindow(calledFrom: CommandLocation): boolean
         return false;
     }
 
-    const config = workspace.getConfiguration("easyManagerProjects").get<string>("confirmSwitchOnActiveWindow", ConfirmSwitchOnActiveWindowMode.never);
+    const config = workspace.getConfiguration("lemari").get<string>("confirmSwitchOnActiveWindow", ConfirmSwitchOnActiveWindowMode.never);
 
     switch (config) {
         case ConfirmSwitchOnActiveWindowMode.never:

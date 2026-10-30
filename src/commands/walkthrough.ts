@@ -7,9 +7,9 @@ import { commands } from "vscode";
 import { Container } from "../core/container";
 
 function openSideBar() {
-    commands.executeCommand("easyManagerProjectsExplorerFavorites.focus");
+    commands.executeCommand("lemariExplorerFavorites.focus");
 }
 
 export function registerWalkthrough() {
-    Container.context.subscriptions.push(commands.registerCommand("_easyManagerProjects.openSideBar", () => openSideBar()));
+    Container.context.subscriptions.push(commands.registerCommand("_lemari.openSideBar", () => openSideBar()));
 }

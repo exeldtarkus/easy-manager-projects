@@ -7,19 +7,19 @@ import { commands, ConfigurationTarget, workspace } from "vscode";
 import { Container } from "../core/container";
 
 function toggleSortBy(sortBy: string) {
-    commands.executeCommand("setContext", "easyManagerProjects.sortBy", sortBy);
-    workspace.getConfiguration("easyManagerProjects").update("sortList", sortBy, ConfigurationTarget.Global);
+    commands.executeCommand("setContext", "lemari.sortBy", sortBy);
+    workspace.getConfiguration("lemari").update("sortList", sortBy, ConfigurationTarget.Global);
 }
 
 export function registerSortBy() {
     updateSortByContext();
-    Container.context.subscriptions.push(commands.registerCommand("_easyManagerProjects.sortBySaved#sideBarFavorites", () => toggleSortBy("Saved")));
-    Container.context.subscriptions.push(commands.registerCommand("_easyManagerProjects.sortByName#sideBarFavorites", () => toggleSortBy("Name")));
-    Container.context.subscriptions.push(commands.registerCommand("_easyManagerProjects.sortByPath#sideBarFavorites", () => toggleSortBy("Path")));
-    Container.context.subscriptions.push(commands.registerCommand("_easyManagerProjects.sortByRecent#sideBarFavorites", () => toggleSortBy("Recent")));
+    Container.context.subscriptions.push(commands.registerCommand("_lemari.sortBySaved#sideBarFavorites", () => toggleSortBy("Saved")));
+    Container.context.subscriptions.push(commands.registerCommand("_lemari.sortByName#sideBarFavorites", () => toggleSortBy("Name")));
+    Container.context.subscriptions.push(commands.registerCommand("_lemari.sortByPath#sideBarFavorites", () => toggleSortBy("Path")));
+    Container.context.subscriptions.push(commands.registerCommand("_lemari.sortByRecent#sideBarFavorites", () => toggleSortBy("Recent")));
 }
 
 export function updateSortByContext() {
-    const sortBy = workspace.getConfiguration("easyManagerProjects").get<string>("sortList", "Name");
-    commands.executeCommand("setContext", "easyManagerProjects.sortBy", sortBy);
+    const sortBy = workspace.getConfiguration("lemari").get<string>("sortList", "Name");
+    commands.executeCommand("setContext", "lemari.sortBy", sortBy);
 }

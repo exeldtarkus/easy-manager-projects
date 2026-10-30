@@ -3,7 +3,7 @@
 Définissez simplement le paramètre `baseFolders` avec les dossiers où sont situés vos projets, et l'extension vous montrera tous les projets Git qui s'y trouvent. Si vous avez besoin d'ignorer un sous-dossier, vous pouvez le faire en utilisant les patterns `glob`.
 
 ```json
-    "easyManagerProjects.git.baseFolders": [
+    "lemari.git.baseFolders": [
         "c:\\Projects\\code",
         "d:\\MoreProjects\\code-testing",
         "$home\\personal-coding"
@@ -11,7 +11,7 @@ Définissez simplement le paramètre `baseFolders` avec les dossiers où sont si
 ```
 
 ```json
-    "easyManagerProjects.git.ignoredFolders": [
+    "lemari.git.ignoredFolders": [
         "node_modules", 
         "out", 
         "typings", 

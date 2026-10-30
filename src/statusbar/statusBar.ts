@@ -15,7 +15,7 @@ let statusItem: StatusBarItem;
 
 export function showStatusBar(projectStorage: ProjectStorage, locators: Locators, projectName?: string): Project {
 
-    const showStatusConfig = workspace.getConfiguration("easyManagerProjects").get("showProjectNameInStatusBar");
+    const showStatusConfig = workspace.getConfiguration("lemari").get("showProjectNameInStatusBar");
 
     // multi-root - decide do use the "first folder" as the original "rootPath"
     // let currentProjectPath = vscode.workspace.rootPath;
@@ -29,17 +29,17 @@ export function showStatusBar(projectStorage: ProjectStorage, locators: Locators
     if (!showStatusConfig || !currentProjectPath) { return; }
 
     if (!statusItem) {
-        statusItem = window.createStatusBarItem("easyManagerProjects.statusBar", StatusBarAlignment.Left);
+        statusItem = window.createStatusBarItem("lemari.statusBar", StatusBarAlignment.Left);
         statusItem.name = "Project Manager";
     }
     statusItem.text = getCodiconFromUri(workspace0) + " ";
     statusItem.tooltip = currentProjectPath;
 
-    const openInNewWindow: boolean = workspace.getConfiguration("easyManagerProjects").get("openInNewWindowWhenClickingInStatusBar", false);
+    const openInNewWindow: boolean = workspace.getConfiguration("lemari").get("openInNewWindowWhenClickingInStatusBar", false);
     if (openInNewWindow) {
-        statusItem.command = "easyManagerProjects.listProjectsNewWindow";
+        statusItem.command = "lemari.listProjectsNewWindow";
     } else {
-        statusItem.command = "easyManagerProjects.listProjects";
+        statusItem.command = "lemari.listProjects";
     }
 
     // if we have a projectName, we don't need to search.

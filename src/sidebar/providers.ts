@@ -42,27 +42,27 @@ export class Providers {
         this.svnProvider = new AutodetectProvider(this.locators.svnLocator);
         this.anyProvider = new AutodetectProvider(this.locators.anyLocator);
 
-        this.storageTreeView = vscode.window.createTreeView("easyManagerProjectsExplorerFavorites", {
+        this.storageTreeView = vscode.window.createTreeView("lemariExplorerFavorites", {
             treeDataProvider: this.storageProvider,
             showCollapseAll: true
         });
-        this.vscodeTreeView = vscode.window.createTreeView("easyManagerProjectsExplorerVSCode", {
+        this.vscodeTreeView = vscode.window.createTreeView("lemariExplorerVSCode", {
             treeDataProvider: this.vscodeProvider,
             showCollapseAll: false
         });
-        this.gitTreeView = vscode.window.createTreeView("easyManagerProjectsExplorerGit", {
+        this.gitTreeView = vscode.window.createTreeView("lemariExplorerGit", {
             treeDataProvider: this.gitProvider,
             showCollapseAll: false
         });
-        this.mercurialTreeView = vscode.window.createTreeView("easyManagerProjectsExplorerMercurial", {
+        this.mercurialTreeView = vscode.window.createTreeView("lemariExplorerMercurial", {
             treeDataProvider: this.mercurialProvider,
             showCollapseAll: false
         });
-        this.svnTreeView = vscode.window.createTreeView("easyManagerProjectsExplorerSVN", {
+        this.svnTreeView = vscode.window.createTreeView("lemariExplorerSVN", {
             treeDataProvider: this.svnProvider,
             showCollapseAll: false
         });
-        this.anyTreeView = vscode.window.createTreeView("easyManagerProjectsExplorerAny", {
+        this.anyTreeView = vscode.window.createTreeView("lemariExplorerAny", {
             treeDataProvider: this.anyProvider,
             showCollapseAll: false
         });
@@ -80,7 +80,7 @@ export class Providers {
             }),
             // Refresh git branch info when window gains focus and sidebar is visible
             vscode.window.onDidChangeWindowState(async (state) => {
-                const showGitBranch = vscode.workspace.getConfiguration("easyManagerProjects").get<string>("git.showBranchName", "never");
+                const showGitBranch = vscode.workspace.getConfiguration("lemari").get<string>("git.showBranchName", "never");
                 if (state.focused && this.storageTreeView.visible && (showGitBranch === "onlyInSideBar" || showGitBranch === "always")) {
                     this.storageProvider.refresh();
                     this.gitProvider.refresh();
@@ -92,7 +92,7 @@ export class Providers {
     private async handleStorageTreeViewExpansionChange(event: vscode.TreeViewExpansionEvent<ProjectNode | TagNode>, state: "expanded" | "collapsed") {
         const element = event.element;
         if (element instanceof TagNode) {
-            const behavior = vscode.workspace.getConfiguration("easyManagerProjects").get<string>("tags.collapseItems", "startExpanded");
+            const behavior = vscode.workspace.getConfiguration("lemari").get<string>("tags.collapseItems", "startExpanded");
             const shouldPersistExpansion = behavior === "startExpanded" || behavior === "startCollapsed";
             if (shouldPersistExpansion) {
                 const tagId = (element.label as string) || (element.description as string) || "";

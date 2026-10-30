@@ -16,7 +16,7 @@ export function registerHelpAndFeedbackView(context: ExtensionContext) {
     items.push({
         icon: 'heart',
         title: 'Support',
-        command: 'easyManagerProjects.supportProjectManager'
+        command: 'lemari.supportProjectManager'
     });
-    new HelpAndFeedbackView(context, "easyManagerProjectsHelpAndFeedback", items);
+    new HelpAndFeedbackView(context, "lemariHelpAndFeedback", items);
 }

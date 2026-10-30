@@ -42,7 +42,7 @@ Lemari keeps saved favorites and auto-detected repositories (Git, VS Code, Mercu
 
    ```jsonc
    // settings.json
-   "easyManagerProjects.git.baseFolders": [
+   "lemari.git.baseFolders": [
        "C:\\Projects",
        "\\\\wsl.localhost\\Ubuntu\\home\\me\\repos"
    ]
@@ -65,7 +65,7 @@ Lemari keeps saved favorites and auto-detected repositories (Git, VS Code, Mercu
 
 ### How the list is built
 
-With `easyManagerProjects.groupList` set to `true` (the default) the list shows one section per kind, in this order:
+With `lemari.groupList` set to `true` (the default) the list shows one section per kind, in this order:
 
 1. **Favorites**, with their custom icon, a folder icon, or a remote icon for remote paths
 2. **Git**
@@ -74,7 +74,7 @@ With `easyManagerProjects.groupList` set to `true` (the default) the list shows 
 5. **SVN**
 6. **Any**
 
-Within each section projects follow `easyManagerProjects.sortList` (`Saved`, `Name`, `Path` or `Recent`). Set `groupList` to `false` for a single flat list without separators.
+Within each section projects follow `lemari.sortList` (`Saved`, `Name`, `Path` or `Recent`). Set `groupList` to `false` for a single flat list without separators.
 
 Typing matches the name and the path (for example `wsl.localhost` or `repos\api`). Set `filterOnFullPath` to `false` to match names only. The current project is hidden from the list unless you turn off `removeCurrentProjectFromList`, and with `git.showBranchName` set to `onlyInCommandPalette` or `always` each Git project shows its current branch.
 
@@ -118,7 +118,7 @@ All projects also offer **Add to Workspace** and **Reveal in Explorer** / **Reve
 
 ### Tags
 
-Tags available for selection come from `easyManagerProjects.tags` (default `Personal`, `Work`). Switch the Favorites view between **View as List** and **View as Tags** from its title bar, and use **Filter Projects by Tag** to show only some tags in both the view and the list. `tags.collapseItems` controls whether tag groups start expanded or collapsed.
+Tags available for selection come from `lemari.tags` (default `Personal`, `Work`). Switch the Favorites view between **View as List** and **View as Tags** from its title bar, and use **Filter Projects by Tag** to show only some tags in both the view and the list. `tags.collapseItems` controls whether tag groups start expanded or collapsed.
 
 ![Favorites grouped by tag in the Side Bar](docs/images/vscode-project-manager-side-bar-tags.gif)
 
@@ -142,7 +142,7 @@ Tags available for selection come from `easyManagerProjects.tags` (default `Pers
 - `~` and `$home` expand to your home folder.
 - `icon` is a codicon id; leave it out for the default folder icon.
 - `profile` opens the project with that VS Code profile.
-- Set `easyManagerProjects.projectsLocation` to keep the file in another folder, for example one shared between Stable and Insiders.
+- Set `lemari.projectsLocation` to keep the file in another folder, for example one shared between Stable and Insiders.
 
 If the file is not valid JSON the extension says so and offers **Open File** so you can fix it.
 
@@ -154,11 +154,11 @@ Each kind has its own settings and, once it has base folders, its own Side Bar v
 
 | Kind | Settings prefix | Detects |
 |---|---|---|
-| Git | `easyManagerProjects.git.*` | Git repositories |
-| VSCode | `easyManagerProjects.vscode.*` | Folders with a `.vscode` folder, and `.code-workspace` files |
-| Mercurial | `easyManagerProjects.hg.*` | Mercurial repositories |
-| SVN | `easyManagerProjects.svn.*` | Subversion working copies |
-| Any | `easyManagerProjects.any.*` | Any folder |
+| Git | `lemari.git.*` | Git repositories |
+| VSCode | `lemari.vscode.*` | Folders with a `.vscode` folder, and `.code-workspace` files |
+| Mercurial | `lemari.hg.*` | Mercurial repositories |
+| SVN | `lemari.svn.*` | Subversion working copies |
+| Any | `lemari.any.*` | Any folder |
 
 For each kind:
 
@@ -167,13 +167,13 @@ For each kind:
 - `maxDepthRecursion` limits how deep the scan goes (default `4`; any value below `1` means no limit).
 
 ```json
-"easyManagerProjects.git.baseFolders": [
+"lemari.git.baseFolders": [
     "C:\\Projects",
     "D:\\Work\\client-*",
     "$home\\personal"
 ],
-"easyManagerProjects.git.ignoredFolders": [ "node_modules", "out", "fork*" ],
-"easyManagerProjects.git.maxDepthRecursion": 4
+"lemari.git.ignoredFolders": [ "node_modules", "out", "fork*" ],
+"lemari.git.maxDepthRecursion": 4
 ```
 
 Related switches: `supportSymlinksOnBaseFolders` follows symlinks, `ignoreProjectsWithinProjects` skips nested projects, `any.excludeBaseFoldersFromResults` leaves the base folders themselves out of the Any list, and `cacheProjectsBetweenSessions` avoids a full rescan at every start. Run **Refresh Projects** (or the per-kind refresh button in each view) after changing folders on disk.
@@ -210,7 +210,7 @@ VS Code refuses UNC hosts that are not listed in `security.allowedUNCHosts`, and
 
   ```json
   "workbench.colorCustomizations": {
-      "easyManagerProjects.sideBar.currentProjectHighlightForeground": "#e13015"
+      "lemari.sideBar.currentProjectHighlightForeground": "#e13015"
   }
   ```
 
@@ -235,7 +235,7 @@ VS Code refuses UNC hosts that are not listed in `security.allowedUNCHosts`, and
 
 ## Settings reference
 
-All settings start with `easyManagerProjects.`.
+All settings start with `lemari.`.
 
 ### List and windows
 
@@ -293,9 +293,10 @@ General:
 
 ### Coming from the original Project Manager
 
-- **Favorites are stored separately.** Copy `projects.json` from the original extension's global storage folder (`alefragnani.project-manager`) into this one's (`exeltarkus.lemari`), or point `easyManagerProjects.projectsLocation` at the folder that already holds it.
+- **Favorites are stored separately.** Copy `projects.json` from the original extension's global storage folder (`alefragnani.project-manager`) into this one's (`exeltarkus.lemari`), or point `lemari.projectsLocation` at the folder that already holds it.
 - **Earlier local build.** If you installed a build with the ID `exeldtarkus.easy-manager-projects`, `exeltarkus.easy-manager-projects` or `exeltarkus.easy-projects-manager`, copy `projects.json` from that extension's global storage folder into the `exeltarkus.lemari` folder, then uninstall the old build.
-- **Settings are renamed.** Replace the `projectManager.` prefix with `easyManagerProjects.` in your `settings.json`.
+- **Settings are renamed.** Replace the `projectManager.` prefix with `lemari.` in your `settings.json`.
+- **Upgrading from 1.10.x or earlier.** From 1.11.0 settings and commands use `lemari.*` instead of `easyManagerProjects.*`, and the old keys are no longer read. Rename them in your `settings.json`, and in `keybindings.json` for any command IDs.
 - **Remote extension kind.** Do not set `remote.extensionKind` to `workspace` for `exeltarkus.lemari`. The extension has to run on the local (Windows) side to switch between WSL and Windows, so running it inside the remote turns those features off. Favorites for Containers, SSH, WSL or Codespaces still work from the local side and open the remote when picked.
 
 ## Extension API

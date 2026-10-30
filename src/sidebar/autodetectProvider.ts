@@ -40,7 +40,7 @@ export class AutodetectProvider implements vscode.TreeDataProvider<ProjectNode> 
                 const ll: ProjectNode[] = [];
 
                 ll.push(new ProjectNode(element.label, vscode.TreeItemCollapsibleState.None, "git", element.preview, {
-                    command: "_easyManagerProjects.open",
+                    command: "_lemari.open",
                     title: "",
                     arguments: [ element.preview.path ],
                 }));
@@ -72,7 +72,7 @@ export class AutodetectProvider implements vscode.TreeDataProvider<ProjectNode> 
                     });
 
                     const projectsWithParent = addParentFolderToDuplicates(projectList);
-                    const showGitBranch = vscode.workspace.getConfiguration("easyManagerProjects").get<string>("git.showBranchName", "never");
+                    const showGitBranch = vscode.workspace.getConfiguration("lemari").get<string>("git.showBranchName", "never");
 
                     for (let index = 0; index < projectsWithParent.length; index++) {
                         const dirinfo = projectsWithParent[ index ];
@@ -97,7 +97,7 @@ export class AutodetectProvider implements vscode.TreeDataProvider<ProjectNode> 
                                 detail: detail,
                                 path: dirinfo.path
                             }, {
-                                command: "_easyManagerProjects.open",
+                                command: "_lemari.open",
                                 title: "",
                                 arguments: [ dirinfo.path, dirinfo.name ],
                             }));
@@ -120,10 +120,10 @@ export class AutodetectProvider implements vscode.TreeDataProvider<ProjectNode> 
         const projectList = this.projectSource.getProjectList();
         if (this.projectSource.displayName === "Git") {
             const hideGitWelcome = Container.context.globalState.get<boolean>("hideGitWelcome", false);
-            vscode.commands.executeCommand("setContext", "easyManagerProjects.canShowTreeView" + this.projectSource.displayName,
+            vscode.commands.executeCommand("setContext", "lemari.canShowTreeView" + this.projectSource.displayName,
                 projectList.length > 0 || !hideGitWelcome);
         } else {
-            vscode.commands.executeCommand("setContext", "easyManagerProjects.canShowTreeView" + this.projectSource.displayName,
+            vscode.commands.executeCommand("setContext", "lemari.canShowTreeView" + this.projectSource.displayName,
                 projectList.length > 0);
         }
         return;

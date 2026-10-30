@@ -69,7 +69,7 @@ function sortByRecent(items: any[], stack: Stack): any[] {
 
 export function sortProjects(itemsToShow) {
     let newItemsSorted = [];
-    const criteria = workspace.getConfiguration("easyManagerProjects").get<string>("sortList", "Name");
+    const criteria = workspace.getConfiguration("lemari").get<string>("sortList", "Name");
     switch (criteria) {
         case "Path":
             newItemsSorted = sortByPath(itemsToShow);

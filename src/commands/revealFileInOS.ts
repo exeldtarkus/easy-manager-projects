@@ -19,7 +19,7 @@ async function revealFileInOS(node: ProjectNode) {
     commands.executeCommand("revealFileInOS", Uri.file(node.command.arguments[ 0 ]));
 }
 export function registerRevealFileInOS() {
-    Container.context.subscriptions.push(commands.registerCommand("_easyManagerProjects.revealInFinder#sideBar", (node) => revealFileInOS(node)));
-    Container.context.subscriptions.push(commands.registerCommand("_easyManagerProjects.revealInExplorer#sideBar", (node) => revealFileInOS(node)));
-    Container.context.subscriptions.push(commands.registerCommand("_easyManagerProjects.revealInFileManager#sideBar", (node) => revealFileInOS(node)));
+    Container.context.subscriptions.push(commands.registerCommand("_lemari.revealInFinder#sideBar", (node) => revealFileInOS(node)));
+    Container.context.subscriptions.push(commands.registerCommand("_lemari.revealInExplorer#sideBar", (node) => revealFileInOS(node)));
+    Container.context.subscriptions.push(commands.registerCommand("_lemari.revealInFileManager#sideBar", (node) => revealFileInOS(node)));
 }

@@ -1,3 +1,7 @@
+## [1.11.0] - 2026-10-30
+### Changed
+- Settings, commands and views moved from the `easyManagerProjects.*` prefix to `lemari.*`, so the Settings UI now shows **Lemari › ...**. Existing `easyManagerProjects.*` settings are no longer read: rename them in `settings.json`, and any command IDs in `keybindings.json`
+
 ## [1.10.4] - 2026-10-30
 ### Changed
 - Renamed to **Lemari - Project Manager**, with the extension ID `exeltarkus.lemari` (the name `easy-projects-manager` is already taken on the Marketplace), and a new wardrobe logo. Settings and commands keep their `easyManagerProjects.*` IDs, so existing settings keep working. To keep your favorites, copy `projects.json` from the `exeltarkus.easy-projects-manager` global storage folder into `exeltarkus.lemari`

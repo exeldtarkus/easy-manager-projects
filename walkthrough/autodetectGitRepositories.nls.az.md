@@ -3,7 +3,7 @@
 Sadəcə `baseFolders` parametrində layihələrinizin yerləşdiyi qovluqları göstərin — genişlənmə orada yerləşən bütün Git layihələrini sizə göstərəcək. Hər hansı alt qovluğu nəzərə almamaq lazımdırsa, bunu `glob` şablonları ilə edə bilərsiniz
 
 ```json
-    "easyManagerProjects.git.baseFolders": [
+    "lemari.git.baseFolders": [
         "c:\\Projects\\code",
         "d:\\MoreProjects\\code-testing",
         "$home\\personal-coding"
@@ -11,7 +11,7 @@ Sadəcə `baseFolders` parametrində layihələrinizin yerləşdiyi qovluqları 
 ```
 
 ```json
-    "easyManagerProjects.git.ignoredFolders": [
+    "lemari.git.ignoredFolders": [
         "node_modules", 
         "out", 
         "typings", 

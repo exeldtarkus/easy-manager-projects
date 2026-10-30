@@ -29,15 +29,15 @@ export class Locators implements Disposable {
     private providerManager: Providers;
 
     public registerCommands() {
-        commands.registerCommand("easyManagerProjects.refreshVSCodeProjects", () => this.refreshProjectsByType("VSCode", this.vscLocator, this.providerManager.vscodeProvider, true, true));
-        commands.registerCommand("easyManagerProjects.refreshGitProjects", () => this.refreshProjectsByType("Git", this.gitLocator, this.providerManager.gitProvider, true, true));
-        commands.registerCommand("easyManagerProjects.refreshMercurialProjects", () => this.refreshProjectsByType("Mercurial", this.mercurialLocator, this.providerManager.mercurialProvider, true, true));
-        commands.registerCommand("easyManagerProjects.refreshSVNProjects", () => this.refreshProjectsByType("SVN", this.svnLocator, this.providerManager.svnProvider, true, true));
-        commands.registerCommand("easyManagerProjects.refreshAnyProjects", () => this.refreshProjectsByType("Any", this.anyLocator, this.providerManager.anyProvider, true, true));
+        commands.registerCommand("lemari.refreshVSCodeProjects", () => this.refreshProjectsByType("VSCode", this.vscLocator, this.providerManager.vscodeProvider, true, true));
+        commands.registerCommand("lemari.refreshGitProjects", () => this.refreshProjectsByType("Git", this.gitLocator, this.providerManager.gitProvider, true, true));
+        commands.registerCommand("lemari.refreshMercurialProjects", () => this.refreshProjectsByType("Mercurial", this.mercurialLocator, this.providerManager.mercurialProvider, true, true));
+        commands.registerCommand("lemari.refreshSVNProjects", () => this.refreshProjectsByType("SVN", this.svnLocator, this.providerManager.svnProvider, true, true));
+        commands.registerCommand("lemari.refreshAnyProjects", () => this.refreshProjectsByType("Any", this.anyLocator, this.providerManager.anyProvider, true, true));
     }
 
     public dispose() {
-        if (workspace.getConfiguration("easyManagerProjects").get("cacheProjectsBetweenSessions", true)) {
+        if (workspace.getConfiguration("lemari").get("cacheProjectsBetweenSessions", true)) {
             return;
         }
 
@@ -75,7 +75,7 @@ export class Locators implements Disposable {
     }
 
     public sortGroupedList(items): any[] {
-        if (workspace.getConfiguration("easyManagerProjects").get("groupList", true)) {
+        if (workspace.getConfiguration("lemari").get("groupList", true)) {
             return this.sortProjectList(items);
         } else {
             return items;
@@ -85,7 +85,7 @@ export class Locators implements Disposable {
     public sortProjectList(items): any[] {
         let itemsToShow = PathUtils.expandHomePaths(items);
         itemsToShow = this.removeRootPath(itemsToShow);
-        const checkInvalidPath: boolean = workspace.getConfiguration("easyManagerProjects").get("checkInvalidPathsBeforeListing", true);
+        const checkInvalidPath: boolean = workspace.getConfiguration("lemari").get("checkInvalidPathsBeforeListing", true);
         if (checkInvalidPath) {
             itemsToShow = PathUtils.indicateInvalidPaths(itemsToShow);
         }
@@ -121,7 +121,7 @@ export class Locators implements Disposable {
             workspace.workspaceFolders ? workspace.workspaceFolders[ 0 ].uri :
                 undefined;
 
-        if (!workspace0 || !workspace.getConfiguration("easyManagerProjects").get("removeCurrentProjectFromList")) {
+        if (!workspace0 || !workspace.getConfiguration("lemari").get("removeCurrentProjectFromList")) {
             return items;
         } else {
             if (isRemoteUri(workspace0)) {

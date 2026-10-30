@@ -9,12 +9,12 @@ import { Container } from '../core/container';
 export function registerSideBarDecorations() {
     window.registerFileDecorationProvider({
         provideFileDecoration: (uri) => {
-            if (uri.scheme !== 'easyManagerProjects-view') return undefined;
+            if (uri.scheme !== 'lemari-view') return undefined;
 
             if (Container.currentProject && uri.path === Container.currentProject.rootPath) {
                 return {
                     badge: '✔',
-                    color: new ThemeColor('easyManagerProjects.sideBar.currentProjectHighlightForeground')
+                    color: new ThemeColor('lemari.sideBar.currentProjectHighlightForeground')
                 };
             }
         }
