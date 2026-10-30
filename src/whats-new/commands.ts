@@ -12,7 +12,7 @@ const VERSION_KEY = "easy-manager-projects.version";
 
 function showPage() {
     const version: string = Container.context.extension.packageJSON.version;
-    const panel = window.createWebviewPanel("easy-manager-projects.whatsNew", "What's New in Easy Projects Manager", ViewColumn.One,
+    const panel = window.createWebviewPanel("easy-manager-projects.whatsNew", "What's New in Lemari", ViewColumn.One,
         { enableCommandUris: PAGE_COMMANDS });
     panel.webview.html = buildWhatsNewHtml(panel.webview.cspSource, version);
 }

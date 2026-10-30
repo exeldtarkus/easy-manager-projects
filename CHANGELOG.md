@@ -1,3 +1,7 @@
+## [1.10.4] - 2026-10-30
+### Changed
+- Renamed to **Lemari - Project Manager**, with the extension ID `exeltarkus.lemari` (the name `easy-projects-manager` is already taken on the Marketplace), and a new wardrobe logo. Settings and commands keep their `easyManagerProjects.*` IDs, so existing settings keep working. To keep your favorites, copy `projects.json` from the `exeltarkus.easy-projects-manager` global storage folder into `exeltarkus.lemari`
+
 ## [1.10.3] - 2026-10-27
 ### Changed
 - Renamed to **Easy Projects Manager**, with the extension ID `exeltarkus.easy-projects-manager` (the previous Marketplace name cannot be reused). Settings and commands keep their `easyManagerProjects.*` IDs, so existing settings keep working. To keep your favorites from an earlier build, copy `projects.json` from the old extension's global storage folder into `exeltarkus.easy-projects-manager`

@@ -1,8 +1,8 @@
 {
-	"name": "easy-projects-manager",
-	"displayName": "Easy Projects Manager",
+	"name": "lemari",
+	"displayName": "Lemari - Project Manager",
 	"description": "Easily switch between projects, including opening projects in WSL or Windows (fork of alefragnani's Project Manager)",
-	"version": "1.10.3",
+	"version": "1.10.4",
 	"publisher": "exeltarkus",
 	"engines": {
 		"vscode": "^1.78.0"
@@ -726,7 +726,7 @@
 				{
 					"command": "_easyManagerProjects.whatsNewContextMenu",
 					"group": "easyManagerProjects",
-					"when": "extension == exeltarkus.easy-projects-manager && extensionStatus == installed"
+					"when": "extension == exeltarkus.lemari && extensionStatus == installed"
 				}
 			],
 			"easyManagerProjects.sideBar.favorites.title": [

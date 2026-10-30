@@ -8,9 +8,9 @@ import { HelpAndFeedbackView, Link, StandardLinksProvider, ProvideFeedbackLink, 
 
 export function registerHelpAndFeedbackView(context: ExtensionContext) {
     const items = new Array<Link | Command>();
-    const predefinedProvider = new StandardLinksProvider('exeltarkus.easy-projects-manager');
+    const predefinedProvider = new StandardLinksProvider('exeltarkus.lemari');
     items.push(predefinedProvider.getGetStartedLink());
-    items.push(new ProvideFeedbackLink('easy-projects-manager'));
+    items.push(new ProvideFeedbackLink('lemari'));
     items.push(predefinedProvider.getReviewIssuesLink());
     items.push(predefinedProvider.getReportIssueLink());
     items.push({
