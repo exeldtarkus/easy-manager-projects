@@ -1211,7 +1211,8 @@
 		"test": "npm run test-compile && npm run just-test",
 		"package": "vsce package --skip-license",
 		"install:local": "node scripts/install-local.js",
-		"deploy": "node scripts/deploy.js"
+		"deploy": "bash scripts/deploy-v2.sh",
+		"deploy:token": "node scripts/deploy.js"
 	},
 	"devDependencies": {
 		"@types/mocha": "^10.0.0",
